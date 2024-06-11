@@ -1,85 +1,57 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
+  <loading v-model:active="storeAuth.loading" :is-full-page="true" />
+  <ErrorModal
+    v-model="modalError"
+    :model-value="modalError"
+    :title="'エラーが発生しました'"
+    :errorMessage="errorMessage"
+    :error-store="storeError.error"
+    @update:model-value="closeError"
+  />
   <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+<script lang="ts" setup>
+import { RouterView, useRoute, useRouter } from 'vue-router'
+import Loading from 'vue-loading-overlay'
+import { useAuthStore } from '@/stores/AuthStore'
+import ErrorModal from '@/components/ErrorModal.vue'
+import { ref, watch } from 'vue'
+import { useErrorStore } from '@/stores/ErrorStore'
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
+const storeAuth = useAuthStore()
+const storeError = useErrorStore()
+const modalError = ref(false)
+const errorMessage = ref('')
+const router = useRouter()
+const route = useRoute()
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
+watch(
+  () => storeError.error,
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  (oldVal, newVal) => {
+    if (storeError.error?.code || storeError.error?.message) {
+      modalError.value = true
+      errorMessage.value = storeError.error?.message
+        ? (storeError.error?.message).replace(/\n/g, '<br/>')
+        : 'Chúng tôi xin lỗi vì sự bất tiện này nhưng vui lòng đợi một lát và thử lại.'
+    }
   }
+)
 
-  .logo {
-    margin: 0 2rem 0 0;
+const closeError = () => {
+  if (storeError.error.code === 'MESERR008') {
+    if (route.name === 'FacilityTicketList') {
+      router.push({
+        name: 'FacilityTicketList'
+      })
+      return
+    }
+    router.push({
+      path: '/'
+    })
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+  modalError.value = false
 }
-</style>
+</script>
+<style lang="scss"></style>

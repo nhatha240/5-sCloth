@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { useAuthStore } from '../stores/AuthStore'
-import router from './../router'
-import { useErrorStore } from './../stores/ErrorStore'
+import { useAuthStore } from '@/stores/AuthStore'
+import router from '@/router'
+import { useErrorStore } from '@/stores/ErrorStore'
 
 const apiClient = axios.create({
   baseURL: `/api/v1`,
