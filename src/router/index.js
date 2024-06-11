@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import auth from '../middleware/auth'
-import { useAuthStore } from '../stores/AuthStore'
+import HomeView from '@/views/HomeView.vue'
+import auth from '@/middleware/auth'
+import { useAuthStore } from '@/stores/AuthStore'
 
 const routeMiddleware = (context, middlewares, index) => {
   const nextMiddleware = middlewares[index]
@@ -20,7 +20,7 @@ const routeMiddleware = (context, middlewares, index) => {
 
 const ifNotAuthenticated = (to, from, next) => {
   if (localStorage.getItem('user-token')) {
-    next({ name: 'DashBoard' })
+    next()
   } else {
     if (to?.path == '/') {
       next({ name: 'Login' })
@@ -36,14 +36,6 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
     }
   ]
 })
