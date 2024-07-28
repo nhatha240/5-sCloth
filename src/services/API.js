@@ -4,7 +4,7 @@ import router from '@/router'
 import { useErrorStore } from '@/stores/ErrorStore'
 
 const apiClient = axios.create({
-  baseURL: `/api/v1`,
+  baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
   withCredentials: true
 })
 
@@ -17,6 +17,7 @@ apiClient.interceptors.request.use(
     toggleLoading(true)
     config.headers['Accept'] = 'application/json'
     config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+    config.headers['Access-Control-Allow-Origin'] = '*'
     return config
   },
   (error) => {

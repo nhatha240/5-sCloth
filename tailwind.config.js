@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import plugin from "tailwindcss/plugin"
 export default {
   content: [],
   purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
@@ -11,5 +12,13 @@ export default {
       display: ["group-hover"],
     }
   },
-  plugins: []
+  plugins: [
+    plugin(({ addUtilities }) => {
+      addUtilities({
+        ".font-common": {
+          'font-family': 'Inter, Open Sans, sans-serif'
+        },
+      })
+    })
+  ],
 }

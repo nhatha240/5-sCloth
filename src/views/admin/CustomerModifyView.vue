@@ -1,0 +1,122 @@
+<template>
+    <div class="cutomer-modify-layout">
+        <div class="flex items-center gap-1 cursor-pointer" @click="backToCustomer">
+            <img src="/images/icon_back_screen.svg" alt="">
+            Back
+        </div>
+        <div class="flex items-center justify-between mb-[30px]">
+            <div class="title-text">Add Customer</div>
+            <div class="flex items-center gap-3">
+                <button
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="backToCustomer">
+                    Cancel
+                </button>
+                <button
+                    class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center">
+                    Save
+                </button>
+            </div>
+        </div>
+        <div class="order-details-box !border-none">
+            <div class="label-text pb-1">
+                Customer Information
+            </div>
+            <div class="details-text pb-6">
+                Most important information about the customer
+            </div>
+            <div class="flex gap-[28px] pb-6">
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">First Name</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Last Name</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+            </div>
+            <div class="flex gap-[28px] pb-10 border-b border-[#E6E9F4]">
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Email Address</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Phone Number</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+            </div>
+            <div class="label-text pb-1">
+                Customer Address
+            </div>
+            <div class="details-text pb-6">
+                Shipping address information
+            </div>
+            <div class="flex gap-[28px] pb-6">
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Address</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Apartment</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+            </div>
+            <div class="flex gap-[28px] pb-6">
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">City</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Country</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+            </div>
+            <div class="flex gap-[28px] pb-10 border-b border-[#E6E9F4]">
+                <div class="w-50">
+                    <div class="mb-1 details-text pb-1">Phone</div>
+                    <input class="form-control w-full" type="text">
+                </div>
+            </div>
+            <div class="label-text pb-1">
+                Customer Notes
+            </div>
+            <div class="details-text pb-6">
+                Add notes about customer
+            </div>
+            <div class="flex gap-[28px]">
+                <div class="w-100">
+                    <div class="mb-1 details-text pb-1">Notes</div>
+                    <textarea class="form-control w-full" type="text" placeholder="Add notes about customer"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="flex items-center justify-end border-t border-[#D7DBEC] pt-[28px] mt-[30px]">
+            <div class="flex items-center gap-3">
+                <button
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="backToCustomer">
+                    Cancel
+                </button>
+                <button
+                    class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center">
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script lang="js" setup>
+import router from '@/router';
+import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const customerId = ref(route?.params?.id)
+
+const backToCustomer = () => {
+    router.go(-1)
+}
+</script>
+
+<style lang="scss"></style>
