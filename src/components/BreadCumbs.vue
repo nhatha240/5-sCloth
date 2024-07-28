@@ -2,7 +2,7 @@
     <nav class="px-[150px] py-[23px] bg-breadcumb flex items-center text-sm font-medium" v-if="route.name !== 'home'">
         <a href="#" class="text-[#D651FF] font-semibold text-lg hover:underline" @click="navigate('/')">Home</a>
         <template v-for="(crumb, index) in breadcrumbs" :key="crumb.to">
-            <span class="mx-2 text-gray-400 text-lg">/</span>
+            <span class="mx-2 text-[#D651FF] text-lg font-semibold">/</span>
             <a v-if="index < breadcrumbs.length - 1" :href="crumb.to" @click.prevent="navigate(crumb.to)"
                 class="text-[#D651FF] text-lg font-normal hover:underline">
                 {{ crumb.name }}
@@ -17,7 +17,16 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { CATEGORY } from '../constant/common'
+import { useShopStore } from '../stores/ShopStore'
 
+const props = defineProps({
+    length: {
+        type: Number,
+        default: 0,
+    },
+})
+
+const storeShop = useShopStore()
 const route = useRoute();
 const router = useRouter();
 

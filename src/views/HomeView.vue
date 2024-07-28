@@ -1,5 +1,6 @@
 <template>
-  <div class="container">
+  <HeaderMain />
+  <div class="">
     <div class="relative bg-[#D651FF] w-full mx-auto text-center py-[193px] text-white">
       <div class="w-[775px] mx-auto font-bold text-[65px]">Chào mừng đến với 5 Clothes</div>
       <div class="w-[584px] mx-auto text-[16px] font-normal">
@@ -216,46 +217,7 @@
           <div class="black-text-500">Đảm bảo hoàn trả</div>
         </div>
       </div>
-      <div class="px-[50px] mb-[150px]">
-        <div class="flex justify-between pb-[80px]">
-          <div class="font-bold text-4xl">Sản phẩm nổi bật</div>
-          <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
-            Xem Thêm
-            <img src="/images/arrow_find_icon.svg" alt="">
-          </div>
-        </div>
-        <swiper :slides-per-view="3" :space-between="50" :navigation="true">
-          <swiper-slide v-for="(product, index) in saleWellProducts" :key="index">
-            <div class="grid grid-cols-2 bg-[#FFFFFF] rounded-[10px]">
-              <div class="col-span-1 w-[200px]">
-                <img :src="product.product_image" alt="">
-              </div>
-              <div class="col-span-1 flex flex-col gap-[30px] flex-grow">
-                <div class="flex items-center gap-8">
-                  <div class="pr-[34px] new-product-tag text-[16px]">
-                    {{ product.tag }}
-                  </div>
-                  <div class="star-rating flex items-center justify-center gap-[5px] px-[20px] py-[11px]">
-                    <img src="/images/star_rating_icon.svg" alt="">
-                    <div>{{ product.rating }}</div>
-                  </div>
-                </div>
-                <div class="flex flex-col prod-name-text">
-                  {{ product.product_name }}
-                  <span class="prod-quantity-text pt-[14px]">{{ 'Số lượng còn :' + product.quantity }}</span>
-                </div>
-                <div class="flex items-center pt-[40px] gap-6" v-if="product.product_sale_price">
-                  <div class="main-price">{{ product.product_sale_price }}</div>
-                  <span class="sub-price">{{ product.product_price }}</span>
-                </div>
-                <div class="flex items-center pt-[40px] gap-6" v-else>
-                  <div class="main-price">{{ product.product_price }}</div>
-                </div>
-              </div>
-            </div>
-          </swiper-slide>
-        </swiper>
-      </div>
+      <HotProductSlide :saleWellProducts="saleWellProducts"></HotProductSlide>
       <div class="px-[50px] mb-[150px]">
         <div class="flex justify-between pb-[80px]">
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
@@ -365,19 +327,72 @@
           </swiper>
         </div>
       </div>
-      <div class="text-center mx-[50px] news-layout">
+      <div class="text-center mx-[50px] mb-[150px] news-layout">
         <div class="title-new-text pb-[30px]">Tin mới nhất</div>
         <div class="sub-new-text pb-[80px]">
           Tham khảo các tin tức để cập nhật gu thời trang, và cách phối đồ theo xu<br />
           hướng mới nhất nhé.
         </div>
-        <div class="row flex gap-[44px]">
-          <div class="flex-[0_0_auto] flex flex-col w-[25%]" v-for="index in 5" :key="index">
+        <div class="row flex gap-[44px] justify-between">
+          <div class="flex-[0_0_auto] flex flex-col w-[372px]" v-for="index in 3" :key="index">
             <div class="cursor-pointer"><img src="/images/image_new1.svg" alt=""></div>
-            <div class="text-[#000000] text-[18px] font-semibold text-left pt-[25px] pb-[14px]">Xu hướng thời trang nam mùa hè năm nay có gì đặc biệt?</div>
+            <div class="text-[#000000] text-[18px] font-semibold text-left pt-[25px] pb-[14px]">Xu hướng thời trang nam
+              mùa hè năm nay có gì đặc biệt?</div>
             <div class="text-[#00000080] text-sm font-normal text-left">
               Áo thun nam đơn giản và quần short cho mùa hè thanh lịch nhẹ nhàng, những họa tiết toptrend đẹp dành...
               <span class="text-[#D651FF] text-sm font-medium cursor-pointer">Continue reading</span>
+            </div>
+          </div>
+        </div>
+        <div class="pt-[148px] flex justify-center mb-[50px]">
+          <button class="view-more-btn">
+            Xem thêm
+            <img src="/images/arrow_right_white.svg" alt="">
+          </button>
+        </div>
+      </div>
+      <div class="rating-layout text-center mb-[150px]">
+        <div class="title-new-text pb-[30px] mx-[50px]">Đánh Giá</div>
+        <div class="sub-new-text pb-[80px] mx-[50px]">
+          Đánh giá từ người dùng là sự quan tâm đến sản phẩm, là uy tín và chất<br />
+          lượng của cửa hàng. Những góp ý của khách hàng luôn được chúng tôi<br />
+          tiếp nhận và khắc phục
+        </div>
+        <div>
+          <swiper :slides-per-view="3.8" :space-between="20" :navigation="true" class="rating-list">
+            <swiper-slide v-for="(rate, index) in ratingList" :key="index">
+              <div class="p-[30px] rating-details">
+                <div class="flex items-center gap-3">
+                  <img class="cursor-pointer" :src="star.rate ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                    alt="" v-for="(star, i) in rate.rating" :key="i">
+                </div>
+                <div class="my-[30px] text-left">
+                  {{ rate.comment }}
+                </div>
+                <div class="row justify-between">
+                  <div class="col flex-col text-left">
+                    <div class="font-semibold text-[18px]">{{ rate.name }}</div>
+                    <div class="text-[#3D3D3D] font-normal text-sm">{{ rate.comment_date }}</div>
+                  </div>
+                  <div class="">
+                    <img :src="rate.avatar" alt="" v-if="rate.avatar">
+                    <div class="avatar-empty" v-else></div>
+                  </div>
+                </div>
+              </div>
+            </swiper-slide>
+          </swiper>
+        </div>
+      </div>
+      <div class="bg-[#6E1F86] brand-info-layout">
+        <div class="flex justify-center pt-[117px] pb-[101px] gap-[131px]">
+          <div class="flex flex-col items-center" v-for="(brand, index) in brandInfo" :key="index">
+            <div class="flex gap-[34px] items-center">
+              <img class="w-full" :src="brand.logo" alt="">
+              <span class="text-[#FFFFFF] text-[50px] font-semibold">{{ brand.count }}</span>
+            </div>
+            <div class="text-[#FFFFFF99] text-[20px] font-normal pt-[29px]">
+              {{ brand.text }}
             </div>
           </div>
         </div>
@@ -388,6 +403,8 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import HeaderMain from '@/components/HeaderMain.vue'
+import HotProductSlide from '@/components/HotProductSlide.vue'
 
 const sizes = ref([
   { label: 'L', value: 'L' },
@@ -573,6 +590,77 @@ const flashSaleProducts = ref([
     rating_count: 459,
   },
 ]);
+const ratingList = ref([
+  {
+    rating: [
+      { rate: true, value: 1 },
+      { rate: true, value: 2 },
+      { rate: true, value: 3 },
+      { rate: true, value: 4 },
+      { rate: false, value: 5 },
+    ],
+    comment: 'Sản phẩm rất đẹp, chất liệu vải chất lượng tôi khá ưng ý với cửa hàng này. Mong cửa hàng có thể mở chi nhánh gần khu vực tôi sống!',
+    name: 'Long Vũ',
+    comment_date: '11-5-2024',
+    avatar: '',
+  },
+  {
+    rating: [
+      { rate: true, value: 1 },
+      { rate: true, value: 2 },
+      { rate: true, value: 3 },
+      { rate: false, value: 4 },
+      { rate: false, value: 5 },
+    ],
+    comment: 'Sản phẩm chất lượng, tôi khá ấn tượng về cửa hàng. Nhưng đơn vị giao hàng của cửa hàng chọn quá tệ, giao hàng trì trệ hộp đựng sản phẩm của tôi bị móp méo khi nhận. !',
+    name: 'Vũ khó tính',
+    comment_date: '11-5-2024',
+    avatar: '',
+  },
+  {
+    rating: [
+      { rate: true, value: 1 },
+      { rate: true, value: 2 },
+      { rate: true, value: 3 },
+      { rate: true, value: 4 },
+      { rate: true, value: 5 },
+    ],
+    comment: 'Sản phẩm chất lượng, tôi khá ấn tượng về cửa hàng. Đơn vị giao hàng của cửa hàng chọn quá tốt, giao hàng nhanh bảo quản sản phẩm rất tốt, tôi rất thích điều này !',
+    name: 'Vũ vui vẻ',
+    comment_date: '11-5-2024',
+    avatar: '',
+  },
+  {
+    rating: [
+      { rate: true, value: 1 },
+      { rate: true, value: 2 },
+      { rate: true, value: 3 },
+      { rate: true, value: 4 },
+      { rate: false, value: 5 },
+    ],
+    comment: 'Tôi không vui vì cửa hàng giao hàng sớm làm tôi không kịp vay tiền để nhận hàng. Mặc dù đó là điều tốt.!!!',
+    name: 'Vũ vay nợ',
+    comment_date: '11-5-2024',
+    avatar: '',
+  },
+])
+const brandInfo = ref([
+  {
+    logo: '/images/store_icon.svg',
+    count: '268',
+    text: 'Cửa hàng của chúng tôi',
+  },
+  {
+    logo: '/images/group_client_icon.svg',
+    count: '25,634',
+    text: 'Số lượng khách hàng đã mua sản phẩm',
+  },
+  {
+    logo: '/images/shirt_icon.svg',
+    count: '25+',
+    text: 'Bộ sưu tập thời trang',
+  },
+])
 
 const flashSaleTimer = ref({
   hours: 5,
@@ -803,5 +891,41 @@ const onSlideChange = () => {
   font-size: 16px;
   font-weight: 400;
   line-height: 24px;
+}
+
+.avatar-empty {
+  background: #C4C4C4;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+}
+
+.rating-list {
+  padding-bottom: 57px !important;
+}
+.rating-list .swiper-button-next{
+  bottom: 0px !important;
+  right: 150px !important;
+  top: unset !important;
+  background-color: #D651FF;
+  background-image: url('/public/images/arrow_find_icon_white.svg') !important;
+  box-shadow: unset !important;
+}
+.rating-list .swiper-button-prev{
+  margin-left: auto;
+  bottom: 0px !important;
+  top: unset !important;
+  right: 229px !important;
+  background-color: #D651FF;
+  background-image: url('/public/images/arrow_find_icon_white.svg') !important;
+  box-shadow: unset !important;
+}
+.rating-list .swiper-button-next.swiper-button-disabled{
+  background-color: #FFFFFF !important;
+  background-image: url('/public/images/arrow_find_icon.svg') !important;
+}
+.rating-list .swiper-button-prev.swiper-button-disabled{
+  background-color: #FFFFFF !important;
+  background-image: url('/public/images/arrow_find_icon.svg') !important;
 }
 </style>

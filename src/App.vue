@@ -8,9 +8,8 @@
     :error-store="storeError.error"
     @update:model-value="closeError"
   />
-  <HeaderMain>
-  </HeaderMain>
-  <RouterView />
+  <RouterView  />
+  <Footer />
 </template>
 
 <script lang="ts" setup>
@@ -21,6 +20,7 @@ import ErrorModal from '@/components/ErrorModal.vue'
 import { ref, watch } from 'vue'
 import { useErrorStore } from '@/stores/ErrorStore'
 import HeaderMain from '@/components/HeaderMain.vue'
+import Footer from '@/components/FooterMain.vue'
 
 const storeAuth = useAuthStore()
 const storeError = useErrorStore()

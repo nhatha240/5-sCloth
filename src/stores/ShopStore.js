@@ -2,10 +2,12 @@ import { defineStore } from 'pinia'
 
 export const useShopStore = defineStore('shop', {
     state: () => ({
+        product: '',
         clothes: [],
     }),
     getters: {
-        getClothes: (state) => state.clothes
+        productName: (state) => state.product,
+        getClothes: (state) => state.clothes,
     },
     actions: {}
 })

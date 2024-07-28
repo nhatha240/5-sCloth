@@ -1,4 +1,5 @@
 <template>
+    <HeaderMain></HeaderMain>
     <div class="checkout-layout">
         <div class="cart-box mx-auto my-[50px] w-[80%]" v-if="isLogin">
             <div class="header-cart bg-[#D651FF] rounded-[10px] h-[88px] flex py-[29px] px-[28px]">
@@ -20,12 +21,12 @@
                     </div>
                     <div class="w-[20%]">
                         <div class="quantity-field flex justify-center items-center w-[183px]">
-                            <div class="mark">
+                            <div class="cursor-pointer">
                                 <img src="/images/minus_icon.svg" alt="">
                             </div>
                             <input class="text-center pointer-events-none" type="number" readonly
                                 v-model="item.quantity">
-                            <div class="mark">
+                            <div class="cursor-pointer">
                                 <img src="/images/plus_icon.svg" alt="">
                             </div>
                         </div>
@@ -75,7 +76,7 @@
                                 </div>
                             </div>
                             <div class="flex flex-col relative mt-[104px]">
-                                <button class="subscribe-purple-button">CHECKOUT</button>
+                                <button class="subscribe-purple-button" @click="checkoutProduct">CHECKOUT</button>
                                 <a class="text-[#D651FF] text-center pt-[22px]">Continue Shopping</a>
                             </div>
                         </div>
@@ -161,7 +162,10 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import HeaderMain from '../components/HeaderMain.vue'
 
+const router = useRouter()
 const isLogin = ref(true)
 const step1 = ref(true)
 const step2 = ref(false)
@@ -187,6 +191,10 @@ const items = ref([
 const submitStep1 = () => {
     step1.value = false
     step2.value = true
+}
+
+const checkoutProduct = () => {
+    router.push({ name: 'PaymentView' })
 }
 </script>
 
@@ -291,10 +299,6 @@ const submitStep1 = () => {
         font-weight: 600;
         line-height: 24px;
         color: #000000;
-    }
-
-    .mark {
-        cursor: pointer;
     }
 }
 </style>
