@@ -5,7 +5,7 @@
       <div class="w-[775px] mx-auto font-bold text-[65px]">Chào mừng đến với 5 Clothes</div>
       <div class="w-[584px] mx-auto text-[16px] font-normal">
         Tại 5 Clothes, chúng tôi tin rằng màu sắc và họa tiết không chỉ là cách để thể hiện phong cách cá nhân mà còn là
-        nguồn cảm hứng vô tận cho cuộc sống.  Dưới lăng kính của thời trang, mỗi mùa hè đều mang đến những xu hướng mới
+        nguồn cảm hứng vô tận cho cuộc sống. Dưới lăng kính của thời trang, mỗi mùa hè đều mang đến những xu hướng mới
         mẻ, tươi mới, và năm 2024 không phải là ngoại lệ.
       </div>
       <div class="search-bar absolute bottom-[-52px] w-full">
