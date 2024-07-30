@@ -2,7 +2,8 @@ import API from './API'
 
 export default {
   async loginUser(payload) {
-    return await API.post('/users/login', payload)
+    // return await fetch('/auth/login', payload)
+    return await API.post('/auth/login', payload)
   },
   async resetPassword(payload) {
     return await API.post('/users/reset-password', payload)

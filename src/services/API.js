@@ -4,8 +4,8 @@ import router from '@/router'
 import { useErrorStore } from '@/stores/ErrorStore'
 
 const apiClient = axios.create({
-  baseURL: `/api/v1`,
-  withCredentials: true
+  baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
+  // withCredentials: true
 })
 
 const toggleLoading = (isLoading) => {
@@ -16,7 +16,8 @@ apiClient.interceptors.request.use(
   (config) => {
     toggleLoading(true)
     config.headers['Accept'] = 'application/json'
-    config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+    // config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+    config.headers['Access-Control-Allow-Origin'] = '*'
     return config
   },
   (error) => {
