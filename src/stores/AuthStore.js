@@ -3,8 +3,10 @@ import AuthService from '../services/AuthService'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null,
+    user: localStorage.getItem('userInfo') ? localStorage.getItem('userInfo') : null,
     token: localStorage.getItem('user-token'),
+    admin: localStorage.getItem('admin') ? localStorage.getItem('admin') : null,
+    adminToken: localStorage.getItem('admin-token'),
     loading: false,
     notLoading: false,
     previousRoute: {
@@ -36,9 +38,10 @@ export const useAuthStore = defineStore('auth', {
       return new Promise((resolve, reject) => {
         AuthService.loginUser({ email, password })
           .then(({ data }) => {
-            this.user = data?.data
-            this.token = data?.data.token
-            if (this.token && !data?.data.is_change_password) {
+            console.log(data);
+            this.user = data?.user
+            this.token = data?.tokens?.access
+            if (this.token) {
               localStorage.setItem('user-token', this.token)
               localStorage.setItem('userInfo', JSON.stringify(this.user))
             }
@@ -47,9 +50,25 @@ export const useAuthStore = defineStore('auth', {
           .catch(({ response }) => reject(response))
       })
     },
-    async userRegister(payload) {
+    async loginAdmin({ email, password }) {
       return new Promise((resolve, reject) => {
-        AuthService.userRegister(payload)
+        AuthService.loginAdmin({ email, password })
+          .then(({ data }) => {
+            console.log(data);
+            this.user = data?.admin
+            this.token = data?.tokens?.access
+            if (this.token) {
+              localStorage.setItem('admin-token', this.token)
+              localStorage.setItem('admin', JSON.stringify(this.user))
+            }
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    async userRegister({ name, email, password }) {
+      return new Promise((resolve, reject) => {
+        AuthService.userRegister({ name, email, password })
           .then(({ data }) => {
             resolve(data)
           })
@@ -89,7 +108,9 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.previousRoute = null
       localStorage.removeItem('user-token')
+      localStorage.removeItem('admin-token')
       localStorage.removeItem('userInfo')
+      localStorage.removeItem('admin')
     },
     setPreviousRoute(route) {
       this.previousRoute = route

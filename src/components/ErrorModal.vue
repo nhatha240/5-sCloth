@@ -13,7 +13,7 @@
       <div class="error-details" v-html="errorMessage"></div>
     </div>
     <button class="btn-confirm" @click="cancelModal">
-      {{ '再読み込み' }}
+      {{ 'Cancel' }}
     </button>
   </VueFinalModal>
 </template>
@@ -73,6 +73,18 @@ const checkClosed = () => {}
     padding: 64px 18px;
     border-radius: 16px;
     background-color: #ffffff;
+  }
+  .btn-confirm {
+    padding: 8px;
+    background-color: #F0142F;
+    border-radius: 8px;
+    font-family: Inter, Open Sans, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: center;
+    color: #FFFFFF;
+    width: 108px;
   }
   .title-modal {
     font-family: Noto Sans JP;

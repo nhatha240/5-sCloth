@@ -16,7 +16,7 @@ apiClient.interceptors.request.use(
   (config) => {
     toggleLoading(true)
     config.headers['Accept'] = 'application/json'
-    // config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+    config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
     config.headers['Access-Control-Allow-Origin'] = '*'
     return config
   },
@@ -35,22 +35,16 @@ apiClient.interceptors.response.use(
     const storeError = useErrorStore()
     toggleLoading(false)
     if (error.response && error.response.data && error.response.status) {
-      if (error.response.status === 401) {
-        useAuthStore().clearStoreAuth()
-        router.push({ name: 'Login' })
-      }
+      // if (error.response.status === 401) {
+      //   useAuthStore().clearStoreAuth()
+      //   router.push({ name: 'Login' })
+      // }
     }
-    if (error?.response?.data?.result?.code) {
-      if (!error.response.data?.result.code) {
-        error.response.data.result.code = 500
+    if (error?.response?.data?.code) {
+      if (!error.response.data?.code) {
+        error.response.data.code = 500
       }
-      if (
-        error.response?.data?.result?.code == 'MESERR010' ||
-        error.response?.data?.result?.code == 'MESERR019'
-      ) {
-        router.push({ path: '/' })
-      }
-      storeError.error = error?.response?.data?.result
+      storeError.error = error?.response?.data
     } else if (error.request.responseType === 'blob') {
       const errorResponse = JSON.parse(await error.response.data.text())
       storeError.error = errorResponse?.result

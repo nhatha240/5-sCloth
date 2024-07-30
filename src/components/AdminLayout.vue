@@ -1,5 +1,8 @@
 <template>
-    <div class="MuiStack-root css-10ioqvk-MuiStack-root">
+    <div class="w-[30%] pt-[24px] m-auto" v-if="route.name === 'LoginPage'">
+        <router-view></router-view>
+    </div>
+    <div class="MuiStack-root css-10ioqvk-MuiStack-root" v-else>
         <div class="MuiBox-root css-6su6fj">
             <div class="MuiDrawer-root MuiDrawer-docked css-1h1dy0v-MuiDrawer-docked">
                 <div
@@ -164,7 +167,9 @@ onMounted(() => {
     beforeCreate()
 })
 const beforeCreate = () => {
-    document.body.className = 'admin';
+    if (route.name !== 'LoginPage') {
+        document.body.className = 'admin';
+    }
 }
 const routeList = ref([
     {

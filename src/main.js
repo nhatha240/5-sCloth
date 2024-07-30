@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'vue3-easy-data-table/dist/style.css';
+import 'vue-loading-overlay/dist/css/index.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -20,6 +21,10 @@ import "echarts";
 import Vue3EasyDataTable from 'vue3-easy-data-table';
 import EmptyAdminData from './components/EmptyAdminData.vue'
 import ConfirmDeleteItem from './components/ConfirmDeleteItem.vue'
+import HeaderMain from './components/HeaderMain.vue'
+import { Field, Form, ErrorMessage } from 'vee-validate'
+import './vee-validate'
+import { LoadingPlugin } from 'vue-loading-overlay'
 
 const app = createApp(App)
 const swiper = new Swiper()
@@ -30,6 +35,7 @@ app.use(createBootstrap({components: true, directives: true}))
 app.use(router)
 app.use(swiper)
 app.use(vfm)
+app.use(LoadingPlugin);
 app.component('Menu', Menu)
 app.component('MenuButton', MenuButton)
 app.component('MenuItems', MenuItems)
@@ -38,5 +44,9 @@ app.component('VueFinalModal', VueFinalModal)
 app.component('EasyDataTable', Vue3EasyDataTable);
 app.component('EmptyAdminData', EmptyAdminData);
 app.component('ConfirmDeleteItem', ConfirmDeleteItem);
+app.component('HeaderMain', HeaderMain);
+app.component('Field', Field);
+app.component('Form', Form);
+app.component('ErrorMessage', ErrorMessage);
 
 app.mount('#app')

@@ -78,7 +78,7 @@
             </MenuButton>
             <MenuItems
               class="z-[1] absolute right-0 w-full origin-top-right divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-              <MenuItem v-for="(link, index) in links" :key="index" as="a" :class="[
+              <MenuItem v-for="(link, index) in menuContent" :key="index" as="a" :class="[
         route.name === link.value ? 'shadow-[0_4px_4px_0_rgba(0,0,0,0.25)]' : '',
         'group flex w-full items-center text-[#D651FF] menu-item-text pt-[14px] pb-[9px] px-[35px] cursor-pointer',
       ]" @click="toPage(link)">
@@ -98,7 +98,7 @@
           <span
             class="absolute right-0 bg-[#D651FF] w-[23px] h-[23px] border-[#FFFFFF] border-2 rounded-[50%] basket-number">1</span>
         </div>
-        <Menu as="div" class="relative">
+        <Menu as="div" class="relative" v-if="storeAuth.user">
           <MenuButton
             class="flex items-center justify-between bg-white text-[#D651FF] font-semibold py-2 px-4 rounded-lg border-[#D651FF] border min-w-[261px]">
             <div class="flex items-center gap-[21px]">
@@ -119,6 +119,9 @@
             </MenuItem>
           </MenuItems>
         </Menu>
+        <button class="btn-pink px-[20px]" v-else @click="() => {router.push({ name: 'LoginView' })}">
+          Login
+        </button>
       </div>
     </nav>
   </div>
@@ -129,8 +132,10 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import BreadCumbs from './BreadCumbs.vue'
 import { useShopStore } from '../stores/ShopStore'
+import { useAuthStore } from '../stores/AuthStore'
 
 const emits = defineEmits(['update:search'])
+const storeAuth = useAuthStore()
 const storeShop = useShopStore()
 const router = useRouter();
 const route = useRoute();
@@ -153,7 +158,12 @@ const menuContent = ref([
 const showBasket = ref(false)
 
 const toPage = (link) => {
-  router.push({ name: link.value });
+  if (link.value === 'signOut') {
+    storeAuth.clearStoreAuth()
+    router.push({ name: 'LoginView' });
+  } else {
+    router.push({ name: link.value, query: { category: link.category } });
+  }
 }
 
 const openBasket = () => {

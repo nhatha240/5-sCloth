@@ -1,39 +1,58 @@
 <template>
+    <HeaderMain></HeaderMain>
     <div class="signup-box mx-auto my-[50px] w-[80%]">
         <div class="bg-[#D651FF] rounded-[10px] h-[88px]"></div>
         <div class="row m-0">
-            <div class="signup-input-layout flex-[0_0_50%]" v-if="isRegister">
+            <Form ref="form" @submit="confirmRegister" class="signup-input-layout flex-[0_0_50%]" v-if="isRegister">
                 <div class="">
                     <div class="label-text">Tên *</div>
-                    <input type="text">
+                    <input type="text" v-model="userInfo.name">
                 </div>
                 <div class="">
                     <div class="label-text">Số điện thoại*</div>
-                    <input type="text">
+                    <input type="number" v-model="userInfo.phone">
                 </div>
                 <div class="">
                     <div class="label-text">Email*</div>
-                    <input type="text">
+                    <input type="email" v-model="userInfo.email">
                 </div>
                 <div class="">
                     <div class="label-text">Mật khẩu*</div>
                     <div class="relative">
-                        <input type="password">
-                        <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                        <Field v-slot="{ field, errors }"
+                            v-model="userInfo.password"
+                            :name="'password'"
+                            :rules="'required'"
+                            ref="password"
+                        >
+                            <input v-bind="field" type="password">
+                            <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                            <div class="text-red-500">{{ errors[0] }}</div>
+                        </Field>
                     </div>
                 </div>
                 <div class="">
                     <div class="label-text">Nhập lại mật khẩu*</div>
                     <div class="relative">
-                        <input type="password">
-                        <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                        <Field v-slot="{ field, errors }"
+                            v-model="userInfo.passwordConfirm"
+                            :name="'passwordConfirm'"
+                            :rules="{
+                                'required': true,
+                                'confirmed': '@password',
+                            }"
+                        >
+                            <input v-bind="field" type="password">
+                            <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                            <div class="text-red-500">{{ errors[0] }}</div>
+                        </Field>
                     </div>
                 </div>
-                <button class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto" @click="confirmRegister">
+                <button type="submit" class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
                     Đăng Kí
                 </button>
-            </div>
-            <form @submit="login" class="signup-input-layout flex-[0_0_50%]" v-else>
+            </Form>
+            <form @submit.prevent="login" class="signup-input-layout flex-[0_0_50%]" v-else>
                 <div class="">
                     <div class="label-text">Email *</div>
                     <input type="email" v-model="user.email" required>
@@ -80,33 +99,61 @@
 <script lang="js" setup>
 import { ref } from 'vue';
 import { useAuthStore } from '@/stores/AuthStore';
+import router from '@/router';
+import { useForm } from "vee-validate";
 
 const storeAuth = useAuthStore()
 const user = ref({
     email: '',
     password: ''
 })
-const isRegister = ref(true)
-const isLogin = ref(false)
+const userInfo = ref({
+    name: '',
+    email: '',
+    password: '',
+    passwordConfirm: '',
+    phone: '',
+})
+const isRegister = ref(false)
+const isLogin = ref(true)
 const toLogin = () => {
     isRegister.value = false
     isLogin.value = true
+    user.value = {
+        email: '',
+        password: ''
+    }
 }
 const toRegister = () => {
     isRegister.value = true
     isLogin.value = false
-}
-const confirmRegister = () => {
-    
-}
-const login = async () => {
-    try {
-        const data = await storeAuth.loginUser(user.value)
-        console.log(data);
-    } catch (error) {
-        console.log(error);
+    user.value = {
+        email: '',
+        password: ''
     }
 }
+
+const login = async () => {
+    try {
+        await storeAuth.loginUser(user.value)
+        router.push(({ name: 'home' }))
+    } catch (error) {
+        return error
+    }
+}
+
+const { handleSubmit } = useForm(userInfo.value);
+const onInvalidSubmitError = ({ errors }) => {
+    return errors;
+};
+const confirmRegister = handleSubmit(async () => {
+    try {
+        const data = await storeAuth.userRegister(userInfo.value)
+        console.log(data);
+    } catch (error) {
+        return error
+    }
+}, onInvalidSubmitError);
 </script>
 
 <style></style>

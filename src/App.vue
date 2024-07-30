@@ -3,7 +3,7 @@
   <ErrorModal
     v-model="modalError"
     :model-value="modalError"
-    :title="'エラーが発生しました'"
+    :title="'An Error has occurred'"
     :errorMessage="errorMessage"
     :error-store="storeError.error"
     @update:model-value="closeError"

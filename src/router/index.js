@@ -20,6 +20,7 @@ import CustomerModifyView from '@/views/admin/CustomerModifyView.vue'
 import RatingPageView from '@/views/admin/RatingPageView.vue'
 import RatingDetailsView from '@/views/admin/RatingDetailsView.vue'
 import PersonalSettingView from '@/views/admin/PersonalSettingView.vue'
+import LoginPage from '@/views/admin/LoginPage.vue'
 import UserLayout from '@/components/FooterMain.vue'
 import AdminLayout from '@/components/AdminLayout.vue'
 import auth from '@/middleware/auth'
@@ -51,6 +52,36 @@ const ifNotAuthenticated = (to, from, next) => {
   }
 }
 
+const isUserAuthenticated = (to, from, next) => {
+  if (localStorage.getItem('user-token')) {
+    if (to?.path == '/login') {
+      next({ name: 'home' })
+    } else {
+      next()
+    }
+  } else {
+    if (to?.path !== '/login') {
+      next({ name: 'LoginView' })
+    }
+    next()
+  }
+}
+
+const isAdminAuthenticated = (to, from, next) => {
+  if (localStorage.getItem('admin-token')) {
+    if (to?.path == '/admin/login') {
+      next({ name: 'DashBoardView' })
+    } else {
+      next()
+    }
+  } else {
+    if (to?.path !== '/admin/login') {
+      next({ name: 'LoginPage' })
+    }
+    next()
+  }
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -58,6 +89,7 @@ const router = createRouter({
       path: '/',
       name: 'UserLayout',
       component: UserLayout,
+      beforeEnter: isUserAuthenticated,
       children: [
         {
           path: '',
@@ -120,13 +152,25 @@ const router = createRouter({
             breadcrumb: 'Books'
           }
         }
-      ]
+      ],
+      meta: {
+        title: 'Home',
+      },
     },
     {
       path: '/admin',
       name: 'AdminLayout',
       component: AdminLayout,
+      beforeEnter: isAdminAuthenticated,
       children: [
+        {
+          path: 'login',
+          name: 'LoginPage',
+          component: LoginPage,
+          meta: {
+            title: 'LoginPage'
+          }
+        },
         {
           path: '',
           name: 'DashBoardView',
