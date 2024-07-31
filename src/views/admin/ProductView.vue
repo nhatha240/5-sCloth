@@ -28,10 +28,11 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <select class="common-input-field" v-model="searchField">
+                        <option selected disabled>Filter</option>
                         <option>customer</option>
                         <option>order_status</option>
                     </select>
-                    <input class="common-input-field" type="text" v-model="searchValue">
+                    <input class="common-input-field search-input" type="text" v-model="searchValue">
                 </div>
                 <div class="flex items-center gap-3">
                     <button class="btn-modify">
@@ -42,21 +43,22 @@
                     </button>
                 </div>
             </div>
-
             <EasyDataTable v-model:items-selected="itemsSelected" class="common-table" :headers="headers" :items="items"
-                :search-field="searchField" :search-value="searchValue" @click-row="showRow">
-                <template #item-product="{ product }">
+                :search-field="searchField" :search-value="searchValue" :rows-per-page="10" :hide-rows-per-page="true" @click-row="showRow">
+                <template #item-product="{ name, image, tags }">
                     <div class="flex items-center">
-                        <img :src="product.img" alt="">
+                        <img :src="image" alt="">
                         <div class="flex flex-col">
-                            <div class="">{{ product.name }}</div>
-                            <div class="">{{ product.type }}</div>
+                            <div class="">{{ name }}</div>
+                            <div class="" v-for="(tag, index) in tags" :key="index">
+                                {{ tag }}{{ (index < tags.length - 1 && index % 2 === 0) ? ', ' : '' }}
+                            </div>
                         </div>
                     </div>
                 </template>
-                <template #item-inventory="{ inventory }">
-                    <span class="inline-block" v-if="inventory">
-                        {{ inventory }} in stock
+                <template #item-quantity="{ quantity }">
+                    <span class="inline-block" v-if="quantity">
+                        {{ quantity }} in stock
                     </span>
                     <span class="inline-block out-stock-field" v-else>
                         Out of Stock
@@ -67,12 +69,29 @@
                         ${{ price }}
                     </span>
                 </template>
-                <template #item-rating="{ rating }">
+                <template #item-color="{ options }">
+                    <span class="" v-for="(option, index) in options" :key="index">
+                        <span class="" v-for="(color, i) in option.color" :key="i">
+                            {{ color }}{{ (i < option.color.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                        </span>
+                    </span>
+                </template>
+                <template #item-rating="{ totalRating, userRating }">
                     <div class="inline-block">
-                        {{ rating.star + '(' + rating.count + 'Votes)' }}
+                        {{ userRating + ' (' + totalRating + ' Votes)' }}
                     </div>
                 </template>
             </EasyDataTable>
+            <PaginateAdmin
+                v-if="totalitem"
+                v-model:page="page"
+                v-model:page-size="pageSize"
+                :showPaging="true"
+                :items="items"
+                :length="totalitem"
+                :total-page="totalPage"
+                :topage="toPage"
+            />
         </div>
         <div class="" v-else>
             <EmptyAdminData
@@ -87,72 +106,105 @@
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ORDER_STATUS } from '@/constant/common'
 import { useRouter } from 'vue-router';
 import _ from 'lodash'
+import PaginateAdmin from '@/components/PaginateAdmin.vue'
+import { useProductStore } from '@/stores/ProductStore'
 
+const storeProduct = useProductStore()
 const router = useRouter();
 const modalDelete = ref(false)
 const searchField = ref("color");
 const searchValue = ref("");
 const itemsSelected = ref([])
 const idSelected = ref([])
+const page = ref(1)
+const pageSize = ref(1)
+const totalPage = ref()
+const totalitem = ref()
 const headers = [
     { text: "Product", value: "product" },
-    { text: "Inventory", value: "inventory" },
+    { text: "Inventory", value: "quantity" },
     { text: "Color", value: "color" },
     { text: "Price", value: "price" },
     { text: "Rating", value: "rating" },
 ];
 
-const items = [
-    {
-        id: 1,
-        "product": {
-            name: 'Men Grey Hoodie',
-            type: 'Hoodies',
-            img: '',
-        },
-        "inventory": 56,
-        "color": 'Black',
-        "price": '36',
-        "rating": {
-            star: 5,
-            count: 32
-        },
-    },
-    {
-        id: 2,
-        "product": {
-            name: 'Women Striped T-Shirt',
-            type: 'T-Shirt',
-            img: '',
-        },
-        "inventory": 96,
-        "color": 'Pink',
-        "price": '39',
-        "rating": {
-            star: 4.8,
-            count: 24
-        },
-    },
-    {
-        id: 2,
-        "product": {
-            name: 'Women White T-Shirt',
-            type: 'T-Shirt',
-            img: '',
-        },
-        "inventory": 0,
-        "color": 'Red',
-        "price": '25',
-        "rating": {
-            star: 4.5,
-            count: 54
-        },
-    },
-];
+const items = ref([
+    // {
+    //     id: 1,
+    //     "product": {
+    //         name: 'Men Grey Hoodie',
+    //         type: 'Hoodies',
+    //         img: '',
+    //     },
+    //     "inventory": 56,
+    //     "color": 'Black',
+    //     "price": '36',
+    //     "rating": {
+    //         star: 5,
+    //         count: 32
+    //     },
+    // },
+    // {
+    //     id: 2,
+    //     "product": {
+    //         name: 'Women Striped T-Shirt',
+    //         type: 'T-Shirt',
+    //         img: '',
+    //     },
+    //     "inventory": 96,
+    //     "color": 'Pink',
+    //     "price": '39',
+    //     "rating": {
+    //         star: 4.8,
+    //         count: 24
+    //     },
+    // },
+    // {
+    //     id: 2,
+    //     "product": {
+    //         name: 'Women White T-Shirt',
+    //         type: 'T-Shirt',
+    //         img: '',
+    //     },
+    //     "inventory": 0,
+    //     "color": 'Red',
+    //     "price": '25',
+    //     "rating": {
+    //         star: 4.5,
+    //         count: 54
+    //     },
+    // },
+]);
+
+onMounted(() => {
+    initProducts()
+})
+
+const toPage = () => {
+    initProducts()
+}
+
+const initProducts = async () => {
+    try {
+        const params = {
+            page: page.value,
+            pageSize: pageSize.value,
+        }
+        const data = await storeProduct.getProducts(params)
+        console.log(data);
+        items.value = data?.results
+        console.log(items.value);
+        totalPage.value = data?.totalPages
+        totalitem.value = data?.totalResults
+    } catch (error) {
+        return error
+    }
+}
+
 const showRow = (item) => {
     router.push({ name: 'ProductDetailsView', params: { id: item.id } })
 };

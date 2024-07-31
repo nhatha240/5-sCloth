@@ -3,10 +3,9 @@ import AuthService from '../services/AuthService'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: localStorage.getItem('userInfo') ? localStorage.getItem('userInfo') : null,
-    token: localStorage.getItem('user-token'),
-    admin: localStorage.getItem('admin') ? localStorage.getItem('admin') : null,
-    adminToken: localStorage.getItem('admin-token'),
+    user: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
+    token: localStorage.getItem('token'),
+    admin: localStorage.getItem('admin') ? JSON.parse(localStorage.getItem('admin')) : null,
     loading: false,
     notLoading: false,
     previousRoute: {
@@ -26,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
     },
     settoken(token) {
       this.token = token
-      localStorage.setItem('user-token', this.token)
+      localStorage.setItem('token', this.token)
     },
     toggleLoading(isLoading) {
       this.loading = isLoading
@@ -40,9 +39,9 @@ export const useAuthStore = defineStore('auth', {
           .then(({ data }) => {
             console.log(data);
             this.user = data?.user
-            this.token = data?.tokens?.access
+            this.token = data?.tokens?.access?.token
             if (this.token) {
-              localStorage.setItem('user-token', this.token)
+              localStorage.setItem('token', this.token)
               localStorage.setItem('userInfo', JSON.stringify(this.user))
             }
             resolve(data)
@@ -54,12 +53,11 @@ export const useAuthStore = defineStore('auth', {
       return new Promise((resolve, reject) => {
         AuthService.loginAdmin({ email, password })
           .then(({ data }) => {
-            console.log(data);
-            this.user = data?.admin
-            this.token = data?.tokens?.access
+            this.admin = data?.admin
+            this.token = data?.tokens?.access?.token
             if (this.token) {
-              localStorage.setItem('admin-token', this.token)
-              localStorage.setItem('admin', JSON.stringify(this.user))
+              localStorage.setItem('token', this.token)
+              localStorage.setItem('admin', JSON.stringify(this.admin))
             }
             resolve(data)
           })
@@ -105,10 +103,10 @@ export const useAuthStore = defineStore('auth', {
     },
     clearStoreAuth() {
       this.user = null
+      this.admin = null
       this.token = null
       this.previousRoute = null
-      localStorage.removeItem('user-token')
-      localStorage.removeItem('admin-token')
+      localStorage.removeItem('token')
       localStorage.removeItem('userInfo')
       localStorage.removeItem('admin')
     },

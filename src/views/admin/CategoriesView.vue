@@ -70,8 +70,8 @@ const openAddCategory = () => {
     modalCategory.value = true
 }
 
-const confirmAddCategory = (e) => {
-    console.log(e);
+const confirmAddCategory = async (e) => {
+    
 }
 </script>
 

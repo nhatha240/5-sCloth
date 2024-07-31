@@ -16,10 +16,19 @@
                 <div class="details-text pb-1">
                     Add Products
                 </div>
-                <select class="form-select" v-model="category.product" required>
+                <select class="form-select" v-model="category.description" required placeholder="Choose a Product">
                     <option selected disabled>Choose a Product</option>
-                    <option value="">a</option>
+                    <option value="a">a</option>
+                    <option value="b">b</option>
+                    <option value="c">c</option>
                 </select>
+            </div>
+            <div class="pb-6">
+                <div class="details-text pb-1">
+                    Image
+                </div>
+                <label for="formFile" class="form-label"></label>
+                <input class="form-control" type="file" id="formFile" accept="image/*" @change="handleUpload($event)">
             </div>
             <div class="flex items-center justify-end gap-[28px]">
                 <button type="button" class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border-none py-2 px-[25px] rounded-[4px]" @click="cancelModal">
@@ -36,6 +45,8 @@
 <script lang="js" setup>
 import { ref } from 'vue';
 import { computed } from 'vue';
+import { useCategoryStore } from '@/stores/CategoryStore'
+import { toastSuccess } from '@/constant/commonUsage'
 
 const emits = defineEmits(['update:modelValue', 'update:addCategory'])
 const props = defineProps({
@@ -43,9 +54,11 @@ const props = defineProps({
     title: String,
 })
 
+const storeCategory = useCategoryStore()
 const category = ref({
     name: '',
-    product: '',
+    description: '',
+    image: '',
 })
 const showModal = computed({
     get() {
@@ -59,7 +72,20 @@ const cancelModal = () => {
     emits('update:modelValue', false)
 }
 
-const addCategory = () => {
+const handleUpload = (event) => {
+    const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
+    if (files.length) {
+        category.value.image = 'public/uploads/' + files[0]?.name
+    }
+}
+
+const addCategory = async () => {
+    try {
+        await storeCategory.createCategory(category.value)
+        toastSuccess('Success')
+    } catch (error) {
+        return error
+    }
     emits('update:addCategory', category.value)
     emits('update:modelValue', false)
 }

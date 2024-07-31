@@ -10,7 +10,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]" @click="backToProduct">
                     Cancel
                 </button>
                 <button
@@ -37,7 +37,7 @@
                 <div class="border-b border-[#D7DBEC] pb-10">
                     <div class="border-b border-[#D7DBEC] drag-file-field">
                         <div class="w-full py-12 !border-dashed border-[1px] border-[#A1A7C4] text-center">
-                            <input id="file" type="file" accept="*" class="inputfile" multiple
+                            <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
                                 @change="handleUpload($event)" />
                             <label :for="'file'" class="file-upload-layout" @drop="dropFile($event)">
                                 <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add File</label>
@@ -140,10 +140,10 @@
                 <div class="order-details-box">
                     <div class="label-text pb-[18px]">Categories</div>
                     <ul class="space-y-2 pl-0">
-                        <li v-for="(category, index) in categories" :key="index" class="flex items-center">
-                            <input type="checkbox" :id="category" :value="category" v-model="selectedOption"
+                        <li v-for="(category, index) in storeCategory.categories" :key="index" class="flex items-center">
+                            <input type="checkbox" :id="category.id" :value="category.name" v-model="selectedOption"
                                 class="form-check-input text-purple-600 focus:ring-purple-500">
-                            <label :for="category" class="ml-2 text-sm text-gray-700">{{ category }}</label>
+                            <label :for="category.id" class="ml-2 text-sm text-gray-700">{{ category.name }}</label>
                         </li>
                     </ul>
                     <div class="cursor-pointer text-[#1E5EFF] font-normal text-base">
@@ -180,7 +180,7 @@
         <div class="flex items-center justify-end border-t border-[#D7DBEC] mt-[30px]">
             <div class="flex items-center gap-3 pt-[28px]">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]" @click="backToProduct">
                     Cancel
                 </button>
                 <button
@@ -196,7 +196,11 @@
 <script lang="js" setup>
 import { onMounted, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useProductStore } from '@/stores/ProductStore'; 
+import { useCategoryStore } from '@/stores/CategoryStore'; 
 
+const storeProduct = useProductStore()
+const storeCategory = useCategoryStore()
 const router = useRouter();
 const route = useRoute();
 const productId = ref(route?.params?.id)
@@ -224,6 +228,7 @@ const categories = ref([
 ]);
 
 onMounted(async () => {
+    initCategories();
     initProductDetails();
 })
 
@@ -232,7 +237,20 @@ const backToProduct = () => {
 }
 
 const initProductDetails = async () => {
+    try {
+        const data = await storeProduct.getProduct(productId.value)
+        console.log(data);
+    } catch (error) {
+        return error
+    }
+}
 
+const initCategories = async () => {
+    try {
+        await storeCategory.getCategories()
+    } catch (error) {
+        return error;
+    }
 }
 
 const dropFile = (event) => {

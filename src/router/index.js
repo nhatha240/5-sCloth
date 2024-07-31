@@ -53,7 +53,7 @@ const ifNotAuthenticated = (to, from, next) => {
 }
 
 const isUserAuthenticated = (to, from, next) => {
-  if (localStorage.getItem('user-token')) {
+  if (localStorage.getItem('token')) {
     if (to?.path == '/login') {
       next({ name: 'home' })
     } else {
@@ -68,7 +68,7 @@ const isUserAuthenticated = (to, from, next) => {
 }
 
 const isAdminAuthenticated = (to, from, next) => {
-  if (localStorage.getItem('admin-token')) {
+  if (localStorage.getItem('token')) {
     if (to?.path == '/admin/login') {
       next({ name: 'DashBoardView' })
     } else {

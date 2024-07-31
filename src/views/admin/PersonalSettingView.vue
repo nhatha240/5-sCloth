@@ -24,7 +24,7 @@
                         <div class="details-text">Profile Image</div>
                         <div class="border-b border-[#D7DBEC] drag-file-field">
                             <div class="w-full py-12 !border-dashed border-[1px] border-[#A1A7C4] text-center">
-                                <input id="file" type="file" accept="*" class="inputfile" multiple
+                                <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
                                     @change="handleUpload($event)" />
                                 <label :for="'file'" class="file-upload-layout" @drop="dropFile($event)">
                                     <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add

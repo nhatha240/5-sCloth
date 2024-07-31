@@ -18,7 +18,9 @@
                     type="email"
                     v-bind="field"
                 >
-                {{ errors[0] }}
+                <div class="text-red-500">
+                    {{ errors[0] }}
+                </div>
             </Field>
             <label for="" class="v-label text-subtitle-1 font-weight-semibold pb-2 text-lightText">
                 Password
@@ -34,7 +36,9 @@
                     type="password"
                     v-bind="field"
                 >
-                {{ errors[0] }}
+                <div class="text-red-500">
+                    {{ errors[0] }}
+                </div>
             </Field>
             <button type="submit" class="w-full p-[8px] bg-primary rounded-lg text-white mt-3">
                 Sign in

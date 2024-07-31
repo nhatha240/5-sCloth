@@ -202,6 +202,7 @@
   bottom: 0;
 }
 .common-table {
+  --da0d4328: auto !important;
   width: 100%;
   thead {
       tr {

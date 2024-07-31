@@ -135,13 +135,28 @@
                             </span>
                         </button>
                         <div class="MuiBox-root css-129hs4l">
-                            <button class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root">
+                            <div class="absolute profile-menu-layout" :class="{ 'hidden': profileMenu }">
+                                <ul class="menu-ul">
+                                    <li @click="toSettingAccount">
+                                        <img src="/images/profile_admin_icon.svg" alt="">
+                                        <div class="menu-text">
+                                            My Profile
+                                        </div>
+                                    </li>
+                                    <div class="flex justify-center">
+                                        <button class="logout-btn w-full" @click="logout">
+                                            Logout
+                                        </button>
+                                    </div>
+                                </ul>
+                            </div>
+                            <button class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root" @click="openProfileMenu">
                                 <div class="MuiStack-root css-1oxsjqv-MuiStack-root">
                                     <div class="MuiAvatar-root MuiAvatar-rounded css-14wdk2t-MuiAvatar-root">
                                         <img class="MuiAvatar-img css-1pqm26d-MuiAvatar-img" src="" alt="">
                                     </div>
                                     <h6 class="MuiTypography-root MuiTypography-subtitle1 css-lh1uqt-MuiTypography-root">
-                                        X’eriya Ponald
+                                        {{ storeAuth.admin?.name }}
                                     </h6>
                                 </div>
                             </button>
@@ -157,15 +172,24 @@
 </template>
 
 <script lang="js" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/AuthStore';
 
+const storeAuth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
+const profileMenu = ref(true)
 
 onMounted(() => {
     beforeCreate()
 })
+watch(
+    () => route.name,
+    () => {
+        profileMenu.value = true
+    },
+)
 const beforeCreate = () => {
     if (route.name !== 'LoginPage') {
         document.body.className = 'admin';
@@ -213,6 +237,18 @@ const settingRouteList = ref([
     //     label: 'Global Settings', path: '/admin/', icon: '/images/global_setting_icon.svg', notifyCount: '', name: ''
     // },
 ])
+const openProfileMenu = () => {
+    profileMenu.value = !profileMenu.value
+}
+const toSettingAccount = () => {
+    router.push({ name: 'PersonalSettingView' })
+    profileMenu.value = !profileMenu.value
+}
+const logout = () => {
+    storeAuth.clearStoreAuth()
+    profileMenu.value = !profileMenu.value
+    router.push({ name: 'LoginPage' })
+}
 </script>
 
 <style lang="scss">
@@ -1227,5 +1263,57 @@ body.admin {
     line-height: 36px;
     text-align: left;
     color: #131523;
+}
+.profile-menu-layout {
+    opacity: 1;
+    transform: none;
+    padding-top: 8px;
+    width: 100%;
+    max-width: 120px;
+    transition: opacity 264ms cubic-bezier(0.4, 0, 0.2, 1), transform 176ms cubic-bezier(0.4, 0, 0.2, 1);
+    top: 58px;
+    transform-origin: 120px 0px;
+    -webkit-overflow-scrolling: touch;
+    margin: auto;
+    border-radius: 6px;
+    margin-top: 8px;
+    color: #5A607F;
+    background-color: #fff;
+    box-shadow: 0px -2.46px 3.86px 0px rgba(0, 0, 0, 0.02), 0px 2.258px 4.692px 0px rgba(0, 0, 0, 0.02), 0px 6.147px 9.475px 0px rgba(0, 0, 0, 0.03), 4px 18px 18px 0px rgba(0, 0, 0, 0.04);
+    .menu-ul {
+        list-style: none;
+        margin: 0;
+        position: relative;
+        outline: 0;
+        padding: 0;
+        padding-bottom: 8px;
+        li {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            gap: 8px;
+            cursor: pointer;
+            &:hover {
+                background-color: #F5F6FA;
+            }
+            .menu-text {
+                margin: 0;
+                font-size: 0.75rem;
+                font-weight: 400;
+                line-height: 1;
+                font-family: Inter, Open Sans, sans-serif;
+            }
+        }
+        .logout-btn {
+            border-radius: 4px;
+            padding: 4px 20px;
+            border: 1px solid #D7DBEC;
+            text-align: center;
+            color: #1E5EFF;
+            font-size: 14px;
+            margin-top: 12px;
+            max-width: 80%;
+        }
+    }
 }
 </style>

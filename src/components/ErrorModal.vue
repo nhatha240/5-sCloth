@@ -61,7 +61,7 @@ const checkClosed = () => {}
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 999;
+  z-index: 99999 !important;
 
   .error-modal-content {
     position: relative;

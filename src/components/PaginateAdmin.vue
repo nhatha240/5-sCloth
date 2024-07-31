@@ -1,22 +1,28 @@
 <template>
-    <div class="pagination-user paging align-items-center justify-content-center">
-        <nav class="paging-nav" aria-label="Page navigation example" v-if="showPaging">
-            <BPagination v-model="page" :total-rows="props.length" :per-page="pageSize" prev-text="" next-text=""
-                first-text="" last-text="" :limit="4">
-                <template #first-text>
-                    <div :tabindex="page == 1 ? '-1' : '0'" class="arrow-paging hidden">
-                    </div>
-                </template>
+    <div class="pagination-admin paging d-flex align-items-center justify-content-between">
+        <nav
+            class="paging-nav"
+            aria-label="Page navigation example"
+            v-if="showPaging"
+        >
+            <BPagination
+                v-model="page"
+                :total-rows="props.length"
+                :per-page="pageSize"
+                prev-text=""
+                next-text=""
+                first-number
+                last-number
+                :limit="7"
+            >
                 <template #prev-text>
-                    <div :tabindex="page == 1 ? '-1' : '0'" class="arrow-paging hidden">
+                    <div class="arrow-paging">
+                        <img src="/images/page-prev-icon.svg" />
                     </div>
                 </template>
                 <template #next-text>
-                    <div :tabindex="page == totalPage ? '-1' : '0'" class="arrow-paging hidden">
-                    </div>
-                </template>
-                <template #last-text>
-                    <div :tabindex="page == totalPage ? '-1' : '0'" class="arrow-paging hidden">
+                    <div class="arrow-paging">
+                        <img src="/images/page-next-icon.svg" />
                     </div>
                 </template>
                 <template #page="{ page, active }">
@@ -28,12 +34,16 @@
                 </template>
             </BPagination>
         </nav>
+        <div class="info-record">
+            <div class="count-page">{{ props.length }} Results</div>
+        </div>
     </div>
 </template>
 
 <script lang="js" setup>
-import { ref, defineEmits, defineProps, computed, onMounted, nextTick } from "vue";
+import { ref, defineEmits, defineProps, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
+
 const emits = defineEmits(['update:page', 'update:pageSize']);
 const props = defineProps({
     length: {
@@ -64,10 +74,6 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
-    customOption: {
-        type: Array,
-        default: () => [],
-    },
 });
 
 const router = useRouter();
@@ -84,7 +90,7 @@ const page = computed({
         return Number(props.page);
     },
     set(value) {
-        const query = { ...route.query }
+        const query = {...route.query}
         router.push({
             ...route,
             query: {
@@ -102,7 +108,7 @@ const pageSize = computed({
         return props.pageSize;
     },
     set(value) {
-        const query = { ...route.query }
+        const query = {...route.query}
         router.push({
             ...route,
             query: {
@@ -115,80 +121,66 @@ const pageSize = computed({
         emits("update:pageSize", value);
     },
 });
-
-onMounted(() => {
-    if (props.customOption?.length > 0) {
-        options.value = props.customOption
-    }
-})
 </script>
 
 <style lang="scss">
-.pagination-user {
+.pagination-admin {
     position: relative;
     margin-bottom: 0;
     align-items: center;
-
     .paging-nav {
         ul {
             gap: 4px;
         }
     }
-
     .page-item {
         .page-link {
-            font-size: 16px;
+            font-family: Inter, Open Sans, sans-serif;
+            font-size: 14px;
             font-weight: 700;
-            line-height: 24px;
+            line-height: 14px;
             letter-spacing: 0em;
-            color: #D651FF;
+            color: #7F8287;
             text-align: center;
-            background: rgba(141, 40, 173, 0.15);
-            border-radius: 10px;
-
+            border: unset !important;
+            background: unset;
+            border-radius: 8px;
             &.active {
-                border-radius: 10px !important;
-                background-color: #D651FF;
-                color: #FFFFFF;
+                border-radius: 8px !important;
+                border: 1px solid #ECF2FF !important;
+                color: #1E5EFF;
+                background-color: #ECF2FF;
             }
         }
-
         cursor: pointer;
-
         &.active {
             button {
                 border: unset !important;
             }
         }
-
         &.bv-d-xs-down-none {
             span {
                 border: unset !important;
             }
         }
-
         .arrow-paging {
             border-radius: 4px;
         }
-
         button {
             outline: unset;
             background-color: unset;
             box-shadow: unset;
             padding: 0;
-
             a {
                 margin: 0;
             }
         }
-
         span {
             padding: 0;
         }
 
         &.disabled {
             pointer-events: none !important;
-
             .arrow-paging {
                 opacity: 0.3;
                 outline: none;
@@ -198,18 +190,18 @@ onMounted(() => {
 
     .active {
         background: inherit;
-        font-family: Noto Sans JP;
+        font-family: Inter, Open Sans, sans-serif;
         font-size: 14px;
         font-weight: 700;
         line-height: 14px;
         letter-spacing: 0em;
         text-align: center;
-        color: #5B9AED;
+        color: #1E5EFF;
     }
 
     .page-link {
-        min-width: 50px;
-        height: 50px;
+        min-width: 34px;
+        height: 34px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -232,14 +224,12 @@ onMounted(() => {
     .info-record {
         display: flex;
         gap: 4px;
-        position: absolute;
-        left: 0;
         font-family: Helvetica Neue;
         font-size: 14px;
         font-style: normal;
         font-weight: 400;
         line-height: 120%;
-        color: #D651FF;
+        color: #7F8287;
 
         .count-page {
             color: #434446;
@@ -249,25 +239,24 @@ onMounted(() => {
     a {
         list-style: none;
         display: inline-flex;
-        background-color: rgba(141, 40, 173, 0.15) !important;
-        border: unset !important;
-        color: #D651FF;
-        background-color: rgba(141, 40, 173, 0.15);
+        background: inherit;
+        border: 1px solid rgba(8, 18, 26, 0.3) !important;
         -webkit-border-radius: 50%;
         -moz-border-radius: 50%;
-        border-radius: 10px;
+        border-radius: 8px;
         padding: 10px 4px;
         margin-right: 8px;
         text-decoration: none;
+        font-family: Helvetica Neue;
         font-style: normal;
-        font-weight: 700;
-        font-size: 16px;
-        line-height: 24px;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 16px;
         text-align: center;
-        color: #D651FF;
+        color: rgba(8, 18, 26, 0.72);
 
         &.active {
-            background-color: #D651FF;
+            background-color: #08121ab8;
             border-radius: 4px;
             font-style: normal;
             line-height: 16px;
@@ -280,7 +269,7 @@ onMounted(() => {
             font-style: normal;
             line-height: 16px;
             text-align: center;
-            color: #D651FF;
+            color: #7F8287;
         }
 
         &.disabled {
@@ -299,89 +288,5 @@ onMounted(() => {
             pointer-events: none;
         }
     }
-
-    .result-display {
-        position: absolute;
-        right: 0;
-        gap: 16px;
-
-        .title {
-            color: #D651FF;
-            font-family: Helvetica Neue;
-            font-size: 14px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 120%;
-        }
-
-        .custom-select {
-            position: relative;
-            color: rgba(29, 36, 51, 0.8);
-            font-family: Noto Sans JP;
-            font-size: 12px;
-            font-style: normal;
-            font-weight: 400;
-            line-height: 12px;
-
-            select {
-                background: inherit;
-                padding: 6px 16px 6px 8px;
-                border-radius: 10px;
-                border: 1px solid #BABFC3;
-                -moz-appearance: none;
-                -webkit-appearance: none;
-                appearance: none;
-                background-image: url('/public/images/arrow_pagesize.svg');
-                background-repeat: no-repeat;
-                background-position: center right 8px;
-                width: 72px;
-                text-align: center;
-                color: #FFFFFF;
-                font-family: Noto Sans JP;
-                font-size: 12px;
-                font-weight: 700;
-                line-height: 12px;
-            }
-
-            .form-select {
-                border-radius: 6px 0 0 6px;
-                padding: 0;
-                height: 40px;
-                width: 72px;
-                border: 1px solid rgba(8, 18, 26, 0.3);
-            }
-
-            .arrow-down {
-                cursor: pointer;
-                border-radius: 0 6px 6px 0;
-                padding: 7px 8px;
-                border-left: unset;
-                border: 1px solid rgba(8, 18, 26, 0.3);
-                background-color: rgba(8, 18, 26, 0.04);
-            }
-        }
-    }
-    
-    [aria-label="Go to next page"] {
-        display: none !important;
-    }
-    [aria-label="Go to previous page"] {
-        display: none !important;
-    }
-    [aria-label="Go to first page"] {
-        display: none !important;
-    }
-    [aria-label="Go to last page"] {
-        display: none !important;
-    }
-}
-::v-deep(.multiselect-caret) {
-    display: none;
-}
-
-::v-deep(.multiselect-wrapper) {
-    display: flex;
-    justify-content: start;
-    padding-left: 16px;
 }
 </style>

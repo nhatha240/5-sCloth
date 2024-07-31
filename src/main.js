@@ -5,6 +5,7 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import '@coreui/coreui/dist/css/coreui.min.css'
 import 'vue3-easy-data-table/dist/style.css';
 import 'vue-loading-overlay/dist/css/index.css'
+import 'vue3-toastify/dist/index.css';
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

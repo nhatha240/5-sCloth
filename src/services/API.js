@@ -34,11 +34,16 @@ apiClient.interceptors.response.use(
   async (error) => {
     const storeError = useErrorStore()
     toggleLoading(false)
+    console.log(error.response.status);
     if (error.response && error.response.data && error.response.status) {
-      // if (error.response.status === 401) {
-      //   useAuthStore().clearStoreAuth()
-      //   router.push({ name: 'Login' })
-      // }
+      if (error.response.status === 401) {
+        if (useAuthStore().admin?.role === 'admin') {
+          router.push({ name: 'LoginPage' })
+        } else {
+          router.push({ name: 'LoginView' })
+        }
+        useAuthStore().clearStoreAuth()
+      }
     }
     if (error?.response?.data?.code) {
       if (!error.response.data?.code) {
