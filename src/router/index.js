@@ -60,9 +60,6 @@ const isUserAuthenticated = (to, from, next) => {
       next()
     }
   } else {
-    if (to?.path !== '/login') {
-      next({ name: 'LoginView' })
-    }
     next()
   }
 }
