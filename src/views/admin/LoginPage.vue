@@ -14,11 +14,11 @@
                 :rules="'required|email'"
             >
                 <input
-                    class="form-control mb-8"
+                    class="form-control"
                     type="email"
                     v-bind="field"
                 >
-                <div class="text-red-500">
+                <div class="text-red-500 mb-8">
                     {{ errors[0] }}
                 </div>
             </Field>

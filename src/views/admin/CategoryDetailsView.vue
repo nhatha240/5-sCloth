@@ -6,7 +6,7 @@
         </div>
         <div class="flex items-center justify-between mb-[28px]">
             <div class="title-text">
-                {{ 'Women Clothes' }}
+                {{ categoryData?.name ?? '' }}
             </div>
             <div class="flex items-center gap-3">
                 <button class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border 
@@ -61,11 +61,17 @@
                     <div class="category-info-field">
                         <div class="main-text">Image</div>
                         <div class="border-b border-[#D7DBEC] drag-file-field">
-                            <div class="w-full py-12 !border-dashed border-[1px] border-[#A1A7C4] text-center">
+                            <div class="w-full !border-dashed border-[1px] border-[#A1A7C4] text-center">
                                 <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
                                     @change="handleUpload($event)" />
-                                <label :for="'file'" class="file-upload-layout" @drop="dropFile($event)">
-                                    <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add File</label>
+                                <label :for="'file'" class="file-upload-layout" @drop.prevent="dropFile($event)"
+                                    @dragleave.prevent="setInactive"
+                                    @dragover.prevent="setActive"
+                                    @dragenter.prevent="setActive"
+                                    @click.prevent="() => {}"
+                                >
+                                    <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
+                                        File</label>
                                     <div class="details-text">Or drag and drop files</div>
                                 </label>
                             </div>
@@ -79,7 +85,31 @@
 
 <script setup>
 import router from "@/router"
+import { useCategoryStore } from "@/stores/CategoryStore"; 
+import { ref } from "vue";
+import { onMounted } from "vue";
+import { useRoute } from "vue-router";
 
+const storeCategory = useCategoryStore();
+const route = useRoute()
+const categoryId = ref(route?.params?.id);
+const categoryData = ref()
+
+onMounted(() => {
+    initCategory();
+})
+
+const initCategory = async () => {
+    try {
+        const data =await storeCategory.getCategory(categoryId.value);
+        console.log(data);
+        categoryData.value = data
+    } catch (error) {
+        return error
+    }
+}
+const setActive = () => {}
+const setInactive = () => {}
 const backToCategories = () => {
     router.push({ name: 'CategoriesView' })
 }

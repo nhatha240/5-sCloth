@@ -1,7 +1,7 @@
 <template>
     <VueFinalModal v-model="showModal" class="category-modal" content-class="category-modal-content"
-        overlay-transition="vfm-fade" content-transition="vfm-fade" :focusTrap="false">
-        <div class="">
+        overlay-transition="vfm-fade" content-transition="vfm-fade" :focusTrap="false" :click-to-close="false">
+        <Form @submit="addCategory" ref="form">
             <div class="title-modal pb-[28px]">
                 {{ title }}
             </div>
@@ -10,43 +10,70 @@
                 <div class="details-text pb-1">
                     Category Name
                 </div>
-                <input type="text" class="form-control" placeholder="Women Clothes" v-model="category.name" required>
+                <Field 
+                    v-slot="{ field, errors }"
+                    v-model="category.name"
+                    :name="'category'"
+                    :rules="'required'"
+                >
+                    <input type="text" class="form-control" placeholder="Women Clothes" v-bind="field">
+                    <div class="text-red-500">
+                        {{ errors[0] }}
+                    </div>
+                </Field>
             </div>
             <div class="pb-6">
                 <div class="details-text pb-1">
                     Add Products
                 </div>
-                <select class="form-select" v-model="category.description" required placeholder="Choose a Product">
-                    <option selected disabled>Choose a Product</option>
-                    <option value="a">a</option>
-                    <option value="b">b</option>
-                    <option value="c">c</option>
-                </select>
+                <Field 
+                    v-slot="{ field, errors }"
+                    v-model="category.description"
+                    :name="'description'"
+                    :rules="'required'"
+                >
+                    <textarea v-bind="field" class="form-control w-full"></textarea>
+                    <div class="text-red-500">
+                        {{ errors[0] }}
+                    </div>
+                </Field>
             </div>
             <div class="pb-6">
                 <div class="details-text pb-1">
                     Image
                 </div>
-                <label for="formFile" class="form-label"></label>
-                <input class="form-control" type="file" id="formFile" accept="image/*" @change="handleUpload($event)">
+                <Field 
+                    v-slot="{ field, errors }"
+                    v-model="category.image"
+                    :name="'categoryImage'"
+                    :rules="'required'"
+                >
+                    <label for="formFile" class="form-label"></label>
+                    <input class="form-control" type="file" id="formFile" accept="image/*" @change="handleUpload($event)">
+                    <input type="text" class="hidden" v-bind="field">
+                    <div class="text-red-500">
+                        {{ errors[0] }}
+                    </div>
+                </Field>
             </div>
             <div class="flex items-center justify-end gap-[28px]">
                 <button type="button" class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border-none py-2 px-[25px] rounded-[4px]" @click="cancelModal">
                     Cancel
                 </button>
-                <button type="submit" class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center" @click="addCategory">
+                <button type="submit" class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center">
                     Create Category
                 </button>
             </div>
-        </div>
+        </Form>
     </VueFinalModal>
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { computed } from 'vue';
 import { useCategoryStore } from '@/stores/CategoryStore'
 import { toastSuccess } from '@/constant/commonUsage'
+import { useForm } from 'vee-validate';
 
 const emits = defineEmits(['update:modelValue', 'update:addCategory'])
 const props = defineProps({
@@ -60,6 +87,19 @@ const category = ref({
     description: '',
     image: '',
 })
+
+watch(
+    () => props.modelValue,
+    () => {
+        if (!showModal.value) {
+            category.value = {
+                name: '',
+                description: '',
+                image: '',
+            }
+        }
+    }
+)
 const showModal = computed({
     get() {
         return props.modelValue
@@ -79,7 +119,11 @@ const handleUpload = (event) => {
     }
 }
 
-const addCategory = async () => {
+const { handleSubmit } = useForm(category.value);
+const onInvalidSubmitError = ({ errors }) => {
+    return errors;
+};
+const addCategory = handleSubmit(async () => {
     try {
         await storeCategory.createCategory(category.value)
         toastSuccess('Success')
@@ -88,7 +132,7 @@ const addCategory = async () => {
     }
     emits('update:addCategory', category.value)
     emits('update:modelValue', false)
-}
+}, onInvalidSubmitError);
 </script>
 
 <style lang="scss">

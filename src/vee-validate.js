@@ -12,7 +12,7 @@ import {
     regex,
 } from '@vee-validate/rules'
 import { localize } from '@vee-validate/i18n'
-import { default as en } from '@vee-validate/i18n/dist/locale/en.json'
+import { default as en } from './lang/en.json'
 configure({
     validateOnBlur: true,
     validateOnChange: false,

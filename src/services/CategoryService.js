@@ -7,4 +7,7 @@ export default {
     async getCategories() {
         return await API.get('/admin/get-categories')
     },
+    async getCategory(id) {
+        return await API.get(`/admin/get-category/${id}`)
+    },
 }

@@ -23,10 +23,15 @@
                     <div class="pb-6">
                         <div class="details-text">Profile Image</div>
                         <div class="border-b border-[#D7DBEC] drag-file-field">
-                            <div class="w-full py-12 !border-dashed border-[1px] border-[#A1A7C4] text-center">
+                            <div class="w-full !border-dashed border-[1px] border-[#A1A7C4] text-center">
                                 <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
                                     @change="handleUpload($event)" />
-                                <label :for="'file'" class="file-upload-layout" @drop="dropFile($event)">
+                                <label :for="'file'" class="file-upload-layout" @drop.prevent="dropFile($event)"
+                                    @dragleave.prevent="setInactive"
+                                    @dragover.prevent="setActive"
+                                    @dragenter.prevent="setActive"
+                                    @click.prevent="() => {}"
+                                >
                                     <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
                                         File</label>
                                     <div class="details-text">Or drag and drop files</div>
@@ -227,6 +232,27 @@ const handleUpload = (event) => {
         align-items: center;
         justify-content: center;
         gap: 12px;
+        padding: 48px 0
+    }
+    .image-viewer-layout {
+        display: inline-flex;
+        gap: 16px;
+    }
+    .file-image-review {
+        position: relative;
+        border-radius: 8px;
+        background-color: #E0E2E7;
+        .check-mark {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+        }
+        .image-view {
+            width: 100px;
+            height: 100px;
+            object-fit: fill;
+            border-radius: 8px;
+        }
     }
 }
 </style>

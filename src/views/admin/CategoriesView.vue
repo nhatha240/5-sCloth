@@ -19,18 +19,18 @@
                 Add Category
             </button>
         </div>
-        <div class="row gap-[30px] justify-between" v-if="categories?.length > 0">
+        <div class="row gap-[30px]" v-if="categories?.length > 0">
             <div class="flex-[0_0_31%] bg-[#FFFFFF] shadow-[0px_1px_4px_0px_rgba(21,34,50,0.08)] p-0 rounded-[8px]"
-                v-for="(category, index) in categories" :key="index">
-                <div class="w-full" @click="toCategoryDetails(category.id)">
-                    <img class="w-full object-cover" :src="category.img" alt="">
+                v-for="(category, index) in categories" :key="index" @click="toCategoryDetails(category.id)">
+                <div class="w-full">
+                    <img class="w-full object-cover" :src="category.image ? urlApi + category.image : ''" alt="">
                 </div>
                 <div class="px-[28px] py-[20px]">
                     <div class="text-[#131523] font-bold text-base">
-                        {{ category.category }}
+                        {{ category.name }}
                     </div>
                     <div class="text-[#5A607F] font-normal text-sm">
-                        {{ category.countItem }} items
+                        {{ category.itemsCount }} items
                     </div>
                 </div>
             </div>
@@ -49,18 +49,34 @@
 
 <script setup>
 import router from "@/router";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
+import { useCategoryStore } from "@/stores/CategoryStore";
 
+const urlApi = import.meta.env.VITE_BASE_URL
+const storeCategory = useCategoryStore()
 const modalCategory = ref(false)
 const categories = ref([
-    { id: 1, category: 'Men Clothes', countItem: 24, img: '/images/man_clothes_img.svg' },
-    { id: 2, category: 'Women Clothes', countItem: 12, img: '/images/woman_clothes_img.svg' },
-    { id: 3, category: 'Accessories', countItem: 43, img: '/images/accessories_img.svg' },
-    { id: 4, category: 'Cotton Clothes', countItem: 26, img: '/images/cotton_clothes_img.svg' },
-    { id: 5, category: 'Summer Clothes', countItem: 52, img: '/images/summer_clothes_img.svg' },
-    { id: 6, category: 'Wedding Clothes', countItem: 52, img: '/images/wedding_clothes_img.svg' },
+    // { id: 1, name: 'Men Clothes', itemsCount: 24, image: '/images/man_clothes_img.svg' },
+    // { id: 2, name: 'Women Clothes', itemsCount: 12, image: '/images/woman_clothes_img.svg' },
+    // { id: 3, name: 'Accessories', itemsCount: 43, image: '/images/accessories_img.svg' },
+    // { id: 4, name: 'Cotton Clothes', itemsCount: 26, image: '/images/cotton_clothes_img.svg' },
+    // { id: 5, name: 'Summer Clothes', itemsCount: 52, image: '/images/summer_clothes_img.svg' },
+    // { id: 6, name: 'Wedding Clothes', itemsCount: 52, image: '/images/wedding_clothes_img.svg' },
 ])
+
+onMounted(() => {
+    initCategories()
+})
+
+const initCategories = async () => {
+    try {
+        await storeCategory.getCategories()
+        categories.value = storeCategory.categories
+    } catch (error) {
+        return error
+    }
+}
 
 const toCategoryDetails = (id) => {
     router.push({ name: 'CategoryDetailsView', params: { id: id } })
