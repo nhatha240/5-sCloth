@@ -107,6 +107,9 @@
                             <span class="ml-auto text-sm text-gray-500">0đ</span>
                         </div>
                     </div>
+                    <button class="btn-pink w-full" @click="paypalSelect">
+                        Paypal
+                    </button>
                 </div>
             </div>
             <div class="flex-[0_0_50%]"></div>
@@ -117,6 +120,9 @@
 <script lang="js" setup>
 import HeaderMain from '../components/HeaderMain.vue'
 
+const paypalSelect = () => {
+
+}
 </script>
 
 <style lang="scss">
