@@ -162,7 +162,11 @@
           <div v-else id="confirmation">Order complete!</div>
         </div>
       </div>
-      <div class="flex-[0_0_50%]"></div>
+      <div class="flex-[0_0_50%]">
+        <div class="cart-payment-layout">
+
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -247,6 +251,11 @@ function onCancel(data, actions) {
 
   .custom-selectbox {
     @apply block appearance-none w-full bg-white border border-[#000000] text-gray-900 pt-[24px] pb-[12px] pl-4 pr-[53px] rounded-[9px] leading-tight focus:outline-none focus:bg-white focus:border-gray-500;
+  }
+  .cart-payment-layout {
+    border-radius: 4px;
+    background-color: #F3F3F3;
+    padding: 8px 4px;
   }
 }
 </style>
