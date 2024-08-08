@@ -38,7 +38,7 @@
                     <button class="btn-modify">
                         <img src="/images/edit_btn_icon.svg" />
                     </button>
-                    <button class="btn-modify" @click="openDeleteModal">
+                    <button class="btn-modify" :disabled="itemsSelected?.length === 0" @click="openDeleteModal">
                         <img src="/images/icon_delete_btn.svg" />
                     </button>
                 </div>
@@ -108,20 +108,22 @@
 <script lang="js" setup>
 import { ref, onMounted } from 'vue';
 import { ORDER_STATUS } from '@/constant/common'
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import _ from 'lodash'
 import PaginateAdmin from '@/components/PaginateAdmin.vue'
 import { useProductStore } from '@/stores/ProductStore'
+import { toastSuccess } from '@/constant/commonUsage'
 
 const storeProduct = useProductStore()
 const router = useRouter();
+const route = useRoute()
 const modalDelete = ref(false)
 const searchField = ref("color");
 const searchValue = ref("");
 const itemsSelected = ref([])
 const idSelected = ref([])
-const page = ref(1)
-const pageSize = ref(1)
+const page = ref(route?.query?.page ? route.query.page : 1)
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 10)
 const totalPage = ref()
 const totalitem = ref()
 const headers = [
@@ -215,8 +217,14 @@ const openDeleteModal = () => {
     modalDelete.value = true
     idSelected.value = _.flatMap(itemsSelected.value, 'id')
 }
-const confirmDelete = () => {
-    console.log(idSelected.value);
+const confirmDelete = async () => {
+    try {
+        await storeProduct.deleteProduct(idSelected.value)
+        toastSuccess('Delete success')
+        initProducts()
+    } catch (error) {
+        return error
+    }
 }
 </script>
 

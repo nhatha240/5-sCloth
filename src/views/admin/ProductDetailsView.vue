@@ -18,7 +18,7 @@
                 </button>
                 <button
                     class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1"
-                    @click="addProduct">
+                    @click="saveProduct">
                     Save
                 </button>
             </div>
@@ -29,11 +29,11 @@
                 <div class="flex flex-col gap-6 border-b border-[#D7DBEC] pb-10">
                     <div class="">
                         <div class="mb-1">Product Name</div>
-                        <input class="form-control w-full" type="text" placeholder="Summer T-Shirt">
+                        <input class="form-control w-full" type="text" placeholder="Summer T-Shirt" v-model="productDetails.name">
                     </div>
                     <div class="">
                         <div class="mb-1">Product Description</div>
-                        <textarea class="form-control w-full" type="text" placeholder="Product description"></textarea>
+                        <textarea class="form-control w-full" type="text" placeholder="Product description" v-model="productDetails.description"></textarea>
                     </div>
                 </div>
                 <div class="title-text mb-6 mt-7">Images</div>
@@ -63,23 +63,42 @@
                     <div class="flex gap-[28px]">
                         <div class="w-50">
                             <div class="mb-1">Product Price</div>
-                            <input class="form-control w-full" type="text" placeholder="Enter price">
+                            <input class="form-control w-full" type="text" placeholder="Enter price" v-model="productDetails.price">
                         </div>
                         <div class="w-50">
                             <div class="mb-1">Discount Price</div>
-                            <input class="form-control w-full" type="text" placeholder="Price at Discount">
+                            <input class="form-control w-full" type="text" placeholder="Price at Discount" v-model="productDetails.discountPrice">
                         </div>
                     </div>
                 </div>
                 <div class="pb-[9px]">
                     <div class="label-text mt-[28px] mb-6">Option</div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <label class="switch">
+                            <input type="checkbox" :checked="productDetails.status" v-model="productDetails.status">
+                            <span class="slider round"></span>
+                        </label>
+                        Is public
+                    </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <label class="switch">
+                            <input type="checkbox" :checked="productDetails.isBestSeller" v-model="productDetails.isBestSeller">
+                            <span class="slider round"></span>
+                        </label>
+                        Is best seller
+                    </div>
+                    <div class="flex flex-col gap-6 border-b border-[#D7DBEC] pb-10">
+                        <div class="mb-1">Quantity</div>
+                        <input class="form-control w-full" type="number" placeholder="Quantity" v-model="productDetails.quantity">
+                    </div>
                     <div class="flex gap-[28px]">
                         <div class="w-50">
                             <div class="mb-1">Size</div>
                             <select class="form-select" name="" id="">
                                 <option selected disabled>Size</option>
-                                <option class="" value=""></option>
-                                <option value=""></option>
+                                <option class="" :value="size" v-for="size in productDetails.size" :key="size">
+                                    {{size}}
+                                </option>
                             </select>
                         </div>
                         <div class="w-50">
@@ -92,8 +111,9 @@
                             <div class="mb-1">Màu</div>
                             <select class="form-select" name="" id="">
                                 <option selected disabled>Màu</option>
-                                <option value=""></option>
-                                <option value=""></option>
+                                <option :value="color" v-for="color in productDetails.color" :key="color">
+                                    {{ color }}
+                                </option>
                             </select>
                         </div>
                         <div class="w-50">
@@ -109,7 +129,7 @@
                     <ul class="space-y-2 pl-0">
                         <li v-for="(category, index) in storeCategory.categories" :key="index"
                             class="flex items-center">
-                            <input type="checkbox" :id="category.id" :value="category.name" v-model="selectedOption"
+                            <input type="checkbox" :id="category.id" :value="category.id" v-model="productDetails.category"
                                 class="form-check-input text-purple-600 focus:ring-purple-500">
                             <label :for="category.id" class="ml-2 text-sm text-gray-700">{{ category.name }}</label>
                         </li>
@@ -122,12 +142,12 @@
                     <div class="label-text pb-[18px]">Tags</div>
                     <div class="">
                         <div class="mb-1">Add Tags</div>
-                        <input class="form-control w-full" type="text" placeholder="Enter tag name">
+                        <input class="form-control w-full" type="text" v-model="tagInput" placeholder="Enter tag name" @keydown.enter="addTags">
                         <div class="inline-flex flex-wrap gap-2 pt-[20px]">
                             <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-1 bg-[#E6E9F4] w-fit"
                                 v-for="(tag, index) in productDetails.tags" :key="index">
                                 {{ tag }}
-                                <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="">
+                                <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeTag(index)">
                             </div>
                         </div>
                     </div>
@@ -143,7 +163,7 @@
                 </button>
                 <button
                     class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1"
-                    @click="addProduct">
+                    @click="saveProduct">
                     Save
                 </button>
             </div>
@@ -157,6 +177,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/ProductStore';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
+import { toastSuccess } from '@/constant/commonUsage'
 
 const storeProduct = useProductStore()
 const storeCategory = useCategoryStore()
@@ -179,7 +200,22 @@ const tagList = ref([
     },
 ])
 const selectedOption = ref([])
-const productDetails = ref({})
+const productDetails = ref({
+    name: '',
+    images: [],
+    description: '',
+    discountPrice: '',
+    price: '',
+    category: [],
+    size: [],
+    color: [],
+    status: '',
+    isSale: false,
+    isBestSeller: false,
+    quantity: 0,
+    tags: [],
+})
+const tagInput = ref('')
 
 onMounted(async () => {
     initCategories();
@@ -241,6 +277,48 @@ const handleUpload = (event) => {
     //             file_mime_type: files[index].type,
     //             step: currentStep.value,
     //         });
+        }
+    }
+}
+
+const addTags = () => {
+    productDetails.value.tags?.push(tagInput.value)
+    tagInput.value = ''
+}
+
+const removeTag = (index) => {
+    productDetails.value.tags?.splice(index, 1)
+}
+
+const saveProduct = async () => {
+    const payload = {
+        name: productDetails.value.name,
+        images: productDetails.value.images,
+        description: productDetails.value.description,
+        discountPrice: productDetails.value.discountPrice,
+        price: productDetails.value.price,
+        category: productDetails.value.category,
+        size: productDetails.value.size,
+        color: productDetails.value.color,
+        status: productDetails.value.status ? 'public' : 'private',
+        isSale: productDetails.value.isSale,
+        isBestSeller: productDetails.value.isBestSeller,
+        quantity: productDetails.value.quantity,
+        tags: productDetails.value.tags,
+    }
+    if (productId.value) {
+        try {
+            await storeProduct.updateProduct(productId.value, payload)
+            router.push({ name: 'ProductViewAdmin' }).then(() => toastSuccess('Update Success'))
+        } catch (error) {
+            return error
+        }
+    } else {
+        try {
+            await storeProduct.createProduct(payload)
+            router.push({ name: 'ProductViewAdmin' }).then(() => toastSuccess('Create Success'))
+        } catch (error) {
+            return error
         }
     }
 }

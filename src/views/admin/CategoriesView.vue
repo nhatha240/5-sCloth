@@ -53,7 +53,7 @@ import { onMounted, ref } from "vue";
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
 import { useCategoryStore } from "@/stores/CategoryStore";
 
-const urlApi = import.meta.env.VITE_BASE_URL
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeCategory = useCategoryStore()
 const modalCategory = ref(false)
 const categories = ref([

@@ -39,5 +39,14 @@ export const useCategoryStore = defineStore('category', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async updateCategory(payload) {
+            return new Promise((resolve, reject) => {
+                CategoryService.updateCategory(payload)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
     }
 })

@@ -10,4 +10,7 @@ export default {
     async getCategory(id) {
         return await API.get(`/admin/get-category/${id}`)
     },
+    async updateCategory(payload) {
+        return await API.put(`/admin/update-category/`, payload)
+    },
 }

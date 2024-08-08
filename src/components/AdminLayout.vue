@@ -53,10 +53,6 @@
                                                                     </div>
                                                                 </router-link>
                                                             </li>
-                                                            <li
-                                                                class="MuiListSubheader-root MuiListSubheader-gutters MuiListSubheader-sticky css-466cav-MuiListSubheader-root">
-                                                                Other Information
-                                                            </li>
                                                             <li class="MuiList-root css-110zuwj-MuiList-root"
                                                                 v-for="(item, index) in otherInfoRouteList"
                                                                 :key="index">
@@ -596,6 +592,7 @@ const logout = () => {
 .css-hpbu28 {
     border-right: 1px solid;
     border-color: #d7dbec;
+    height: calc(100vh - 68px);
 }
 
 .css-19midj6 {

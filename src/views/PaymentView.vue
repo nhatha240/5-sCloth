@@ -164,7 +164,7 @@
       </div>
       <div class="flex-[0_0_50%]">
         <div class="cart-payment-layout">
-
+          <div class=""></div>
         </div>
       </div>
     </div>

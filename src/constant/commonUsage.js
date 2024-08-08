@@ -3,6 +3,14 @@ export function toastSuccess(message){
     toast.success(message, {
     position: toast.POSITION.BOTTOM_RIGHT,
     autoClose: 2000,
-    hideProgressBar: true,
+    closeButton: false,
+  });
+}
+export function toastError(message){
+    toast.error(message, {
+    position: toast.POSITION.BOTTOM_RIGHT,
+    autoClose: 2000,
+    closeButton: false,
+    toastStyle: {background: '#DE2233', color: '#FFFFFF'},
   });
 }
