@@ -29,8 +29,9 @@
                 <div class="flex items-center gap-3">
                     <select class="common-input-field" v-model="searchField">
                         <option selected disabled>Filter</option>
-                        <option>customer</option>
-                        <option>order_status</option>
+                        <option>name</option>
+                        <option>price</option>
+                        <option>color</option>
                     </select>
                     <input class="common-input-field search-input" type="text" v-model="searchValue">
                 </div>
@@ -64,9 +65,9 @@
                         Out of Stock
                     </span>
                 </template>
-                <template #item-price="{ price }">
+                <template #item-price="{ price, discountPrice }">
                     <span class="">
-                        ${{ price }}
+                        ${{ discountPrice ? discountPrice : price }}
                     </span>
                 </template>
                 <template #item-color="{ options }">

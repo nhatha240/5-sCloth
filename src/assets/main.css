@@ -351,3 +351,9 @@ input:checked + .slider:before {
   line-height: 24px;
   text-align: right;
 }
+.max-text-inline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}

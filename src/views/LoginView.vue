@@ -149,7 +149,10 @@ const onInvalidSubmitError = ({ errors }) => {
 const confirmRegister = handleSubmit(async () => {
     try {
         const data = await storeAuth.userRegister(userInfo.value)
-        console.log(data);
+        if (data?.tokens) {
+            scrollTo(0, 0)
+            router.push({ name: 'home' })
+        }
     } catch (error) {
         return error
     }

@@ -125,7 +125,7 @@ const router = createRouter({
           name: 'OrderView',
           component: OrderView,
           meta: {
-            breadcrumb: 'Checkout'
+            breadcrumb: 'Orders'
           }
         },
         {

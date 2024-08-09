@@ -17,7 +17,7 @@
             <span class="" v-if="crumb?.params?.id && index == breadcrumbs.length - 1">
                 <span class="mx-2 text-[#D651FF] text-lg font-semibold">/</span>
                 <span class="text-gray-500 font-normal text-lg">
-                    {{ storeShop.productName ? storeShop.productName : crumb?.params?.id }}
+                    {{ storeProduct.productInfo ? storeProduct.productInfo?.name : crumb?.params?.id }}
                 </span>
             </span>
         </template>
@@ -27,7 +27,7 @@
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { CATEGORY, NAME_LINK_ROUTER } from '../constant/common'
-import { useShopStore } from '../stores/ShopStore'
+import { useProductStore } from '../stores/ProductStore'
 
 const props = defineProps({
     length: {
@@ -36,7 +36,7 @@ const props = defineProps({
     },
 })
 
-const storeShop = useShopStore()
+const storeProduct = useProductStore()
 const route = useRoute();
 const router = useRouter();
 

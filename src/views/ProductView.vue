@@ -190,8 +190,10 @@ import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { generateSingleData } from '../constant/commonFunction'
+import { useProductStore } from '@/stores/ProductStore'
 
 const route = useRoute()
+const storeProduct = useProductStore()
 const productId = ref(route.params.id ? route.params.id : 0)
 const product = ref({})
 const imageList = ref([
@@ -234,8 +236,19 @@ const ratingDetails = ref([
 
 onMounted(() => {
   product.value = generateSingleData(productId.value, imageList.value, subImage.value)
+  initProduct()
   console.log(product.value);
 })
+
+const initProduct = async () => {
+  try {
+    const data = await storeProduct.getProduct(productId.value)
+    console.log(data);
+    // product.value = data?.results
+  } catch (error) {
+    return error
+  }
+}
 
 const getProductName = (e) => {
   console.log(e);

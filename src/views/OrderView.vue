@@ -1,4 +1,5 @@
 <template>
+    <HeaderMain></HeaderMain>
     <VueFinalModal v-model="orderDetails" class="details-modal" content-class="details-modal-content"
         overlay-transition="vfm-fade" content-transition="vfm-fade">
         <div class="title-modal">{{ ratingModal ? 'Đánh giá sản phẩm' : 'ĐƠN HÀNG CHI TIẾT' }}</div>
@@ -182,7 +183,7 @@
                     <div class="w-[16%]">${{ item.price }}</div>
                     <div class="w-[20%]">${{ item.total }}</div>
                     <div class="" @click="openOrder(item.id)">
-                        <div href="cursor-pointer" class="text-[#0477FF] font-light">Chi tiết</div>
+                        <div href="cursor-pointer" class="text-[#0477FF] font-light cursor-pointer">Chi tiết</div>
                     </div>
                 </div>
             </div>

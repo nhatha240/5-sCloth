@@ -47,7 +47,7 @@
                                 @dragenter.prevent="setActive" >
                                 <div class="image-viewer-layout">
                                     <div class="file-image-review" v-for="image in productDetails.image" :key="image">
-                                        <img class="image-view" :src="image" alt="">
+                                        <img class="image-view" :src="urlApi + image" alt="">
                                         <img class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                     </div>
                                 </div>
@@ -87,38 +87,57 @@
                         </label>
                         Is best seller
                     </div>
-                    <div class="flex flex-col gap-6 border-b border-[#D7DBEC] pb-10">
+                    <div class="flex flex-col gap-6 border-b border-[#D7DBEC] pb-4">
                         <div class="mb-1">Quantity</div>
                         <input class="form-control w-full" type="number" placeholder="Quantity" v-model="productDetails.quantity">
                     </div>
-                    <div class="flex gap-[28px]">
+                    <div class="flex gap-[28px] pt-4">
                         <div class="w-50">
                             <div class="mb-1">Size</div>
-                            <select class="form-select" name="" id="">
+                            <select class="form-select" name="" id="" @change="addSize" v-model="selectedSize">
                                 <option selected disabled>Size</option>
-                                <option class="" :value="size" v-for="size in productDetails.size" :key="size">
-                                    {{size}}
-                                </option>
+                                <option class="" value="S">S</option>
+                                <option class="" value="M">M</option>
+                                <option class="" value="L">L</option>
+                                <option class="" value="XL">XL</option>
                             </select>
                         </div>
                         <div class="w-50">
                             <div class="mb-1">Value</div>
-                            <input class="form-control w-full" type="text" placeholder="Price at Discount">
+                            <div class="form-control w-full min-h-[38px] flex items-center">
+                                <div class="inline-flex flex-wrap gap-2">
+                                    <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-[2px] bg-[#E6E9F4] w-fit"
+                                        v-for="(tag, index) in productDetails?.options[0].size" :key="index">
+                                        {{ tag }}
+                                        <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeSize(index)">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="flex gap-[28px]">
                         <div class="w-50">
                             <div class="mb-1">Màu</div>
-                            <select class="form-select" name="" id="">
+                            <select class="form-select" name="" id="" @change="addColor" v-model="selectedColor">
                                 <option selected disabled>Màu</option>
-                                <option :value="color" v-for="color in productDetails.color" :key="color">
-                                    {{ color }}
-                                </option>
+                                <option value="red">Đỏ</option>
+                                <option value="green">Xanh lá</option>
+                                <option value="blue">Xanh</option>
+                                <option value="white">Trắng</option>
+                                <option value="black">Đen</option>
                             </select>
                         </div>
                         <div class="w-50">
                             <div class="mb-1">Value</div>
-                            <input class="form-control w-full" type="text" placeholder="Price at Discount">
+                            <div class="form-control w-full min-h-[38px] flex items-center">
+                                <div class="inline-flex flex-wrap gap-2">
+                                    <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-[2px] bg-[#E6E9F4] w-fit"
+                                        v-for="(color, index) in productDetails?.options[0].color" :key="index">
+                                        {{ color }}
+                                        <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeColor(index)">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -179,6 +198,7 @@ import { useCategoryStore } from '@/stores/CategoryStore';
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
 import { toastSuccess } from '@/constant/commonUsage'
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
 const storeCategory = useCategoryStore()
 const router = useRouter();
@@ -199,7 +219,8 @@ const tagList = ref([
         tag: 'Summer Collection'
     },
 ])
-const selectedOption = ref([])
+const selectedColor = ref('Màu')
+const selectedSize = ref('Size')
 const productDetails = ref({
     name: '',
     images: [],
@@ -207,8 +228,12 @@ const productDetails = ref({
     discountPrice: '',
     price: '',
     category: [],
-    size: [],
-    color: [],
+    options: [
+        {
+            size: [],
+            color: [],
+        }
+    ],
     status: '',
     isSale: false,
     isBestSeller: false,
@@ -231,7 +256,6 @@ const backToProduct = () => {
 const initProductDetails = async () => {
     try {
         const data = await storeProduct.getProduct(productId.value)
-        console.log(data);
         productDetails.value = data;
     } catch (error) {
         return error
@@ -286,8 +310,30 @@ const addTags = () => {
     tagInput.value = ''
 }
 
+const addSize = () => {
+    if (!productDetails.value?.options[0].size?.includes(selectedSize.value)) {
+        productDetails.value?.options[0].size?.push(selectedSize.value)
+    }
+    selectedSize.value = 'Size'
+}
+
+const addColor = () => {
+    if (!productDetails.value?.options[0].color?.includes(selectedColor.value)) {
+        productDetails.value?.options[0].color?.push(selectedColor.value)
+    }
+    selectedColor.value = 'Màu'
+}
+
 const removeTag = (index) => {
     productDetails.value.tags?.splice(index, 1)
+}
+
+const removeSize = (index) => {
+    productDetails.value?.options[0].size?.splice(index, 1)
+}
+
+const removeColor = (index) => {
+    productDetails.value?.options[0].color?.splice(index, 1)
 }
 
 const saveProduct = async () => {
@@ -298,8 +344,8 @@ const saveProduct = async () => {
         discountPrice: productDetails.value.discountPrice,
         price: productDetails.value.price,
         category: productDetails.value.category,
-        size: productDetails.value.size,
-        color: productDetails.value.color,
+        size: productDetails.value?.options[0].size,
+        color: productDetails.value?.options[0].color,
         status: productDetails.value.status ? 'public' : 'private',
         isSale: productDetails.value.isSale,
         isBestSeller: productDetails.value.isBestSeller,

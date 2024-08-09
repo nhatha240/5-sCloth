@@ -9,7 +9,7 @@
                     class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-k1bkb-MuiPaper-root-MuiDrawer-paper">
                     <div class="MuiBox-root css-10klw3m">
                         <div class="MuiBox-root css-10596f4">
-                            <a herff="/admin"
+                            <a herf="/admin"
                                 class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-uehu5v-MuiTypography-root-MuiLink-root">
                                 <img class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-70z4a9-MuiSvgIcon-root"
                                     src="/images/main_logo.svg" />
@@ -179,6 +179,7 @@ const profileMenu = ref(true)
 
 onMounted(() => {
     beforeCreate()
+    refreshAdmin()
 })
 watch(
     () => route.name,
@@ -244,6 +245,18 @@ const logout = () => {
     storeAuth.clearStoreAuth()
     profileMenu.value = !profileMenu.value
     router.push({ name: 'LoginPage' })
+}
+const refreshAdmin = async () => {
+    if (storeAuth.adminRefreshToken) {
+        try {
+            const params = {
+                refreshToken: storeAuth.adminRefreshToken
+            }
+            await storeAuth.refreshAdminToken(params)
+        } catch (error) {
+            return error
+        }
+    }
 }
 </script>
 
@@ -1269,6 +1282,7 @@ body.admin {
     max-width: 120px;
     transition: opacity 264ms cubic-bezier(0.4, 0, 0.2, 1), transform 176ms cubic-bezier(0.4, 0, 0.2, 1);
     top: 58px;
+    right: 24px; 
     transform-origin: 120px 0px;
     -webkit-overflow-scrolling: touch;
     margin: auto;

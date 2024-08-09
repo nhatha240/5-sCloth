@@ -8,6 +8,13 @@ export default {
         }
         return await API.get('/admin/get-products', {params})
     },
+    async getAllProduct(query) {
+        const params = {
+            page: query?.page,
+            limit: query?.pageSize
+        }
+        return await API.get('/products', {params})
+    },
     async getProduct(id) {
         return await API.get(`/admin/get-product/${id}`)
     },
@@ -19,5 +26,8 @@ export default {
     },
     async deleteProduct(id) {
         return await API.delete(`/admin/delete-product/${id}`)
+    },
+    async addCart(payload) {
+        return await API.post(`/users/add-cart/`, payload)
     },
 }

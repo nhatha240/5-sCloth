@@ -37,7 +37,7 @@ apiClient.interceptors.response.use(
     console.log(error.response);
     if (error.response && error.response.data && error.response.status) {
       if (error.response.status === 401 && error.response.data.message === 'Please authenticate') {
-        if (useAuthStore().admin?.role === 'admin') {
+        if (useAuthStore().admin) {
           router.push({ name: 'LoginPage' })
         } else {
           router.push({ name: 'LoginView' })

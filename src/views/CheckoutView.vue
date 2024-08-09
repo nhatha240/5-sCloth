@@ -1,7 +1,7 @@
 <template>
     <HeaderMain></HeaderMain>
     <div class="checkout-layout">
-        <div class="cart-box mx-auto my-[50px] w-[80%]" v-if="isLogin">
+        <div class="cart-box mx-auto my-[50px] w-[80%]" v-if="storeAuth.user">
             <div class="header-cart bg-[#D651FF] rounded-[10px] h-[88px] flex py-[29px] px-[28px]">
                 <div class="w-[45%]">Item</div>
                 <div class="w-[20%]">Quantity</div>
@@ -77,7 +77,7 @@
                             </div>
                             <div class="flex flex-col relative mt-[104px]">
                                 <button class="subscribe-purple-button" @click="checkoutProduct">CHECKOUT</button>
-                                <a class="text-[#D651FF] text-center pt-[22px]">Continue Shopping</a>
+                                <a class="text-[#D651FF] cursor-pointer text-center pt-[22px]" @click="backtoShop">Continue Shopping</a>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,9 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import HeaderMain from '../components/HeaderMain.vue'
+import { useAuthStore } from "@/stores/AuthStore";
 
+const storeAuth = useAuthStore()
 const router = useRouter()
 const isLogin = ref(false)
 const step1 = ref(true)
@@ -122,6 +124,9 @@ const submitStep1 = () => {
 
 const checkoutProduct = () => {
     router.push({ name: 'PaymentView' })
+}
+const backtoShop = () => {
+    router.push({ name: 'ShopView' })
 }
 </script>
 

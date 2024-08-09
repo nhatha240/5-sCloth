@@ -6,6 +6,8 @@ export const useAuthStore = defineStore('auth', {
     user: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null,
     token: localStorage.getItem('token'),
     admin: localStorage.getItem('admin') ? JSON.parse(localStorage.getItem('admin')) : null,
+    userRefreshToken: localStorage.getItem('userRefreshToken') ? localStorage.getItem('userRefreshToken') : null,
+    adminRefreshToken: localStorage.getItem('adminRefreshToken') ? localStorage.getItem('adminRefreshToken') : null,
     loading: false,
     notLoading: false,
     previousRoute: {
@@ -40,8 +42,10 @@ export const useAuthStore = defineStore('auth', {
             console.log(data);
             this.user = data?.user
             this.token = data?.tokens?.access?.token
+            this.userRefreshToken = data?.tokens?.refresh?.token
             if (this.token) {
               localStorage.setItem('token', this.token)
+              localStorage.setItem('userRefreshToken', this.userRefreshToken)
               localStorage.setItem('userInfo', JSON.stringify(this.user))
             }
             resolve(data)
@@ -55,8 +59,10 @@ export const useAuthStore = defineStore('auth', {
           .then(({ data }) => {
             this.admin = data?.admin
             this.token = data?.tokens?.access?.token
+            this.adminRefreshToken = data?.tokens?.refresh?.token
             if (this.token) {
               localStorage.setItem('token', this.token)
+              localStorage.setItem('adminRefreshToken', this.adminRefreshToken)
               localStorage.setItem('admin', JSON.stringify(this.admin))
             }
             resolve(data)
@@ -68,6 +74,14 @@ export const useAuthStore = defineStore('auth', {
       return new Promise((resolve, reject) => {
         AuthService.userRegister({ name, email, password })
           .then(({ data }) => {
+            this.user = data?.user
+            this.token = data?.tokens?.access?.token
+            this.userRefreshToken = data?.tokens?.refresh?.token
+            if (this.token) {
+              localStorage.setItem('token', this.token)
+              localStorage.setItem('userRefreshToken', this.userRefreshToken)
+              localStorage.setItem('userInfo', JSON.stringify(this.user))
+            }
             resolve(data)
           })
           .catch(({ response }) => reject(response))
@@ -101,14 +115,42 @@ export const useAuthStore = defineStore('auth', {
           .catch(({ response }) => reject(response))
       })
     },
+    async refreshUserToken({refreshToken}) {
+      return new Promise((resolve, reject) => {
+        AuthService.refreshUserToken({refreshToken})
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    async refreshAdminToken({refreshToken}) {
+      return new Promise((resolve, reject) => {
+        AuthService.refreshAdminToken({refreshToken})
+          .then(({ data }) => {
+            this.token = data?.access?.token
+            this.adminRefreshToken = data?.refresh?.token
+            if (this.token) {
+              localStorage.setItem('token', this.token)
+              localStorage.setItem('adminRefreshToken', this.adminRefreshToken)
+            }
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
     clearStoreAuth() {
       this.user = null
       this.admin = null
       this.token = null
+      this.userRefreshToken = null
+      this.adminRefreshToken = null
       this.previousRoute = null
       localStorage.removeItem('token')
       localStorage.removeItem('userInfo')
       localStorage.removeItem('admin')
+      localStorage.removeItem('userRefreshToken')
+      localStorage.removeItem('adminRefreshToken')
     },
     setPreviousRoute(route) {
       this.previousRoute = route

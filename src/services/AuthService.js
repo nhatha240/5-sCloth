@@ -21,5 +21,11 @@ export default {
   },
   async userInfo() {
     return await API.get(`/users/info`)
+  },
+  async refreshUserToken(token) {
+    return await API.post(`/auth/refresh-tokens`, token)
+  },
+  async refreshAdminToken(token) {
+    return await API.post(`/admin/refresh-tokens`, token)
   }
 }

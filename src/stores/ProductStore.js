@@ -6,7 +6,7 @@ export const useProductStore = defineStore('product', {
         product: '',
     }),
     getters: {
-        productData: (state) => state.product,
+        productInfo: (state) => state.product,
     },
     actions: {
         async getProducts(request) {
@@ -18,10 +18,20 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getAllProduct(request) {
+            return new Promise((resolve, reject) => {
+                ProductService.getAllProduct(request)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
         async getProduct(id) {
             return new Promise((resolve, reject) => {
                 ProductService.getProduct(id)
                     .then(({ data }) => {
+                        this.product = data;
                         resolve(data)
                     })
                     .catch(({ response }) => reject(response))
@@ -48,6 +58,15 @@ export const useProductStore = defineStore('product', {
         async deleteProduct(id) {
             return new Promise((resolve, reject) => {
                 ProductService.deleteProduct(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async addCart({ productId, quantity }) {
+            return new Promise((resolve, reject) => {
+                ProductService.addCart({ productId, quantity })
                     .then(({ data }) => {
                         resolve(data)
                     })

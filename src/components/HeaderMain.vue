@@ -43,7 +43,7 @@
               </div>
             </div>
             <div class="border-t border-[#D0CFCF] pt-[15px]">
-              <button class="w-[50%] mx-auto rounded-[12px] flex items-center justify-between subscribe-purple-button">
+              <button class="w-[50%] mx-auto rounded-[12px] flex items-center justify-between subscribe-purple-button" @click="openCheckout">
                 <div class="font-medium text-[16px] tex-[#FEFCFC]">$1,672</div>
                 <div class="font-medium text-[16px] tex-[#FEFCFC]">Checkout</div>
               </button>
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="flex items-center">
-        <img src="/images/main_logo.svg" alt="Clevr Logo" class="" />
+        <img src="/images/main_logo.svg" alt="Clevr Logo" class="cursor-pointer" @click="() => { router.push({ name: 'home' }) }" />
       </div>
       <ul class="flex space-x-6" v-if="route.name === 'home'">
         <li v-for="(page, index) in menuContent" :key="index">
@@ -93,7 +93,7 @@
         </div>
       </div>
       <div class="flex items-center gap-12">
-        <div class="relative w-10 cursor-pointer" @click="openBasket">
+        <div class="relative w-10 cursor-pointer" @click="openBasket" v-if="storeAuth.user">
           <img src="/images/basket.svg" alt="basket" />
           <span
             class="absolute right-0 bg-[#D651FF] w-[23px] h-[23px] border-[#FFFFFF] border-2 rounded-[50%] basket-number">1</span>
@@ -128,7 +128,7 @@
   <BreadCumbs></BreadCumbs>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import BreadCumbs from './BreadCumbs.vue'
 import { useShopStore } from '../stores/ShopStore'
@@ -143,7 +143,7 @@ const links = ref([
   { href: '/', label: 'Home', value: 'home' },
   { href: '/sign-out', label: 'Đăng Xuất', value: 'signOut' },
   { href: '/support', label: 'Thông tin' },
-  { href: '/license', label: 'Đơn hàng' },
+  { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
 ]);
 
 const menuContent = ref([
@@ -152,10 +152,27 @@ const menuContent = ref([
   { href: '/shop?category=femaleShirt', label: 'Đồ Nữ', value: 'ShopView', category: 'femaleShirt' },
   { href: '/shop?category=childShirt', label: 'Đồ Trẻ Em', value: 'ShopView', category: 'childShirt' },
   { href: '/shop?category=accessory', label: 'Phụ Kiện', value: 'ShopView', category: 'accessory' },
-  { href: '/', label: 'Đơn hàng', value: '' },
+  { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
   { href: '/', label: 'Sale', value: '' },
 ])
 const showBasket = ref(false)
+
+onMounted(() => {
+  refreshToken()
+})
+
+const refreshToken = async () => {
+  if (storeAuth.userRefreshToken) {
+    try {
+      const params = {
+        refreshToken: storeAuth.userRefreshToken
+      }
+      // await storeAuth.refreshUserToken(params)
+    } catch (error) {
+      return error
+    }
+  }
+}
 
 const toPage = (link) => {
   if (link.value === 'signOut') {
@@ -173,17 +190,9 @@ const openBasket = () => {
 const searchProduct = () => {
   emits("update:search", storeShop.productName);
 }
-// import { useAuthStore } from '../stores/AuthStore'
-
-// const storeAuth = useAuthStore()
-// const router = useRouter()
-
-// const logout = async () => {
-//   try {
-//     await storeAuth.logout()
-//     router.push({ name: 'Login' })
-//   } catch (error) {}
-// }
+const openCheckout = () => {
+  router.push({ name: 'Checkout' })
+}
 </script>
 <style lang="scss">
 .basket-layout {
