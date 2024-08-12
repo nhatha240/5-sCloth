@@ -14,7 +14,7 @@
                     Cancel
                 </button>
                 <button class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px]
-                        flex items-center gap-1">
+                        flex items-center gap-1" @click="saveCategory">
                     Save
                 </button>
             </div>
@@ -23,26 +23,26 @@
             <div class="flex-[0_0_63%] order-details-box h-fit">
                 <div class="label-text mb-6">
                     Products
-                    <span class="details-text">12</span>
+                    <span class="details-text">{{ categoryData.products?.length }}</span>
                 </div>
                 <div class="product-list-layout">
-                    <div class="product" v-for="product in 12" :key="product">
+                    <div class="product" v-for="(product, index) in categoryData.products" :key="index">
                         <img src="/images/dotted_product_icon.svg" />
                         <div class="w-[48px] h-[48px]">
                             <img class="object-cover" src="/images/product1_img.svg" alt="">
                         </div>
                         <div class="">
-                            Women Striped T-Shirt
+                            {{ product.name }}
                         </div>
                     </div>
                     <button class="add-prod-btn">
-                        <img src="/images/add_product_icon.svg" alt="">
+                        <img :src="product?.image[0] ? urlApi + product.image[0] : '/images/add_product_icon.svg'" alt="">
                         <div class="btn-text">Add Pr</div>
                     </button>
                 </div>
             </div>
             <div class="flex-[0_0_34%] flex flex-col gap-6">
-                <div class="order-details-box">
+                <!-- <div class="order-details-box">
                     <div class="label-text mb-6">Category Visibility</div>
                     <div class="flex items-center gap-3">
                         <label class="switch">
@@ -51,30 +51,33 @@
                         </label>
                         Visible on site
                     </div>
-                </div>
+                </div> -->
                 <div class="order-details-box">
                     <div class="label-text mb-6">Category Info</div>
                     <div class="category-info-field mb-6">
-                        <div class="main-text">Category Name</div>
-                        <input type="text" class="form-control">
+                        <div class="main-text">Category description</div>
+                        <textarea class="form-control w-full" type="text" placeholder="Product description" v-model="categoryData.description"></textarea>
                     </div>
                     <div class="category-info-field">
                         <div class="main-text">Image</div>
                         <div class="border-b border-[#D7DBEC] drag-file-field">
                             <div class="w-full !border-dashed border-[1px] border-[#A1A7C4] text-center">
-                                <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
-                                    @change="handleUpload($event)" />
-                                <label :for="'file'" class="file-upload-layout" @drop.prevent="dropFile($event)"
-                                    @dragleave.prevent="setInactive"
-                                    @dragover.prevent="setActive"
-                                    @dragenter.prevent="setActive"
-                                    @click.prevent="() => {}"
-                                >
-                                    <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
-                                        File</label>
-                                    <div class="details-text">Or drag and drop files</div>
-                                </label>
-                            </div>
+                            <input id="file" type="file" accept="image/png, image/jpeg" class="inputfile" multiple
+                                @change="handleUpload($event)" />
+                            <label :for="'file'" class="file-upload-layout" @drop.prevent="dropFile($event)"
+                                @dragleave.prevent="setInactive" @dragover.prevent="setActive"
+                                @dragenter.prevent="setActive" >
+                                <div class="image-viewer-layout">
+                                    <div class="file-image-review">
+                                        <img class="image-view" :src="urlApi + categoryData.image" alt="">
+                                        <img class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
+                                    </div>
+                                </div>
+                                <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
+                                    File</label>
+                                <div class="details-text">Or drag and drop files</div>
+                            </label>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -86,14 +89,16 @@
 <script setup>
 import router from "@/router"
 import { useCategoryStore } from "@/stores/CategoryStore"; 
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { onMounted } from "vue";
 import { useRoute } from "vue-router";
+import { toastSuccess } from '@/constant/commonUsage'
 
 const storeCategory = useCategoryStore();
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const route = useRoute()
 const categoryId = ref(route?.params?.id);
-const categoryData = ref()
+const categoryData = ref({})
 
 onMounted(() => {
     initCategory();
@@ -139,6 +144,20 @@ const handleUpload = (event) => {
     //     }
     // }
     event.target.value = '';
+}
+
+const saveCategory = async () => {
+    try {
+        categoryData.value.categoryId = categoryData.value._id
+        delete categoryData.value._id
+        delete categoryData.value.__v
+        delete categoryData.value.itemsCount
+        delete categoryData.value.products
+        await storeCategory.updateCategory(categoryData.value)
+        router.push({ name: 'CategoriesView' }).then(() => toastSuccess('Update Success'))
+    } catch (error) {
+        return error
+    }
 }
 </script>
 

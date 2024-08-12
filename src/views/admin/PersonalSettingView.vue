@@ -122,8 +122,10 @@
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useAuthStore } from '@/stores/AuthStore';
 
+const storeAuth = useAuthStore()
 const currentTab = ref(0)
 const notifyTabValue = ref([
     {
@@ -188,6 +190,10 @@ const handleUpload = (event) => {
     // }
     event.target.value = '';
 }
+
+onMounted(() => {
+
+})
 </script>
 
 <style lang="scss">

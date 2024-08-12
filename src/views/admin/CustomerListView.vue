@@ -29,6 +29,16 @@
                     <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
                         @update:deleteCustomer="deleteCustomer" @update:customerDetail="customerDetail">
                     </CustomersTable>
+                    <PaginateAdmin
+                        v-if="totalitem"
+                        v-model:page="page"
+                        v-model:page-size="pageSize"
+                        :showPaging="true"
+                        :items="items"
+                        :length="totalitem"
+                        :total-page="totalPage"
+                        :topage="toPage"
+                    />
                 </BTab>
                 <BTab :active="isActiveTab(1)" title="New Customers">
                     <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
@@ -60,54 +70,30 @@
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
-import CustomersTable from '@/components/CustomersTable.vue'
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
+import CustomersTable from '@/components/CustomersTable.vue';
 import { watch } from 'vue';
 import router from '@/router';
 import _ from 'lodash'
+import { useCustomerStore } from '@/stores/CustomerStore'
+import { useRouter } from 'vue-router';
 
+const route = useRouter()
+const storeCustomer = useCustomerStore()
 const currentTab = ref(0)
+const page = ref(route?.query?.page ? route.query.page : 1)
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 10)
+const totalPage = ref(0)
+const totalitem = ref(0)
 const modalDelete = ref(false)
 const idSelected = ref([])
-const options = ref(['name', 'location', 'orders', 'spent'])
-const items = [
-    {
-        id: 1,
-        "name": {
-            name: 'Walter Gibson',
-            avatar: '',
-        },
-        "location": 'Sawaynchester',
-        "orders": 5,
-        "spent": '96.14',
-    },
-    {
-        id: 2,
-        "name": {
-            name: 'Walter Gibson',
-            avatar: '',
-        },
-        "location": 'Sawaynchester',
-        "orders": 5,
-        "spent": '96.14',
-    },
-    {
-        id: 3,
-        "name": {
-            name: 'Walter Gibson',
-            avatar: '',
-        },
-        "location": 'Sawaynchester',
-        "orders": 5,
-        "spent": '96.14',
-    },
-];
+const options = ref(['name', 'address', 'totalOrder', 'totalMoney'])
+const items = ref([]);
 const headers = [
     { text: "Name", value: "name" },
-    { text: "Location", value: "location" },
-    { text: "Orders", value: "orders" },
-    { text: "Spent", value: "spent" },
+    { text: "Location", value: "address" },
+    { text: "Orders", value: "totalOrder" },
+    { text: "Spent", value: "totalMoney" },
 ];
 
 onMounted(() => {
@@ -121,10 +107,24 @@ watch(
     }
 )
 
+const toPage = () => {
+    initCustomers(currentTab.value)
+}
+
 const initCustomers = async (index) => {
     try {
         console.log(index);
-        items.value
+        const params = {
+            page: page.value,
+            limit: pageSize.value,
+        }
+        const data = await storeCustomer.getListCustomer(params)
+        console.log(data);
+        if (data?.results) {
+            items.value = data?.results
+            totalPage.value = data?.totalPages
+            totalitem.value = data?.totalResults
+        }
     } catch (error) {
         console.log(error);
     }

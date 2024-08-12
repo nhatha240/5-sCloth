@@ -28,12 +28,14 @@
 <script lang="js" setup>
 import CustomersTable from '@/components/CustomersTable.vue'
 import router from '@/router';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import _ from 'lodash'
+import { useUserStore } from '../../stores/UserStore';
 
+const storeUser = useUserStore()
 const modalDelete = ref(false)
 const idSelected = ref([])
-const items = [
+const items = ref([
     {
         id: 1,
         "name": {
@@ -82,17 +84,33 @@ const items = [
         ],
         "date": '02/07/2024',
     },
-];
+]);
 const headers = [
-    { text: "Name", value: "name" },
-    { text: "Nội dung", value: "content" },
+    { text: "Name", value: "userId" },
+    { text: "Nội dung", value: "comment" },
     { text: "Sao", value: "rating" },
-    { text: "Ngày", value: "date" },
+    { text: "Ngày", value: "createdAt" },
 ];
-const options = ref(['name', 'content', 'rating', 'date'])
+const options = ref(['name', 'comment', 'rating', 'createdAt'])
 
 const ratingDetail = (e) => {
-    router.push({ name: 'RatingDetailsView', params: { id: e.id } })
+    router.push({ name: 'RatingDetailsView', params: { id: e?.userId._id } })
+}
+
+onMounted(() => {
+    initRatings()
+})
+
+const initRatings = async () => {
+    try {
+        const data = await storeUser.listRating()
+        console.log(data);
+        if (data?.results) {
+            items.value = data.results
+        }
+    } catch (error) {
+        return error
+    }
 }
 
 const addCustomer = () => {

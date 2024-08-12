@@ -42,6 +42,15 @@ export const useUserStore = defineStore('user', {
           })
           .catch(({ response }) => reject(response))
       })
-    }
+    },
+    async listRating(request) {
+      return new Promise((resolve, reject) => {
+        UserService.listRating(request)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
   }
 })

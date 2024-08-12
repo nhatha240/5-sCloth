@@ -44,13 +44,13 @@
                                                                             {{ item.label }}
                                                                         </span>
                                                                     </div>
-                                                                    <div class="MuiChip-root MuiChip-outlined MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-outlinedSecondary css-119rat0-MuiChip-root"
+                                                                    <!-- <div class="MuiChip-root MuiChip-outlined MuiChip-sizeSmall MuiChip-colorSecondary MuiChip-outlinedSecondary css-119rat0-MuiChip-root"
                                                                         v-if="index == 1">
                                                                         <span
                                                                             class="MuiChip-label MuiChip-labelSmall css-1985qjx-MuiChip-label">
                                                                             16
                                                                         </span>
-                                                                    </div>
+                                                                    </div> -->
                                                                 </router-link>
                                                             </li>
                                                             <li class="MuiList-root css-110zuwj-MuiList-root"

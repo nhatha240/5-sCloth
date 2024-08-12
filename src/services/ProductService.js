@@ -30,4 +30,13 @@ export default {
     async addCart(payload) {
         return await API.post(`/users/add-cart/`, payload)
     },
+    async removeCart(productId) {
+        const payload = {
+            productId: productId
+        }
+        return await API.post(`/users/remove-cart/`, payload)
+    },
+    async listCart() {
+        return await API.get(`/users/list-cart/`)
+    },
 }

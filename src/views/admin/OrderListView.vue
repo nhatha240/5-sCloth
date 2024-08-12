@@ -33,88 +33,114 @@
                 </div>
             </div>
 
-            <EasyDataTable v-model:items-selected="itemsSelected" class="common-table" :headers="headers" :items="items"
-                :search-field="searchField" :search-value="searchValue" @click-row="showRow">
-                <template #item-order="{ order }">
+            <EasyDataTable v-model:items-selected="itemsSelected" :rows-per-page="pageSize" class="common-table" :headers="headers" :items="items"
+                :search-field="searchField" :search-value="searchValue" :hide-rows-per-page="true" :hide-footer="true" @click-row="showRow">
+                <template #item-_id="{ _id }">
                     <div class="inline-block">
-                        #{{ order }}
+                        #{{ _id }}
                     </div>
                 </template>
-                <template #item-payment_status="{ payment_status }">
-                    <span v-if="payment_status === 'Paid'" class="inline-block transactions-status paid rounded-[4px]">
-                        {{ payment_status }}
+                <template #item-idUser="{ idUser }">
+                    <div class="inline-block">
+                        {{ idUser?.name }}
+                    </div>
+                </template>
+                <template #item-createdAt="{ createdAt }">
+                    <div class="inline-block">
+                        {{ formatDate(createdAt, 'MMMM D, hh:mm A') }}
+                    </div>
+                </template>
+                <template #item-idPayment="{ idPayment }">
+                    <span v-if="idPayment?.status === 'COMPLETED'" class="inline-block transactions-status paid rounded-[4px]">
+                        {{ idPayment?.status }}
                     </span>
                     <span v-else class="inline-block transactions-status pending rounded-[4px]">
-                        {{ payment_status }}
+                        {{ idPayment?.status }}
                     </span>
                 </template>
-                <template #item-order_status="{ order_status }">
+                <template #item-status="{ status }">
                     <span :class="{
                             'inline-block order-status': true, 
-                            'ready': order_status === 'ready',
-                            'shipped': order_status === 'shipped',
-                            'received': order_status === 'received'
+                            'ready': status === 'ready' || status === 'pending',
+                            'shipped': status === 'shipped' || status === 'shipping',
+                            'received': status === 'received' || status === 'delivered' || status === 'delivery',
                         }">
-                        {{ ORDER_STATUS[order_status] }}
+                        {{ ORDER_STATUS[status] }}
                     </span>
                 </template>
-                <template #item-total="{ total }">
+                <template #item-totalAmount="{ totalAmount }">
                     <div class="inline-block">
-                        ${{ total }}
+                        ${{ totalAmount }}
                     </div>
                 </template>
             </EasyDataTable>
+            <div class="flex items-center gap-2">
+                <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
+                    <img src="/images/page-prev-icon.svg" />
+                </button>
+                <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
+                    <img src="/images/page-next-icon.svg" />
+                </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { ORDER_STATUS } from '@/constant/common'
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useOrderStore } from '@/stores/OrderStore';
+import { formatDate } from '@/constant/commonFunction'
 
 const router = useRouter();
+const route = useRoute();
+const storeOrder = useOrderStore();
 const searchField = ref("customer");
 const searchValue = ref("");
 const itemsSelected = ref([])
 const headers = [
-    { text: "Order", value: "order" },
-    { text: "Date", value: "date" },
-    { text: "Customer", value: "customer" },
-    { text: "Payment status", value: "payment_status" },
-    { text: "Order Status", value: "order_status" },
-    { text: "Total", value: "total" },
+    { text: "Order", value: "_id" },
+    { text: "Date", value: "createdAt" },
+    { text: "Customer", value: "idUser" },
+    { text: "Payment status", value: "idPayment" },
+    { text: "Order Status", value: "status" },
+    { text: "Total", value: "totalAmount" },
 ];
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 10)
 
-const items = [
-    {
-        "order": "12512B",
-        "date": "May 5, 4:20 PM",
-        "customer": 'Tom Anderson',
-        "payment_status": 'Paid',
-        "order_status": 'ready',
-        "total": '49.90',
-    },
-    {
-        "order": "12512B",
-        "date": "May 5, 4:20 PM",
-        "customer": 'Jayden Walker',
-        "payment_status": 'Pending',
-        "order_status": 'shipped',
-        "total": '49.90'
-    },
-    {
-        "order": "12512B",
-        "date": "May 5, 4:20 PM",
-        "customer": 'Inez Kim',
-        "payment_status": 'Paid',
-        "order_status": 'received',
-        "total": '49.90'
-    },
-];
+const items = ref([]);
 const showRow = (item) => {
-    router.push({ name: 'OrderDetailsView', params: { id: item.order } })
+    router.push({ name: 'OrderDetailsView', params: { id: item._id } })
 };
+const nextPage = ref('')
+const prevPage = ref('')
+
+onMounted(() => {
+    initOrders()
+})
+
+const toPage = (cursor) => {
+    initOrders(cursor)
+}
+
+const initOrders = async (cursor) => {
+    try {
+        const params = {
+            pageSize: pageSize.value,
+            cursor: cursor
+        }
+        const data = await storeOrder.getListOrder(params)
+        if(data?.results) {
+            items.value = data?.results
+        }
+        nextPage.value = data?.nextCursor
+        prevPage.value = data?.prevCursor
+
+    } catch (error) {
+        return error
+    }
+}
 </script>
 
 <style lang="scss">

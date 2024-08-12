@@ -26,6 +26,7 @@ import HeaderMain from './components/HeaderMain.vue'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import './vee-validate'
 import { LoadingPlugin } from 'vue-loading-overlay'
+import PaginateAdmin from './components/PaginateAdmin.vue'
 
 const app = createApp(App)
 const swiper = new Swiper()
@@ -49,5 +50,6 @@ app.component('HeaderMain', HeaderMain);
 app.component('Field', Field);
 app.component('Form', Form);
 app.component('ErrorMessage', ErrorMessage);
+app.component('PaginateAdmin', PaginateAdmin);
 
 app.mount('#app')

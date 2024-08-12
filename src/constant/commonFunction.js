@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import moment from 'moment'
 export const generateFakeData = (count, imageList) => {
     let idCounter = 1;
     const fakeData = [];
@@ -104,3 +105,10 @@ export const generateSingleData = (id, imageList, subImage) => {
 
     return fakeData;
 };
+
+export function formatDate(date, format) {
+    if (moment(date).isValid()) {
+        return moment(date).format(format)
+    }
+    return ''
+}

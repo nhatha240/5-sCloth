@@ -4,6 +4,8 @@ import ProductService from '@/services/ProductService'
 export const useProductStore = defineStore('product', {
     state: () => ({
         product: '',
+        cartItem : [],
+        totalPrice : 0,
     }),
     getters: {
         productInfo: (state) => state.product,
@@ -67,6 +69,29 @@ export const useProductStore = defineStore('product', {
         async addCart({ productId, quantity }) {
             return new Promise((resolve, reject) => {
                 ProductService.addCart({ productId, quantity })
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async listCart() {
+            return new Promise((resolve, reject) => {
+                ProductService.listCart()
+                    .then(({ data }) => {
+                        this.cartItem = data?.products
+                        this.totalPrice = data?.products?.reduce((sum, item) => {
+                            const itemPrice = item.product.discountPrice > 0 ? item.product.discountPrice : item.product.price;
+                            return sum + (itemPrice * item.quantity);
+                        }, 0);
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async removeCart(id) {
+            return new Promise((resolve, reject) => {
+                ProductService.removeCart(id)
                     .then(({ data }) => {
                         resolve(data)
                     })

@@ -156,6 +156,7 @@ const addToCart = async (id) => {
         }
         await storeProduct.addCart(payload)
         toastSuccess('Add to cart success')
+        storeProduct.listCart()
     } catch (error) {
         return error
     }

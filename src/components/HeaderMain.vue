@@ -12,39 +12,41 @@
           <div class="pt-[17px]">
             <div class="sub-text">Giỏ hàng</div>
             <div class="details-text pb-[17px]">
-              Bạn có 5 sản phẩm trong giỏ hàng
+              Bạn có {{ storeProduct.cartItem?.length }} sản phẩm trong giỏ hàng
             </div>
             <div class="max-h-[399px] flex flex-col gap-[28px] overflow-auto mb-[31px]">
               <div class="flex items-center justify-between py-[11px] pr-[24px] pl-[10px] bg-[#D651FF] rounded-[15px]"
-                v-for="i in 5" :key="i">
+                v-for="(item, i) in storeProduct.cartItem" :key="i">
                 <div class="max-w-[85px] h-[93px]">
-                  <img class="object-cover" src="/images/basket_images1.svg" alt="">
+                  <img class="object-cover" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
                 </div>
                 <div class="flex flex-col pr-[86px]">
-                  <div class="font-medium main-text">Quần đùi vãi kaki</div>
+                  <div class="font-medium main-text">{{ item.product.name }}</div>
                   <div class="flex justify-between">
                     <div>Size: s</div>
                     <div>Màu: đen</div>
                   </div>
                 </div>
                 <div class="pr-[46px] flex items-center gap-[6px]">
-                  <div class="text-[#393939] font-semibold text-[22px]">1</div>
+                  <div class="text-[#393939] font-semibold text-[22px]">
+                    {{ item.quantity }}
+                  </div>
                   <div class="flex flex-col gap-[3px]">
-                    <img class="cursor-pointer" src="/images/up_icon.svg" alt="">
-                    <img class="cursor-pointer" src="/images/down_icon.svg" alt="">
+                    <img class="cursor-pointer" src="/images/up_icon.svg" alt="" @click="updateCart(item.product.id, 1)">
+                    <img class="cursor-pointer" src="/images/down_icon.svg" alt="" @click="updateCart(item.product.id, -1)">
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
-                  $681
+                  ${{ item.product.discountPrice ? (item.product.discountPrice * item.quantity) : (item.product.price * item.quantity) }}
                 </div>
-                <div class="">
+                <div class="" @click="removeItemCart(item.product.id)">
                   <img class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">
                 </div>
               </div>
             </div>
             <div class="border-t border-[#D0CFCF] pt-[15px]">
               <button class="w-[50%] mx-auto rounded-[12px] flex items-center justify-between subscribe-purple-button" @click="openCheckout">
-                <div class="font-medium text-[16px] tex-[#FEFCFC]">$1,672</div>
+                <div class="font-medium text-[16px] tex-[#FEFCFC]">${{ storeProduct.totalPrice ?? 0 }}</div>
                 <div class="font-medium text-[16px] tex-[#FEFCFC]">Checkout</div>
               </button>
             </div>
@@ -133,10 +135,14 @@ import { useRoute, useRouter } from 'vue-router'
 import BreadCumbs from './BreadCumbs.vue'
 import { useShopStore } from '../stores/ShopStore'
 import { useAuthStore } from '../stores/AuthStore'
+import { useProductStore } from '../stores/ProductStore'
+import { toastSuccess } from '@/constant/commonUsage';
 
 const emits = defineEmits(['update:search'])
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeAuth = useAuthStore()
 const storeShop = useShopStore()
+const storeProduct = useProductStore()
 const router = useRouter();
 const route = useRoute();
 const links = ref([
@@ -159,6 +165,7 @@ const showBasket = ref(false)
 
 onMounted(() => {
   refreshToken()
+  getListCart()
 })
 
 const refreshToken = async () => {
@@ -181,6 +188,38 @@ const toPage = (link) => {
   } else {
     router.push({ name: link.value, query: { category: link.category } });
   }
+}
+
+const getListCart = async () => {
+  try {
+    const data = await storeProduct.listCart()
+    storeProduct.cartItem = data?.products
+  } catch (error) {
+    return error
+  }
+}
+
+const removeItemCart = async (id) => {
+  try {
+    await storeProduct.removeCart(id)
+    getListCart()
+  } catch (error) {
+    return error
+  }
+}
+
+const updateCart = async (id, quantity) => {
+    try {
+        const payload = {
+            productId: id,
+            quantity: quantity,
+        }
+        await storeProduct.addCart(payload)
+        toastSuccess('Add to cart success')
+        getListCart()
+    } catch (error) {
+        return error
+    }
 }
 
 const openBasket = () => {

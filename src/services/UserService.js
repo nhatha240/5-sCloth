@@ -14,4 +14,11 @@ export default {
     async deleteUser(id) {
         return await API.post(`/users/${id}/delete`)
     },
+    async listRating(query) {
+        const params = {
+            page: query?.page,
+            limit: query?.pageSize
+        }
+        return await API.get(`/admin/list-rating`, {params})
+    },
 }

@@ -1,13 +1,17 @@
 <template>
     <div class="orders-details-layout">
+        <div class="flex items-center gap-1 cursor-pointer" @click="backToOrder">
+            <img src="/images/icon_back_screen.svg" alt="">
+            Back
+        </div>
         <div class="flex items-center justify-between mb-[24px]">
             <div class="title-text">Order Details </div>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
                 <button
                     class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1">
                     Lưu Order
                 </button>
-            </div>
+            </div> -->
         </div>
         <div class="row justify-between">
             <div class="flex-[0_0_32%] order-details-box">
@@ -17,7 +21,7 @@
                         'order-status': true,
                         'process': true
                     }">
-                        Processing
+                        {{ orderData?.status ? ORDER_STATUS[orderData?.status] : '' }}
                     </div>
                 </div>
                 <div class="flex flex-col gap-[14px]">
@@ -27,7 +31,7 @@
                             Added
                         </div>
                         <div class="">
-                            12 Dec 2022
+                            {{ formatDate(orderData?.createdAt, 'DD MMMM YYYY') }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -36,7 +40,7 @@
                             Payment Method
                         </div>
                         <div class="">
-                            Visa
+                            {{ orderData?.idPayment?.method }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -61,7 +65,7 @@
                             Customer
                         </div>
                         <div class="">
-                            Josh Adam
+                            {{ orderData?.idUser?.name }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -70,7 +74,7 @@
                             Email
                         </div>
                         <div class="">
-                            josh_adam@mail.com
+                            {{ orderData?.idUser?.email }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -79,7 +83,7 @@
                             Phone
                         </div>
                         <div class="">
-                            909 427 2910
+                            {{ orderData?.idUser?.phone }}
                         </div>
                     </div>
                 </div>
@@ -95,7 +99,7 @@
                             Invoice
                         </div>
                         <div class="">
-                            INV-32011
+                            {{ orderData?.idPayment?.transactionId }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -104,7 +108,7 @@
                             Shipping
                         </div>
                         <div class="">
-                            SHP-2011REG
+                            {{ orderData?.idPayment?.shippingCode }}
                         </div>
                     </div>
                     <div class="flex items-center justify-between">
@@ -127,7 +131,7 @@
                         'order-status': true,
                         'success': true
                     }">
-                        2 Products
+                        {{ orderData?.products ? orderData?.products?.length : 0 }} Products
                     </div>
                 </div>
                 <table class="order-table">
@@ -141,25 +145,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
+                        <tr v-for="(product, index) in orderData?.products" :key="index">
                             <td>
                                 <div class="flex items-center gap-2">
                                     <div class="rounded-[8px] bg-[#E0E2E7] w-[44px] h-[44px]">
                                         <img class="object-cover" src="" alt="">
                                     </div>
                                     <div class="flex flex-col gap-1">
-                                        <div class="text-[#333843] font-medium text-sm">Smartwatch E2</div>
+                                        <div class="text-[#333843] font-medium text-sm">
+                                            {{ product?.product?.name }}
+                                        </div>
                                         <div class="text-[#667085] font-normal text-xs">Black</div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="text-[#5C59E8] font-semibold text-sm">302011</td>
-                            <td class="text-[#667085] font-medium text-sm">1 pcs</td>
+                            <td class="text-[#5C59E8] font-semibold text-sm">
+                                {{ product?.product?.id }}
+                            </td>
+                            <td class="text-[#667085] font-medium text-sm">{{ product?.quantity }} pcs</td>
                             <td class="text-[#667085] font-medium text-sm">
-                                ${{ '400.00' }}
+                                ${{ product?.price ? product?.price?.toFixed(2) : 0 }}
                             </td>
                             <td class="text-[#667085] font-medium text-sm">
-                                ${{ '400.00' }}
+                                ${{ product?.priceTotal ? product?.priceTotal?.toFixed(2) : 0 }}
                             </td>
                         </tr>
                         <tr>
@@ -167,7 +175,7 @@
                             <td></td>
                             <td></td>
                             <td class="total-grand-text">Subtotal</td>
-                            <td class="text-[#333843] font-medium text-sm">${{ '585.00' }}</td>
+                            <td class="text-[#333843] font-medium text-sm">${{ orderData?.totalAmount ? orderData?.totalAmount?.toFixed(2) : 0 }}</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -181,27 +189,32 @@
                             <td></td>
                             <td></td>
                             <td class="total-grand-text">Shipping Rate</td>
-                            <td class="text-[#333843] font-medium text-sm">${{ '5.00' }}</td>
+                            <td class="text-[#333843] font-medium text-sm">
+                                ${{ orderData?.totalAmount ? (orderData?.totalAmount * 0.05)?.toFixed(2) : 0 }}
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td class="total-grand-text">Grand Total</td>
-                            <td class="total-price-text">${{ '590.00' }}</td>
+                            <td class="total-price-text">
+                                ${{ orderData?.totalAmount ? (orderData?.totalAmount)?.toFixed(2) : 0 }}
+                            </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="flex-[0_0_34%] flex flex-col gap-6">
-                <div class="order-details-box">
+                <div class="order-details-box" v-if="orderData?.address">
                     <div class="title-text pb-[18px]">Address</div>
                     <div class="flex items-center gap-2 pb-[14px]">
                         <img src="/images/icon_location.svg" alt="">
                         <div class="">
                             <div class="text-[#4D5464] font-medium text-sm">Billing</div>
-                            <div class="text-[#1A1C21] font-medium text-sm">1833 Bel Meadow Drive, Fontana, California
-                                92335, USA</div>
+                            <div class="text-[#1A1C21] font-medium text-sm">
+                                {{ orderData?.address }}
+                            </div>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
@@ -221,36 +234,37 @@
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Order Placed</div>
                                 <div class="text-[#4D5464] font-medium text-sm">An order has been placed.</div>
-                                <div class="text-[#858D9D] font-medium text-[12px]">12/12/2022, 03:00</div>
+                                <div class="text-[#858D9D] font-medium text-[12px]">
+                                    {{ formatDate(orderData?.createdAt, 'DD/MM/YY, hh:mm') }}
+                                </div>
                             </div>
                         </div>
                         <div class="flex items-center gap-2 progress-field">
-                            <img src="/images/icon_processing.svg" alt="">
+                            <img src="/images/icon_processing.svg" alt="" @click="updateStatus('shipping')">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Processing</div>
                                 <div class="text-[#4D5464] font-medium text-sm">Seller has proccessed your order.</div>
-                                <div class="text-[#858D9D] font-medium text-[12px]">12/12/2022, 03:15</div>
+                                <div class="text-[#858D9D] font-medium text-[12px]">
+                                    {{ formatDate(orderData?.processDate, 'DD/MM/YY, hh:mm') }}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 progress-field">
-                            <img src="/images/packed_icon.svg" alt="">
-                            <div class="">
-                                <div class="text-[#333843] font-medium text-sm">Packed</div>
-                                <div class="text-[#858D9D] font-medium text-[12px]">DD/MM/YY, 00:00</div>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2 progress-field">
-                            <img src="/images/ship_method_icon.svg" alt="">
+                        <div class="flex items-center gap-2 progress-field" v-if="orderData?.status === 'shipping' || orderData?.status === 'delivery'">
+                            <img src="/images/ship_method_icon.svg" alt="" @click="updateStatus('delivery')">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Shipping</div>
-                                <div class="text-[#858D9D] font-medium text-[12px]">DD/MM/YY, 00:00</div>
+                                <div class="text-[#858D9D] font-medium text-[12px]">
+                                    {{ formatDate(orderData?.shipDate, 'DD/MM/YY, hh:mm') }}
+                                </div>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 progress-field">
+                        <div class="flex items-center gap-2 progress-field" v-if="orderData?.status === 'delivery'">
                             <img src="/images/deliver_complete_icon.svg" alt="">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Delivered</div>
-                                <div class="text-[#858D9D] font-medium text-[12px]">DD/MM/YY, 00:00</div>
+                                <div class="text-[#858D9D] font-medium text-[12px]">
+                                    {{ formatDate(orderData?.deliveryDate, 'DD/MM/YY, hh:mm') }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -261,11 +275,51 @@
 </template>
 
 <script lang="js" setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useOrderStore } from '@/stores/OrderStore';
+import router from '@/router';
+import { formatDate } from '@/constant/commonFunction'
+import { toastSuccess } from '@/constant/commonUsage'
+import { ORDER_STATUS } from '@/constant/common'
 
 const route = useRoute();
+const storeOrder = useOrderStore();
 const orderId = ref(route?.params?.id)
+const orderData = ref({})
+
+onMounted(() => {
+    initOrder()
+})
+
+const initOrder = async () => {
+    try {
+        const data = await storeOrder.getOrder(orderId.value)
+        console.log(data);
+        orderData.value = data
+    } catch (error) {
+        return error
+    }
+}
+
+const updateStatus = async (status) => {
+    if (orderData.value?.status === 'pending' || orderData.value?.status !== 'delivery') {
+        try {
+            const payload = {
+                status: status
+            }
+            await storeOrder.updateOrderStatus(orderId.value, payload)
+            toastSuccess('Updated')
+            initOrder()
+        } catch (error) {
+            return error
+        }
+    }
+}
+
+const backToOrder = () => {
+    router.push({ name: 'OrderListView' })
+}
 </script>
 
 <style lang="scss">

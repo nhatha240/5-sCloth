@@ -22,22 +22,29 @@
             :search-field="searchField" :search-value="searchValue" @click-row="showCustomer">
             <template #item-name="{ name }">
                 <div class="flex items-center gap-4">
-                    <img class="avatar-customer" :src="name.avatar" alt="" v-if="name.avatar">
-                    <div class="avatar-customer temp" v-else>
-                        {{ name.name?.charAt(0) }}
+                    <div class="avatar-customer temp">
+                        {{ name?.charAt(0) }}
                     </div>
-                    <div class="">{{ name.name }}</div>
+                    <div class="">{{ name }}</div>
                 </div>
             </template>
-            <template #item-spent="{ spent }">
+            <template #item-userId="{ userId }">
+                <div class="flex items-center gap-4">
+                    <div class="avatar-customer temp">
+                        {{ userId?.name?.charAt(0) }}
+                    </div>
+                    <div class="">{{ userId?.name }}</div>
+                </div>
+            </template>
+            <template #item-totalMoney="{ totalMoney }">
                 <span class="">
-                    ${{ spent }}
+                    ${{ totalMoney }}
                 </span>
             </template>
             <template #item-rating="{ rating }">
                 <div class="flex gap-[8px] items-center">
-                    <img class="" :src="star.rate ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
-                        alt="" v-for="(star, i) in rating" :key="i">
+                    <img class="" :src="star <= rating ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                        alt="" v-for="star in 5" :key="star">
                 </div>
             </template>
             <template #item-content="{ content }">
@@ -45,11 +52,17 @@
                     {{ content }}
                 </div>
             </template>
+            <template #item-createdAt="{ createdAt }">
+                <div class="comment-text">
+                    {{ formatDate(createdAt, 'DD/MM/YYYY') }}
+                </div>
+            </template>
         </EasyDataTable>
     </div>
 </template>
 
 <script lang="js" setup>
+import { formatDate } from '@/constant/commonFunction';
 import { ref } from 'vue';
 
 const props = defineProps({
