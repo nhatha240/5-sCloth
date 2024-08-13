@@ -70,9 +70,9 @@ export const useAuthStore = defineStore('auth', {
           .catch(({ response }) => reject(response))
       })
     },
-    async userRegister({ name, email, password }) {
+    async userRegister({ name, email, password, address, phone }) {
       return new Promise((resolve, reject) => {
-        AuthService.userRegister({ name, email, password })
+        AuthService.userRegister({ name, email, password, address, phone })
           .then(({ data }) => {
             this.user = data?.user
             this.token = data?.tokens?.access?.token
@@ -118,6 +118,15 @@ export const useAuthStore = defineStore('auth', {
     async refreshUserToken({refreshToken}) {
       return new Promise((resolve, reject) => {
         AuthService.refreshUserToken({refreshToken})
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    async updateUser(id ,payload) {
+      return new Promise((resolve, reject) => {
+        AuthService.updateUser(id ,payload)
           .then(({ data }) => {
             resolve(data)
           })

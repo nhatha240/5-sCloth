@@ -24,10 +24,8 @@
             </div>
         </div>
         <div class="bg-[#FFFFFF] py-[32px] px-[28px] border border-[#E6E9F4] rounded-[6px]" v-if="items?.length > 0">
-            <BTabs v-model="currentTab" content-class="mt-4">
-                <BTab :active="isActiveTab(0)" title="All Customers">
                     <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
-                        @update:deleteCustomer="deleteCustomer" @update:customerDetail="customerDetail">
+                        @update:deleteCustomer="openDeleteCustomer" @update:customerDetail="customerDetail" :modifyOption="false">
                     </CustomersTable>
                     <PaginateAdmin
                         v-if="totalitem"
@@ -39,23 +37,6 @@
                         :total-page="totalPage"
                         :topage="toPage"
                     />
-                </BTab>
-                <BTab :active="isActiveTab(1)" title="New Customers">
-                    <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
-                        @update:deleteCustomer="deleteCustomer" @update:customerDetail="customerDetail">
-                    </CustomersTable>
-                </BTab>
-                <BTab :active="isActiveTab(2)" title="Returning Customers">
-                    <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
-                        @update:deleteCustomer="deleteCustomer" @update:customerDetail="customerDetail">
-                    </CustomersTable>
-                </BTab>
-                <BTab :active="isActiveTab(3)" title="From Europe">
-                    <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
-                        @update:deleteCustomer="deleteCustomer" @update:customerDetail="customerDetail">
-                    </CustomersTable>
-                </BTab>
-            </BTabs>
         </div>
         <div class="" v-else>
             <EmptyAdminData
@@ -77,6 +58,7 @@ import router from '@/router';
 import _ from 'lodash'
 import { useCustomerStore } from '@/stores/CustomerStore'
 import { useRouter } from 'vue-router';
+import { toastSuccess } from '@/constant/commonUsage';
 
 const route = useRouter()
 const storeCustomer = useCustomerStore()
@@ -143,9 +125,22 @@ const addCustomer = () => {
 
 }
 
-const deleteCustomer = (e) => {
-    modalDelete.value = true
-    idSelected.value = _.flatMap(e, 'id')
+const deleteCustomer = async (e) => {
+    if (e?.length > 0) {
+        try {
+            await storeCustomer.deleteCustomer(idSelected.value)
+            toastSuccess('Delete Success')
+        } catch (error) {
+            return error
+        }
+    }
+}
+
+const openDeleteCustomer = (e) => {
+    if (e?.length > 0) {
+        modalDelete.value = true
+        idSelected.value = _.flatMap(e, 'id')
+    }
 }
 
 const isActiveTab = (index) => {

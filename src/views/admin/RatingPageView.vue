@@ -91,7 +91,7 @@ const headers = [
     { text: "Sao", value: "rating" },
     { text: "Ngày", value: "createdAt" },
 ];
-const options = ref(['name', 'comment', 'rating', 'createdAt'])
+const options = ref(['userId.name', 'comment', 'rating', 'createdAt'])
 
 const ratingDetail = (e) => {
     router.push({ name: 'RatingDetailsView', params: { id: e?.userId._id } })

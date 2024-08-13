@@ -10,6 +10,9 @@ export default {
   async userRegister(payload) {
     return await API.post('/auth/register', payload)
   },
+  async updateUser(id, payload) {
+    return await API.put(`/admin/customer/${id}`, payload)
+  },
   async resetPassword(payload) {
     return await API.post('/users/reset-password', payload)
   },

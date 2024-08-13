@@ -1,17 +1,11 @@
 <template>
     <div class="customer-info-layout">
+        <div class="flex items-center gap-1 cursor-pointer" @click="() => {router.push({ name: 'CustomerListView' })}">
+            <img src="/images/icon_back_screen.svg" alt="">
+            Back
+        </div>
         <div class="flex items-center justify-between mb-[30px]">
             <div class="title-text">Customer Information</div>
-            <div class="flex items-center gap-3">
-                <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
-                    Cancel
-                </button>
-                <button
-                    class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center">
-                    Save
-                </button>
-            </div>
         </div>
         <div class="row justify-between !mt-6">
             <div class="flex-[0_0_63%] flex flex-col gap-[30px]">
@@ -23,28 +17,19 @@
                             </div>
                             <div class="flex flex-col gap-2">
                                 <div class="label-text">
-                                    Lenora Robinson
+                                    {{ orderData?.name }}
                                 </div>
                                 <div class="flex flex-col">
                                     <div class="details-text">Ireland</div>
-                                    <div class="details-text">5 Orders</div>
+                                    <div class="details-text">{{ orderData?.orders ? orderData?.orders?.length : 0 }} Orders</div>
                                     <div class="details-text">Customer for 2 years</div>
                                 </div>
                             </div>
                         </div>
                         <div class="flex items-center gap-[3px]">
-                            <img :src="Math.round(rating) >= star ? '/images/star_customer_icon_active.svg' : '/images/star_details_icon_inactive.svg'"
+                            <img :src="Math.round(orderData?.comments?.rating) >= star ? '/images/star_customer_icon_active.svg' : '/images/star_details_icon_inactive.svg'"
                                 alt="" v-for="star in 5" :key="star">
                         </div>
-                    </div>
-                    <div class="border-t border-[#E6E9F4] pt-[28px] mt-[40px]">
-                        <div class="label-text mb-6">
-                            Customer Notes
-                        </div>
-                        <div class="details-text mb-1">
-                            Notes
-                        </div>
-                        <textarea name="" id="" class="form-control" placeholder="Add notes about customer"></textarea>
                     </div>
                 </div>
                 <div class="order-details-box">
@@ -60,17 +45,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="transaction in items" :key="transaction.order" class="shared-classes">
-                                <td class="px-4 py-2 text-classes">{{ transaction.order }}</td>
-                                <td class="px-4 py-2 text-classes">{{ transaction.date }}</td>
+                            <tr v-for="(transaction, index) in items" :key="index" class="shared-classes">
+                                <td class="px-4 py-2 text-classes">{{ transaction._id }}</td>
+                                <td class="px-4 py-2 text-classes">{{ formatDate(transaction.createdAt, 'DD.MM.YYYY') }}</td>
                                 <td class="px-4 py-2 text-classes">
-                                    <span v-if="transaction.orderStatus === 'Completed'"
+                                    <span v-if="transaction.status === 'completed'"
                                         class="inline-block transactions-status paid rounded-[4px]">{{
-                                            transaction.orderStatus }}</span>
+                                            transaction.status }}</span>
                                     <span v-else class="inline-block transactions-status pending rounded-[4px]">{{
-                                        transaction.orderStatus }}</span>
+                                        transaction.status }}</span>
                                 </td>
-                                <td class="px-4 py-2 text-classes">{{ transaction.price }}</td>
+                                <td class="px-4 py-2 text-classes">{{ transaction.totalAmount }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,15 +72,14 @@
                         </div>
                     </div>
                     <div class="flex flex-col gap-6 pb-[28px] border-b border-[#E6E9F4] ">
-                        <div class="">
+                        <div class="" v-if="orderData?.address">
                             <div class="details-text gray mb-[7px]">
                                 Address
                             </div>
-                            <div class="details-text">
-                                <div class="">831 Wilhelmine Glen</div>
-                                <div class="">40583-2293</div>
-                                <div class="">South Lelastad </div>
-                                <div class="">Ireland</div>
+                            <div class="details-text" v-if="orderData?.address">
+                                <div class="" v-for="address in orderData?.address?.split(',')" :key="address">
+                                    {{ address }}
+                                </div>
                             </div>
                         </div>
                         <div class="">
@@ -103,15 +87,15 @@
                                 Email Address
                             </div>
                             <div class="details-text">
-                                lenora_rob@yahoo.com
+                                {{ orderData?.email }}
                             </div>
                         </div>
-                        <div class="">
+                        <div class="" v-if="orderData?.phone">
                             <div class="details-text gray mb-[7px]">
                                 Phone
                             </div>
                             <div class="details-text">
-                                636-458-4820
+                                {{ orderData?.phone }}
                             </div>
                         </div>
                     </div>
@@ -119,7 +103,7 @@
                         Delete Customer
                     </div>
                 </div>
-                <div class="order-details-box">
+                <!-- <div class="order-details-box">
                     <div class="label-text mb-6">
                         Tags
                     </div>
@@ -135,7 +119,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -143,24 +127,25 @@
 
 <script lang="js" setup>
 import router from '@/router';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useCustomerStore } from '@/stores/CustomerStore'
+import { formatDate } from '@/constant/commonFunction';
+import { toastSuccess } from '@/constant/commonUsage'
 
 const route = useRoute()
+const storeCustomer = useCustomerStore()
 const customerId = ref(route?.params?.id)
 const rating = ref(parseFloat((Math.random() * 5).toFixed(1)));
 const headers = [
     { text: "Order", value: "order" },
     { text: "Date", value: "date" },
-    { text: "Order Status", value: "orderStatus" },
+    { text: "Order Status", value: "status" },
     { text: "Price", value: "price" },
 ];
 
-const items = [
-    { "order": "#23534D", "date": '24.05.2020', "orderStatus": 'Completed', "price": '$124.97' },
-    { "order": "#12512B", "date": '24.05.2020', "orderStatus": 'Pending', "price": '$124.97' },
-    { "order": "#23534D.", "date": '24.05.2020', "orderStatus": 'Completed', "price": '$124.97' },
-];
+const items = ref([]);
+const orderData = ref({})
 const tagList = ref([
     {
         id: 1,
@@ -172,12 +157,32 @@ const tagList = ref([
     },
 ])
 
+onMounted(() => {
+    initCustomer()
+})
+
+const initCustomer = async () => {
+    try {
+        const data = await storeCustomer.getCustomer(customerId.value)
+        console.log(data);
+        orderData.value = data
+        items.value = data?.orders
+    } catch (error) {
+        return error
+    }
+}
+
 const toEditCustomer = (id) => {
     router.push({ name: 'CustomerModifyView', params: { id: id } })
 }
 
-const deleteCustomer = (id) => {
-    
+const deleteCustomer = async (id) => {
+    try {
+        await storeCustomer.deleteCustomer(id)
+        router.push({ name: 'CustomerListView' }).then(() => toastSuccess('Delete Success'))
+    } catch (error) {
+        return error
+    }
 }
 </script>
 

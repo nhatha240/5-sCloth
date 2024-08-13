@@ -17,6 +17,24 @@ export const useCustomerStore = defineStore('customer', {
                     })
                     .catch(({ response }) => reject(response))
             })
-        }
+        },
+        async getCustomer(id) {
+            return new Promise((resolve, reject) => {
+                CustomerService.getCustomer(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async deleteCustomer(id) {
+            return new Promise((resolve, reject) => {
+                CustomerService.deleteCustomer(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
     }
 })

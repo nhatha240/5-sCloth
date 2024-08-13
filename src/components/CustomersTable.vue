@@ -9,7 +9,7 @@
                 </select>
                 <input class="common-input-field" type="text" v-model="searchValue">
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3" v-if="modifyOption">
                 <button class="btn-modify" @click="addCustomer">
                     <img src="/images/edit_btn_icon.svg" />
                 </button>
@@ -77,6 +77,10 @@ const props = defineProps({
     options: {
         type: Array,
         default: () => [],
+    },
+    modifyOption: {
+        type: Boolean,
+        default: true,
     },
 })
 const emits = defineEmits([

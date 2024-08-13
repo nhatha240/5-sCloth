@@ -113,6 +113,7 @@ const userInfo = ref({
     password: '',
     passwordConfirm: '',
     phone: '',
+    address: '',
 })
 const isRegister = ref(false)
 const isLogin = ref(true)
