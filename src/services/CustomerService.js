@@ -14,4 +14,10 @@ export default {
     async deleteCustomer(id) {
         return await API.delete(`/admin/customer/${id}`)
     },
+    async exportCustomerCsv() {
+        const config = {
+            responseType: 'blob'
+        }
+        return await API.get('/admin/csv/customers', '', config)
+    },
 }

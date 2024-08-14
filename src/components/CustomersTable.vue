@@ -1,12 +1,15 @@
 <template>
     <div class="">
         <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3" v-if="showSearchField">
                 <select class="common-input-field" v-model="searchField">
                     <option v-for="(option, index) in options" :key="index">
                         {{ option }}
                     </option>
                 </select>
+                <input class="common-input-field" type="text" v-model="searchValue">
+            </div>
+            <div class="flex items-center gap-3" v-else>
                 <input class="common-input-field" type="text" v-model="searchValue">
             </div>
             <div class="flex items-center gap-3" v-if="modifyOption">
@@ -63,7 +66,7 @@
 
 <script lang="js" setup>
 import { formatDate } from '@/constant/commonFunction';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const props = defineProps({
     headers: {
@@ -82,6 +85,14 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    showSearchField: {
+        type: Boolean,
+        default: true,
+    },
+    fieldSearch: {
+        type: String,
+        default: '',
+    },
 })
 const emits = defineEmits([
     'update:modelValue',
@@ -92,6 +103,12 @@ const emits = defineEmits([
 const searchField = ref("name");
 const searchValue = ref("");
 const itemsSelected = ref([])
+
+onMounted(() => {
+    if (props.fieldSearch) {
+        searchField.value = props.fieldSearch
+    }
+})
 
 const showCustomer = (item) => {
     emits('update:customerDetail', item)

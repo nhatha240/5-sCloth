@@ -12,14 +12,17 @@
             <div class="title-text">Đánh giá</div>
             <div class="flex items-center gap-3">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="exportCsv"
+                >
                     Export
                 </button>
             </div>
         </div>
         <div class="bg-[#FFFFFF] py-[32px] px-[28px] border border-[#E6E9F4] rounded-[6px]">
             <CustomersTable :options="options" :headers="headers" :items="items" @update:addCustomer="addCustomer"
-                @update:deleteCustomer="deleteCustomer" @update:customerDetail="ratingDetail">
+                @update:deleteCustomer="deleteCustomer" @update:customerDetail="ratingDetail" 
+                :showSearchField="false" :fieldSearch="'userId.name'">
             </CustomersTable>
         </div>
     </div>
@@ -120,6 +123,14 @@ const addCustomer = () => {
 const deleteCustomer = (e) => {
     modalDelete.value = true
     idSelected.value = _.flatMap(e, 'id')
+}
+
+const exportCsv = async () => {
+    try {
+        await storeUser.exportRatingCsv('rating')
+    } catch (error) {
+        return error
+    }
 }
 </script>
 

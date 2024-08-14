@@ -84,7 +84,7 @@
                         </div>
                     </div>
                 </BTab>
-                <BTab :active="isActiveTab(1)" title="Notifications">
+                <!-- <BTab :active="isActiveTab(1)" title="Notifications">
                     <div class="notify-tab">
                         <div class="layout" v-for="(notify, index) in notifyTabValue" :key="index">
                             <div class="flex flex-col gap-1">
@@ -103,7 +103,7 @@
                             </div>
                         </div>
                     </div>
-                </BTab>
+                </BTab> -->
             </BTabs>
         </div>
         <div class="flex items-center justify-end border-t border-[#D7DBEC] mt-[30px]">

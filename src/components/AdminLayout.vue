@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <div class="MuiStack-root css-95rbei-MuiStack-root">
-                        <button class="MuiIconButton-sizeMedium css-a7o5bl-MuiButtonBase-root-MuiIconButton-root">
+                        <!-- <button class="MuiIconButton-sizeMedium css-a7o5bl-MuiButtonBase-root-MuiIconButton-root">
                             <img class="" src="/images/icon_chat_log.svg" alt="">
                         </button>
                         <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1igjtp5-MuiButtonBase-root-MuiIconButton-root">
@@ -129,7 +129,7 @@
                                     5
                                 </span>
                             </span>
-                        </button>
+                        </button> -->
                         <div class="MuiBox-root css-129hs4l">
                             <div class="absolute profile-menu-layout" :class="{ 'hidden': profileMenu }">
                                 <ul class="menu-ul">

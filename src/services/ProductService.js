@@ -39,4 +39,10 @@ export default {
     async listCart() {
         return await API.get(`/users/list-cart/`)
     },
+    async exportProductCsv() {
+        const config = {
+            responseType: 'blob'
+        }
+        return await API.get('/admin/csv/products', '', config)
+    },
 }

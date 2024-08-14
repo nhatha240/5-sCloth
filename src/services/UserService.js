@@ -21,4 +21,10 @@ export default {
         }
         return await API.get(`/admin/list-rating`, {params})
     },
+    async exportRatingCsv() {
+        const config = {
+            responseType: 'blob'
+        }
+        return await API.get('/admin/csv/rating', '', config)
+    },
 }

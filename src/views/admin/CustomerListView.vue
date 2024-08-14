@@ -12,7 +12,9 @@
             <div class="title-text">Customers</div>
             <div class="flex items-center gap-3" v-if="items?.length > 0">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="exportCsv"
+                >
                     Export
                 </button>
                 <button
@@ -109,6 +111,14 @@ const initCustomers = async (index) => {
         }
     } catch (error) {
         console.log(error);
+    }
+}
+
+const exportCsv = async () => {
+    try {
+        await storeCustomer.exportCustomerCsv('customer')
+    } catch (error) {
+        return error
     }
 }
 

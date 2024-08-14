@@ -10,11 +10,17 @@
         <div class="row flex items-center">
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
                 <div class="flex flex-col">
-                    <div class="number-text">$10.540</div>
+                    <div class="number-text">${{ totalData?.currentMonthAmount ?? 0 }}</div>
                     <div class="details-text">Total Revenue</div>
-                    <div class="asc-desc-text is-up">
-                        22.45%
-                        <img src="/images/up_stonk_icon.svg" alt="">
+                    <div class="asc-desc-text" 
+                        :class="{
+                            'is-up': totalData?.percentageChange > 0,
+                            'is-down': totalData?.percentageChange < 0
+                        }"
+                    >
+                        {{ totalData?.percentageChange ?? 0 }}%
+                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.percentageChange > 0">
+                        <img src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
@@ -23,11 +29,17 @@
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
                 <div class="flex flex-col">
-                    <div class="number-text">1,056</div>
+                    <div class="number-text">{{ totalData?.ordersThisMonth ?? 0 }}</div>
                     <div class="details-text">Orders</div>
-                    <div class="asc-desc-text is-up">
-                        15.45%
-                        <img src="/images/up_stonk_icon.svg" alt="">
+                    <div class="asc-desc-text" 
+                        :class="{
+                            'is-up': totalData?.orderPercentageChange > 0,
+                            'is-down': totalData?.orderPercentageChange < 0
+                        }"
+                    >
+                        {{ totalData?.orderPercentageChange ?? 0 }}%
+                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.orderPercentageChange > 0">
+                        <img src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
@@ -36,11 +48,17 @@
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
                 <div class="flex flex-col">
-                    <div class="number-text">48</div>
+                    <div class="number-text">{{ totalData?.loginsThisMonth ?? 0 }}</div>
                     <div class="details-text">Active Sessions</div>
-                    <div class="asc-desc-text is-down">
-                        18.25%
-                        <img src="/images/down_stink_icon.svg" alt="">
+                    <div class="asc-desc-text"
+                        :class="{
+                            'is-up': totalData?.loginUserPercentageChange > 0,
+                            'is-down': totalData?.loginUserPercentageChange < 0
+                        }"
+                    >
+                        {{ totalData?.loginUserPercentageChange ?? 0 }}%
+                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.loginUserPercentageChange > 0">
+                        <img src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
@@ -49,11 +67,17 @@
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
                 <div class="flex flex-col">
-                    <div class="number-text">5.420</div>
+                    <div class="number-text">{{ totalData?.newUsersThisMonth ?? 0 }}</div>
                     <div class="details-text">Total Sessions</div>
-                    <div class="asc-desc-text is-down">
-                        10.24%
-                        <img src="/images/down_stink_icon.svg" alt="">
+                    <div class="asc-desc-text"
+                        :class="{
+                            'is-up': totalData?.newUserPercentageChange > 0,
+                            'is-down': totalData?.newUserPercentageChange < 0
+                        }"
+                    >
+                        {{ totalData?.newUserPercentageChange ?? 0 }}%
+                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.newUserPercentageChange > 0">
+                        <img src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
@@ -121,16 +145,21 @@
                     </thead>
                     <tbody>
                         <tr v-for="transaction in items" :key="transaction.name" class="shared-classes">
-                            <td class="px-4 py-2 text-classes">{{ transaction.name }}</td>
-                            <td class="px-4 py-2 text-classes">{{ transaction.date }}</td>
-                            <td class="px-4 py-2 text-classes">{{ transaction.amount }}</td>
+                            <td class="px-4 py-2 text-classes">{{ transaction?.idUser.name }}</td>
                             <td class="px-4 py-2 text-classes">
-                                <span v-if="transaction.status === 'Paid'"
-                                    class="inline-block transactions-status paid rounded-[4px]">{{
-                                    transaction.status }}</span>
-                                <span v-else
-                                    class="inline-block transactions-status pending rounded-[4px]">{{
-                                    transaction.status }}</span>
+                                {{ transaction?.createdAt ? formatDate(transaction?.createdAt, 'DD.MM.YYYY') : '' }}
+                            </td>
+                            <td class="px-4 py-2 text-classes">{{ transaction?.totalAmount }}</td>
+                            <td class="px-4 py-2 text-classes">
+                                <span class="inline-block order-status rounded-[4px]"
+                                    :class="{
+                                        'ready': transaction.status === 'ready' || transaction.status === 'pending',
+                                        'shipped': transaction.status === 'shipped' || transaction.status === 'shipping',
+                                        'received': transaction.status === 'received' || transaction.status === 'delivered' || transaction.status === 'delivery',
+                                    }"
+                                >
+                                    {{ transaction.status }}
+                                </span>
                             </td>
                         </tr>
                     </tbody>
@@ -171,30 +200,62 @@
 <script lang="ts" setup>
 import BarChart from '@/components/BarChart.vue';
 import BarBlueChart from '@/components/BarBlueChart.vue';
+import { useDashboardStore } from '@/stores/DashboardStore';
+import { useOrderStore } from '@/stores/OrderStore';
+import { onMounted, ref } from 'vue';
+import { formatDate } from '@/constant/commonFunction';
 
+const storeDashboard = useDashboardStore();
+const storeOrder = useOrderStore();
+const totalData = ref({})
 const headers = [
     { text: "Name", value: "name" },
-    { text: "Date", value: "date" },
-    { text: "Amount", value: "amount" },
+    { text: "Date", value: "createdAt" },
+    { text: "Amount", value: "totalAmount" },
     { text: "Status", value: "status" }
 ];
 
-const items = [
-    { "name": "Jessica S.", "date": '24.05.2020', "amount": '$124.97', "status": 'Paid' },
-    { "name": "Andrew S..", "date": '24.05.2020', "amount": '$124.97', "status": 'Pending' },
-    { "name": "Jessica S.", "date": '24.05.2020', "amount": '$124.97', "status": 'Paid' },
-];
+const items = ref([]);
 
 const headerTopProduct = [
     { text: "Name", value: "name" },
     { text: "Price", value: "price" },
     { text: "Units Solid", value: "units_sold" },
 ]
-const topProductsSold = [
+const topProductsSold = ref([
     { "img": '/images/top_product_img1.svg', "name": "Men Grey Hoodie", "price": '49.90', "units_sold": 204 },
     { "img": '', "name": "Women Striped T-Shirt", "price": '34.90', "units_sold": 155 },
     { "img": '', "name": "Wome White T-Shirt", "price": '40.90', "units_sold": 120 },
-];
+]);
+
+onMounted(() => {
+    initDashboardTotal()
+    initTopOrders()
+})
+
+const initDashboardTotal = async () => {
+    try {
+        const data = await storeDashboard.getDashBoardTotal()
+        console.log(data);
+        totalData.value = data
+    } catch (error) {
+        return error
+    }
+}
+
+const initTopOrders = async () => {
+    try {
+        const params = {
+            page: 1,
+            limit: 5,
+        }
+        const data = await storeOrder.getListOrder(params)
+        console.log(data);
+        items.value = data?.results
+    } catch (error) {
+        return error
+    }
+}
 </script>
 
 <style lang="scss" scoped>

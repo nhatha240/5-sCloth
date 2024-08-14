@@ -12,7 +12,9 @@
             <div class="title-text">Products</div>
             <div class="flex items-center gap-3" v-if="items?.length > 0">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="exportCsv"
+                >
                     Export
                 </button>
                 <button
@@ -223,6 +225,14 @@ const confirmDelete = async () => {
         await storeProduct.deleteProduct(idSelected.value)
         toastSuccess('Delete success')
         initProducts()
+    } catch (error) {
+        return error
+    }
+}
+
+const exportCsv = async () => {
+    try {
+        await storeProduct.exportProductCsv('product')
     } catch (error) {
         return error
     }

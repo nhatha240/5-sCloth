@@ -36,5 +36,23 @@ export const useOrderStore = defineStore('order', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async exportOrderCsv(file_name) {
+            return new Promise(() => {
+                OrderService.exportOrderCsv()
+                .then((response) => {
+                    const blob = new Blob([response?.data], {
+                        type: 'text/csv',
+                        charset: 'shift_jis',
+                    })
+                    const link = document.createElement('a')
+                    link.href = window.URL.createObjectURL(blob)
+                    link.download = file_name
+                    document.body.appendChild(link)
+                    link.click()
+                    document.body.removeChild(link)
+                })
+                .catch(console.error)
+            })
+        }
     }
 })

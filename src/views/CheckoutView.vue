@@ -14,30 +14,32 @@
                     <div class="w-[45%] flex gap-[34px]">
                         <img :src="item.image" alt="">
                         <div class="flex flex-col justify-center gap-[10px]">
-                            <div class="code-text">ISBN 51251123151</div>
-                            <div class="product-text">Emily and the Backbone</div>
-                            <div class="brand-text">Cloe Mamora</div>
+                            <div class="code-text">{{ item?.product?.id }}</div>
+                            <div class="product-text">{{ item?.product?.name }}</div>
+                            <div class="brand-text" v-for="(tag, index) in item?.product?.tags" :key="index">
+                                {{ tag }}{{ (index < tags?.length - 1 && index % 2 === 0) ? ', ' : '' }}
+                            </div>
                         </div>
                     </div>
                     <div class="w-[20%]">
                         <div class="quantity-field flex justify-center items-center w-[183px]">
-                            <div class="cursor-pointer">
+                            <div class="cursor-pointer" @click="updateCart(item.product.id, -1)">
                                 <img src="/images/minus_icon.svg" alt="">
                             </div>
                             <input class="text-center pointer-events-none" type="number" readonly
                                 v-model="item.quantity">
-                            <div class="cursor-pointer">
+                            <div class="cursor-pointer" @click="updateCart(item.product.id, 1)">
                                 <img src="/images/plus_icon.svg" alt="">
                             </div>
                         </div>
                     </div>
                     <div class="w-[15%] price-text">
-                        {{ '$' + item.price }}
+                        {{ '$' + item?.product?.price }}
                     </div>
                     <div class="w-[15%] price-text">
-                        {{ '$' + item.price * item.quantity }}
+                        {{ '$' + item?.product?.price * item?.quantity }}
                     </div>
-                    <div class="">
+                    <div class="" @click="removeItemCart(item.product?.id)">
                         <img class="cursor-pointer" src="/images/trash_icon.svg" alt="">
                     </div>
                 </div>
@@ -63,16 +65,16 @@
                             <div class="">
                                 <div class="flex justify-between items-center mb-[26px]">
                                     <span class="text-[#755A7D]">Subtotal</span>
-                                    <span class="font-semibold text-xl">${{ '83,92' }}</span>
+                                    <span class="font-semibold text-xl">${{ storeProduct.totalPrice ?? 0 }}</span>
                                 </div>
-                                <div class="flex justify-between items-center mb-[31px]">
+                                <!-- <div class="flex justify-between items-center mb-[31px]">
                                     <span class="text-[#755A7D]">Tax</span>
                                     <span class="font-semibold text-xl">${{ '2,35' }}</span>
-                                </div>
+                                </div> -->
                                 <div class="h-[1px] w-full bg-[#D5A4E4] mb-[23px]"></div>
                                 <div class="border-t border-gray-200 pt-4 flex justify-between items-center">
                                     <span class="text-[#755A7D] font-semibold">Total</span>
-                                    <span class="font-bold text-lg">${{ '86,27' }}</span>
+                                    <span class="font-bold text-lg">${{ storeProduct.totalPrice ?? 0 }}</span>
                                 </div>
                             </div>
                             <div class="flex flex-col relative mt-[104px]">
@@ -88,14 +90,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import HeaderMain from '../components/HeaderMain.vue'
 import { useAuthStore } from "@/stores/AuthStore";
+import { useProductStore } from "@/stores/ProductStore";
+import { toastSuccess } from "@/constant/commonUsage";
 
 const storeAuth = useAuthStore()
+const storeProduct = useProductStore()
 const router = useRouter()
-const isLogin = ref(false)
 const step1 = ref(true)
 const step2 = ref(false)
 const items = ref([
@@ -116,6 +120,42 @@ const items = ref([
         price: 15.63
     }
 ]);
+
+onMounted(() => {
+    initCheckOutItem()
+})
+
+const initCheckOutItem = async () => {
+    try {
+        await storeProduct.listCart()
+        items.value = storeProduct.cartItem
+    } catch (error) {
+        return error
+    }
+}
+
+const updateCart = async (id, quantity) => {
+    try {
+        const payload = {
+            productId: id,
+            quantity: quantity,
+        }
+        await storeProduct.addCart(payload)
+        toastSuccess('Add to cart success')
+        initCheckOutItem()
+    } catch (error) {
+        return error
+    }
+}
+
+const removeItemCart = async (id) => {
+    try {
+        await storeProduct.removeCart(id)
+        initCheckOutItem()
+    } catch (error) {
+        return error
+    }
+}
 
 const submitStep1 = () => {
     step1.value = false

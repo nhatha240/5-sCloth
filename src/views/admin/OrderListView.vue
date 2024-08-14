@@ -4,7 +4,9 @@
             <div class="title-text">Orders</div>
             <div class="flex items-center gap-3">
                 <button
-                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]">
+                    class="font-common text-[#1E5EFF] text-base bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px]"
+                    @click="exportCsv"
+                >
                     Export
                 </button>
                 <button
@@ -19,7 +21,7 @@
                 <div class="flex items-center gap-3">
                     <select class="common-input-field" v-model="searchField">
                         <option>customer</option>
-                        <option>order_status</option>
+                        <option>status</option>
                     </select>
                     <input class="common-input-field" type="text" v-model="searchValue">
                 </div>
@@ -137,6 +139,14 @@ const initOrders = async (cursor) => {
         nextPage.value = data?.nextCursor
         prevPage.value = data?.prevCursor
 
+    } catch (error) {
+        return error
+    }
+}
+
+const exportCsv = async () => {
+    try {
+        await storeOrder.exportOrderCsv('order')
     } catch (error) {
         return error
     }
