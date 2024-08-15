@@ -1,19 +1,19 @@
 <template>
     <HeaderMain></HeaderMain>
-    <VueFinalModal v-model="orderDetails" class="details-modal" content-class="details-modal-content"
+    <VueFinalModal v-model="modalOrder" class="details-modal" content-class="details-modal-content"
         overlay-transition="vfm-fade" content-transition="vfm-fade">
         <div class="title-modal">{{ ratingModal ? 'Đánh giá sản phẩm' : 'ĐƠN HÀNG CHI TIẾT' }}</div>
         <div class="row w-full justify-between gap-[35px]" v-if="!ratingModal">
             <div class="flex-[0_0_65%] flex flex-col gap-[26px]">
                 <div class="details-field relative bg-[#EEEBEB]">
                     <div class="text-modal">
-                        Đơn hàng: 232718273929
+                        Đơn hàng: {{ orderDetails?._id }}
                     </div>
                     <div class="text-modal">
-                        11/4/2023 - 23:51
+                        {{ formatDate(orderDetails?.createdAt, 'DD/MM/YYYY - HH:mm') }}
                     </div>
                     <div class="order-status absolute right-[68px]">
-                        ĐÃ GIAO HÀNG
+                        {{ orderDetails?.status }}
                     </div>
                 </div>
                 <div class="row gap-[17px]">
@@ -24,7 +24,7 @@
                             </div>
                             <div class="body-order">
                                 <div>Nguyễn Long Vũ</div>
-                                <div>0378132001</div>
+                                <div>{{ orderDetails?.phone }}</div>
                             </div>
                         </div>
                     </div>
@@ -35,7 +35,9 @@
                             </div>
                             <div class="body-order">
                                 <div>Nguyễn Long Vũ</div>
-                                <div>Thôn Hội An 1, Xã phổ an, thị xã đức phổ, tỉnh Quảng Ngãi</div>
+                                <div>
+                                    {{ orderDetails?.address }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,24 +53,24 @@
                             <div class="">Đánh Giá</div>
                         </div>
                         <div class="body-order border-b-[1px] border-[#000000] last:border-none flex items-center gap-1"
-                            v-for="i in 3" :key="i">
+                            v-for="(product, i) in orderDetails?.products" :key="i">
                             <div class="w-[22%]">
                                 <div class="">Áo sơ mi ngắn tay size: M</div>
-                                <div class="">Mã sản phẩm: 1232232</div>
+                                <div class="break-all">Mã sản phẩm: {{ product?._id }}</div>
                             </div>
                             <div class="w-[20%]">
                                 <img src="/images/order_image_product1.svg" alt="">
                             </div>
                             <div class="w-[14%] text-center">
-                                1
+                                {{ product?.quantity }}
                             </div>
                             <div class="w-[14%]">
-                                100.000 đ
+                                {{ product?.price }} đ
                             </div>
                             <div class="w-[15%]">
-                                400.000 đ
+                                {{ product?.priceTotal }} đ
                             </div>
-                            <div class="cursor-pointer text-[#0495FF]" @click="rateOrder">
+                            <div class="cursor-pointer text-[#0495FF]" @click="rateOrder(product?._id)">
                                 Đánh Giá
                             </div>
                         </div>
@@ -83,32 +85,32 @@
                     <div class="body-order">
                         <div class="flex justify-between">
                             <div>Tiền mặt</div>
-                            <div>400.000 đ</div>
+                            <div>{{ orderDetails?.totalAmount ?? 0 }} đ</div>
                         </div>
-                        <div>VnpayQR</div>
+                        <div>Paypal</div>
                     </div>
                 </div>
                 <div class="details-field no-p">
                     <div class="body-order">
-                        <div class="flex justify-between">
+                        <!-- <div class="flex justify-between">
                             <div>Khuyến mãi</div>
                             <div>10.000 đ</div>
                         </div>
                         <div class="flex justify-between">
                             <div>Mã giảm giá</div>
                             <div>10.000 đ</div>
-                        </div>
+                        </div> -->
                         <div class="flex justify-between">
                             <div>phí vận chuyển</div>
                             <div class="text-[#30CD60]">Miễn phí</div>
                         </div>
                         <div class="flex justify-between pb-[37px]">
                             <div>Thành tiền</div>
-                            <div>380.000 đ</div>
+                            <div>{{ orderDetails?.totalAmount ?? 0 }} đ</div>
                         </div>
                     </div>
                 </div>
-                <button class="btn-orange w-[80%] mx-auto" @click="orderDetails = false">
+                <button class="btn-orange w-[80%] mx-auto" @click="modalOrder = false">
                     ĐÓNG
                 </button>
             </div>
@@ -117,13 +119,13 @@
             <div class="flex-[0_0_65%] flex flex-col gap-[26px]">
                 <div class="details-field relative bg-[#EEEBEB]">
                     <div class="text-modal">
-                        Đơn hàng: 232718273929
+                        Đơn hàng: {{ orderDetails?._id }}
                     </div>
                     <div class="text-modal">
-                        11/4/2023 - 23:51
+                        {{ formatDate(orderDetails?.createdAt, 'DD/MM/YYYY - HH:mm') }}
                     </div>
                     <div class="order-status absolute right-[68px]">
-                        ĐÃ GIAO HÀNG
+                        {{ orderDetails?.status }}
                     </div>
                 </div>
                 <div class="">
@@ -135,7 +137,7 @@
                 <div class="flex justify-end gap-[47px]">
                     <div class="flex gap-[19px] items-center">
                         <div class="" v-for="i in 5" :key="i">
-                            <img src="/images/big_star_active.svg" alt="">
+                            <img :src="orderDetails?.rating <= i ? '/images/big_star_active.svg' : '/images/big_star_inactive.svg'" alt="">
                         </div>
                     </div>
                     <button class="btn-orange w-[318px]">
@@ -177,12 +179,14 @@
             <div class="flex flex-col gap-[39px]">
                 <div class="body-order flex item-layout items-center text-[19px]" v-for="(item, index) in items"
                     :key="index">
-                    <div class="w-[20%]">{{ item.order_code }}</div>
-                    <div class="w-[16%]">{{ item.order_date }}</div>
-                    <div class="w-[16%]">{{ item.quantity }}</div>
-                    <div class="w-[16%]">${{ item.price }}</div>
-                    <div class="w-[20%]">${{ item.total }}</div>
-                    <div class="" @click="openOrder(item.id)">
+                    <div class="w-[20%] text-wrap overflow-hidden break-all">
+                        {{ item?._id }}
+                    </div>
+                    <div class="w-[16%]">{{ formatDate(item?.createdAt, 'DD/MM/YYYY') }}</div>
+                    <div class="w-[16%]">{{ totalQuantity(item?.products) }}</div>
+                    <div class="w-[16%]">${{ item?.totalAmount }}</div>
+                    <div class="w-[20%]">${{ item?.totalAmount }}</div>
+                    <div class="" @click="openOrder(item?._id)">
                         <div href="cursor-pointer" class="text-[#0477FF] font-light cursor-pointer">Chi tiết</div>
                     </div>
                 </div>
@@ -192,9 +196,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
+import { useOrderStore } from '@/stores/OrderStore'
+import { formatDate } from "@/constant/commonFunction";
 
-const orderDetails = ref()
+const storeOrder = useOrderStore()
+const modalOrder = ref(false)
+const orderDetails = ref({})
 const items = ref([
     {
         order_id: 1,
@@ -243,8 +251,21 @@ const chooseColor = (index) => {
     });
 }
 
+const initOrderItem = async () => {
+    try {
+        const data = await storeOrder.getUserOrder()
+        items.value = data
+    } catch (error) {
+        return error
+    }
+}
+
+onMounted(() => {
+    initOrderItem()
+})
+
 watch(
-    () => orderDetails.value,
+    () => modalOrder.value,
     (value) => {
         if (!value) {
             ratingModal.value = false
@@ -252,11 +273,22 @@ watch(
     }
 )
 
-const openOrder = (id) => {
-    orderDetails.value = true
+const totalQuantity = (arr) => {
+    return arr?.reduce((sum, item) => sum + item.quantity, 0)
 }
 
-const rateOrder = () => {
+const openOrder = async (id) => {
+    modalOrder.value = true
+    try {
+        const data = await storeOrder.getUserOrderDetails(id)
+        console.log(data);
+        orderDetails.value = data
+    } catch (error) {
+        return error
+    }
+}
+
+const rateOrder = (id) => {
     ratingModal.value = true
 }
 </script>

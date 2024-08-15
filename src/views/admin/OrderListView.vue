@@ -9,11 +9,6 @@
                 >
                     Export
                 </button>
-                <button
-                    class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1">
-                    <img src="/images/add_order_icon.svg" alt="">
-                    Add Order
-                </button>
             </div>
         </div>
         <div class="bg-[#FFFFFF] py-[32px] px-[28px] border border-[#E6E9F4] rounded-[6px]">

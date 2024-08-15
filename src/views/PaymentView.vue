@@ -6,19 +6,19 @@
         <div class="flex flex-col gap-[15px]">
           <div class="relative input-field-label">
             <label for="name" class=""> Họ và tên </label>
-            <input type="text" id="name" placeholder=" " />
+            <input type="text" id="name" placeholder=" " v-model="storeUser.user.name" />
           </div>
           <div class="relative input-field-label">
             <label for="phone" class=""> Số điện thoại </label>
-            <input type="number" id="phone" placeholder=" " />
+            <input type="number" id="phone" placeholder=" " v-model="storeUser.user.phone" />
           </div>
           <div class="relative input-field">
-            <input type="email" id="email" placeholder=" " />
+            <input type="email" id="email" placeholder="Email" v-model="storeUser.user.email" />
           </div>
           <div class="relative input-field">
-            <input type="text" id="address" placeholder=" " />
+            <input type="text" id="address" placeholder="Địa chỉ" v-model="storeUser.user.address" />
           </div>
-          <div class="flex gap-[18px] justify-between">
+          <!-- <div class="flex gap-[18px] justify-between">
             <div class="relative">
               <select id="city" class="custom-selectbox">
                 <option selected disabled>Chọn tỉnh / thành</option>
@@ -139,7 +139,7 @@
                 Phường/ xã
               </label>
             </div>
-          </div>
+          </div> -->
           <div class="">
             <div class=""></div>
             <div class="flex items-center">
@@ -164,7 +164,22 @@
       </div>
       <div class="flex-[0_0_50%]">
         <div class="cart-payment-layout">
-          <div class=""></div>
+          <div class="flex items-center justify-around" v-for="(product, index) in storeProduct.cartItem" :key="index">
+            <div class="flex items-center gap-2">
+              <img :src="urlApi + product?.product?.image[0]" alt="">
+              <div class="flex flex-col">
+                <div class="">
+                  {{ product?.product?.name }}
+                </div>
+                <div class="" v-for="(size, i) in product?.product?.options[0]?.size" :key="i">
+                  {{ size }}{{ (i < product?.product?.options[0]?.size?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                </div>
+              </div>
+            </div>
+            <div class="flex justify-end">
+              {{ (product?.product?.discountPrice ? (product?.product?.discountPrice * product?.quantity) : (product?.product?.price * product?.quantity)) }}đ
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -174,9 +189,17 @@
 <script lang="js" setup>
 import HeaderMain from '../components/HeaderMain.vue'
 import { loadScript } from '@paypal/paypal-js'
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, onMounted } from 'vue'
+import { useUserStore } from '../stores/UserStore'
+import { useProductStore } from '../stores/ProductStore'
+import { useOrderStore } from '../stores/OrderStore'
+import router from '@/router'
 
 // Change to your CLIENT ID gotten from the developer dashboard
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
+const storeUser = useUserStore()
+const storeProduct = useProductStore()
+const storeOrder = useOrderStore()
 const CLIENT_ID = 'AfIaLEGS-9xRihTtrrI9moBlf6gOAOOfu7Pq85HYuADQtRE-erhSh1mWKJ25szo9lQSgM_dp5A0vD6H0'
 
 const { cartTotal } = defineProps({
@@ -186,6 +209,18 @@ const { cartTotal } = defineProps({
   }
 })
 const paid = ref(false)
+
+const initUser = async () => {
+  try {
+    await storeUser.getUser()
+  } catch (error) {
+    return error
+  }
+}
+
+onMounted(() => {
+  initUser()
+})
 
 onBeforeMount(function () {
   loadScript({ 'client-id': CLIENT_ID }).then((paypal) => {
@@ -215,11 +250,32 @@ function createOrder(data, actions) {
   })
 }
 
+const confirmOrder = async () => {
+  try {
+    const productItem = {
+      products: storeProduct.cartItem.map(item => ({
+        product: item.product.id,
+        quantity: item.quantity
+      }))
+    }
+    console.log(productItem);
+    router.push({ name: 'home' })
+    const data = await storeOrder.addOrder(productItem)
+    if (data?.id) {
+      await storeOrder.captureOrder(data?.id)
+    }
+
+  } catch (error) {
+    return error
+  }
+}
+
 function onApprove(data, actions) {
   console.log('Order approved...')
   return actions.order.capture().then(() => {
     paid.value = true
     console.log('Order complete!')
+    confirmOrder()
   })
 }
 function onCancel(data, actions) {

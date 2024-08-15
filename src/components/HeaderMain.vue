@@ -2,7 +2,7 @@
   <div class="px-[60px] w-full pt-4 border-b border-[#EEDFF3]">
     <nav class="relative flex items-center justify-between">
       <div class="absolute top-[119px] right-0 basket-layout z-[1]" v-if="showBasket">
-        <div class="w-[690px] bg-[#D9D9D9] text-[#1E1E1E] pb-[32px] px-[16px] rounded-3xl">
+        <div class="w-[690px] bg-[#D9D9D9] text-[#1E1E1E] pb-[32px] px-[16px] rounded-3xl shadow-[10px_5px_5px_rgb(23,30,28)]">
           <div class="border-b-[1.5px] border-[#D0CFCF]">
             <div class="flex justify-center">
               <img class="cursor-pointer" src="/images/arrow_up_icon.svg" alt="" @click="openBasket">
@@ -22,9 +22,18 @@
                 </div>
                 <div class="flex flex-col pr-[86px]">
                   <div class="font-medium main-text">{{ item.product.name }}</div>
-                  <div class="flex justify-between">
-                    <div>Size: s</div>
-                    <div>Màu: đen</div>
+                  <div class="flex justify-between gap-2">
+                    <div>
+                      Size: 
+                      <span v-for="(size, i) in item?.product?.options[0]?.size" :key="i">
+                        {{ size }}{{ (i < item?.product?.options[0]?.size?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                      </span>
+                    </div>
+                    <div>Màu: 
+                      <span v-for="(color, i) in item?.product?.options[0]?.color" :key="i">
+                        {{ color }}{{ (i < item?.product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div class="pr-[46px] flex items-center gap-[6px]">
@@ -105,7 +114,7 @@
             class="flex items-center justify-between bg-white text-[#D651FF] font-semibold py-2 px-4 rounded-lg border-[#D651FF] border min-w-[261px]">
             <div class="flex items-center gap-[21px]">
               <img src="/images/icon_user.svg" alt="user" />
-              Roberto
+              {{ storeAuth.user?.name }}
             </div>
             <svg width="15" height="8" viewBox="0 0 15 8" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M0 0.0961914H7.09619H14.1924L7.09619 7.19238L0 0.0961914Z" fill="#D651FF" />
@@ -165,7 +174,9 @@ const showBasket = ref(false)
 
 onMounted(() => {
   refreshToken()
-  getListCart()
+  if (storeAuth.user) {
+    getListCart()
+  }
 })
 
 const refreshToken = async () => {

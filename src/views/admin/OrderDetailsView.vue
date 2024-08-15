@@ -155,7 +155,13 @@
                                         <div class="text-[#333843] font-medium text-sm">
                                             {{ product?.product?.name }}
                                         </div>
-                                        <div class="text-[#667085] font-normal text-xs">Black</div>
+                                        <div class="inline-flex">
+                                            <div class="text-[#667085] font-normal text-xs" 
+                                                v-for="(color, i) in product?.product?.options[0]?.color" :key="i"
+                                            >
+                                                {{ color }}{{ (i < product?.product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </td>

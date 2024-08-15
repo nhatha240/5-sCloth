@@ -17,6 +17,10 @@
                     <input type="email" v-model="userInfo.email">
                 </div>
                 <div class="">
+                    <div class="label-text">Địa chỉ*</div>
+                    <input type="text" v-model="userInfo.address">
+                </div>
+                <div class="">
                     <div class="label-text">Mật khẩu*</div>
                     <div class="relative">
                         <Field v-slot="{ field, errors }"
@@ -149,6 +153,7 @@ const onInvalidSubmitError = ({ errors }) => {
 };
 const confirmRegister = handleSubmit(async () => {
     try {
+        userInfo.value.phone = userInfo.value.phone.toString();
         const data = await storeAuth.userRegister(userInfo.value)
         if (data?.tokens) {
             scrollTo(0, 0)

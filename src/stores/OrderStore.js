@@ -53,6 +53,42 @@ export const useOrderStore = defineStore('order', {
                 })
                 .catch(console.error)
             })
-        }
+        },
+        async getUserOrder() {
+            return new Promise((resolve, reject) => {
+                OrderService.getUserOrder()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async getUserOrderDetails(id) {
+            return new Promise((resolve, reject) => {
+                OrderService.getUserOrderDetails(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async addOrder(payload) {
+            return new Promise((resolve, reject) => {
+                OrderService.addOrder(payload)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async captureOrder(id) {
+            return new Promise((resolve, reject) => {
+                OrderService.captureOrder(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
     }
 })

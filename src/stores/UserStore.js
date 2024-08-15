@@ -52,6 +52,15 @@ export const useUserStore = defineStore('user', {
           .catch(({ response }) => reject(response))
       })
     },
+    async ratingById(id) {
+      return new Promise((resolve, reject) => {
+        UserService.ratingById(id)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
     async exportRatingCsv(file_name) {
       return new Promise(() => {
         UserService.exportRatingCsv()
@@ -69,6 +78,16 @@ export const useUserStore = defineStore('user', {
           })
           .catch(console.error)
       })
-  }
+    },
+    async getUser() {
+      return new Promise((resolve, reject) => {
+        UserService.getUser()
+        .then(({ data }) => {
+          this.user = data;
+          resolve(data)
+        })
+        .catch(({ response }) => reject(response))
+      })
+    }
   }
 })

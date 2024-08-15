@@ -97,7 +97,7 @@ const headers = [
 const options = ref(['userId.name', 'comment', 'rating', 'createdAt'])
 
 const ratingDetail = (e) => {
-    router.push({ name: 'RatingDetailsView', params: { id: e?.userId._id } })
+    router.push({ name: 'RatingDetailsView', params: { id: e?._id } })
 }
 
 onMounted(() => {

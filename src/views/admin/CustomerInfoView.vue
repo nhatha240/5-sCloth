@@ -13,7 +13,7 @@
                     <div class="flex justify-between items-center">
                         <div class="flex items-center gap-[18px]">
                             <div class="avatar-customer temp lg">
-                                L
+                                {{ orderData?.name ? orderData?.name?.charAt(0) : '' }}
                             </div>
                             <div class="flex flex-col gap-2">
                                 <div class="label-text">
@@ -22,7 +22,7 @@
                                 <div class="flex flex-col">
                                     <div class="details-text">Ireland</div>
                                     <div class="details-text">{{ orderData?.orders ? orderData?.orders?.length : 0 }} Orders</div>
-                                    <div class="details-text">Customer for 2 years</div>
+                                    <div class="details-text">Customer for {{ checkSinceDate(orderData?.createdAt) }}</div>
                                 </div>
                             </div>
                         </div>
@@ -130,7 +130,7 @@ import router from '@/router';
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useCustomerStore } from '@/stores/CustomerStore'
-import { formatDate } from '@/constant/commonFunction';
+import { checkSinceDate, formatDate } from '@/constant/commonFunction';
 import { toastSuccess } from '@/constant/commonUsage'
 
 const route = useRoute()

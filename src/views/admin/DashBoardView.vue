@@ -250,7 +250,6 @@ const initTopOrders = async () => {
             limit: 5,
         }
         const data = await storeOrder.getListOrder(params)
-        console.log(data);
         items.value = data?.results
     } catch (error) {
         return error

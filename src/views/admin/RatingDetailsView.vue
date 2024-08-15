@@ -28,16 +28,16 @@
                             </div>
                             <div class="flex flex-col gap-2">
                                 <div class="label-text">
-                                    Long Vũ
+                                    {{ customerData?.name ? customerData?.name?.charAt(0) : '' }}
                                 </div>
                                 <div class="flex flex-col">
-                                    <div class="details-text">5 đơn hàng.</div>
-                                    <div class="details-text">Thành viên 2 năm.</div>
+                                    <div class="details-text">{{ items?.length }} đơn hàng.</div>
+                                    <div class="details-text">Customer for {{ checkSinceDate(customerData?.createdAt) }}</div>
                                 </div>
                             </div>
                         </div>
                         <div class="flex items-center gap-[8px]">
-                            <img class="w-[20px]" :src="Math.round(rating) >= star ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                            <img class="w-[20px]" :src="(productRating?.rating) >= star ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
                                 alt="" v-for="star in 5" :key="star">
                         </div>
                     </div>
@@ -46,7 +46,7 @@
                             Nội dung đánh giá
                         </div>
                         <textarea name="" id="" class="form-control"
-                            placeholder="Áo mặc mát lắm tôi thích nó lắm hihi "></textarea>
+                            placeholder="Áo mặc mát lắm tôi thích nó lắm hihi " v-model="productRating.comment"></textarea>
                     </div>
                 </div>
                 <div class="order-details-box">
@@ -62,17 +62,20 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="customer in items" :key="customer.order" class="shared-classes">
-                                <td class="px-4 py-2 text-classes">{{ customer.order }}</td>
-                                <td class="px-4 py-2 text-classes">{{ customer.date }}</td>
+                            <tr v-for="(order, i) in items" :key="i" class="shared-classes">
+                                <td class="px-4 py-2 text-classes">{{ order?._id }}</td>
+                                <td class="px-4 py-2 text-classes">{{ formatDate(order.createdAt, 'DD.MM.YYYY') }}</td>
                                 <td class="px-4 py-2 text-classes">
-                                    <span v-if="customer.orderStatus === 'Completed'"
-                                        class="inline-block transactions-status paid rounded-[4px]">{{
-                                            customer.orderStatus }}</span>
-                                    <span v-else class="inline-block transactions-status pending rounded-[4px]">{{
-                                        customer.orderStatus }}</span>
+                                    <span class="inline-block order-status !rounded-[4px]"
+                                        :class="{
+                                        'ready': order.status === 'ready' || order.status === 'pending',
+                                        'shipped': order.status === 'shipped' || order.status === 'shipping',
+                                        'received': order.status === 'received' || order.status === 'delivered' || order.status === 'delivery',
+                                    }">
+                                        {{ order.status }}
+                                    </span>
                                 </td>
-                                <td class="px-4 py-2 text-classes">{{ customer.price }}</td>
+                                <td class="px-4 py-2 text-classes">{{ order.totalAmount }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -81,18 +84,18 @@
             <div class="flex-[0_0_34%] flex flex-col gap-[30px]">
                 <div class="order-details-box">
                     <div class="">
-                        <img class="w-full" src="/images/details-rating-img.svg" alt="">
+                        <img class="w-full" :src="productRating?.productId?.image[0] ? productRating?.productId?.image[0] : '/images/details-rating-img.svg'" alt="">
                     </div>
                     <div class="!pl-[38px] !pr-[29px]">
                         <div class="pb-[5px] text-[15px] text-[#000000] font-semibold">
-                            Giá: 300.000 đ
+                            Giá: {{ productRating?.productId?.price }} đ
                         </div>
-                        <div class="text-[17px] text-[#000000] font-semibold flex gap-[11px] items-center">
+                        <div class="text-[17px] text-[#000000] font-semibold flex gap-[11px] items-center" v-if="productRating?.productId?.options[0]?.color?.length > 0">
                             Màu:
                             <div class="border-[1px] border-[#D651FF] rounded-[50%] w-[30px] h-[30px] cursor-pointer"
-                                :class="{ 'choosen-color': color.active }"
+                                :class="{ 'choosen-color': color.color }"
                                 :style="`background-color: ${color.color};`"
-                                v-for="(color, i) in colors" :key="color" @click="chooseColor(i)">
+                                v-for="(color, i) in productRating?.productId?.options[0]?.color" :key="i">
                             </div>
                         </div>
                     </div>
@@ -120,12 +123,18 @@
 
 <script lang="js" setup>
 import router from '@/router';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useUserStore } from '../../stores/UserStore';
+import { useCustomerStore } from '../../stores/CustomerStore';
+import { checkSinceDate, formatDate } from '@/constant/commonFunction';
 
 const route = useRoute();
+const storeUser = useUserStore()
+const storeCustomer = useCustomerStore()
+const customerData = ref({})
+const productRating = ref({})
 const ratingId = ref(route?.params?.id)
-const rating = ref(parseFloat((Math.random() * 5).toFixed(1)));
 const headers = [
     { text: "Order", value: "order" },
     { text: "Date", value: "date" },
@@ -133,11 +142,7 @@ const headers = [
     { text: "Price", value: "price" },
 ];
 
-const items = [
-    { "order": "#23534D", "date": '24.05.2020', "orderStatus": 'Completed', "price": '$124.97' },
-    { "order": "#12512B", "date": '24.05.2020', "orderStatus": 'Pending', "price": '$124.97' },
-    { "order": "#23534D.", "date": '24.05.2020', "orderStatus": 'Completed', "price": '$124.97' },
-];
+const items = ref([]);
 
 const colors = ref([
     {
@@ -154,10 +159,30 @@ const colors = ref([
     },
 ])
 
-const chooseColor = (index) => {
-    colors.value.forEach((color, i) => {
-        color.active = i === index;
-    });
+onMounted(() => {
+    initRating()
+})
+
+const initRating = async () => {
+    try {
+        const data = await storeUser.ratingById(ratingId.value)
+        console.log(data);
+        productRating.value = data
+        await initCustomer(data?.userId)
+    } catch (error) {
+        return error;
+    }
+}
+
+const initCustomer = async (id) => {
+    try {
+        const data = await storeCustomer.getCustomer(id)
+        console.log(data);
+        customerData.value = data;
+        items.value = data?.orders
+    } catch (error) {
+        return error;
+    }
 }
 
 const backToRating = () => {

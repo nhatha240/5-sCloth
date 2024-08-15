@@ -21,4 +21,16 @@ export default {
         }
         return await API.get('/admin/csv/order', '', config)
     },
+    async getUserOrder() {
+        return await API.get(`/users/orders`)
+    },
+    async getUserOrderDetails(id) {
+        return await API.get(`/users/order/${id}`)
+    },
+    async addOrder(payload) {
+        return await API.post(`/users/add-order`, payload)
+    },
+    async captureOrder(id) {
+        return await API.post(`/users/order/${id}/capture`)
+    },
 }

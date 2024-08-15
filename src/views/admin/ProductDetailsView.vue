@@ -264,7 +264,7 @@ const initProductDetails = async () => {
 
 const initCategories = async () => {
     try {
-        await storeCategory.getCategories()
+        await storeCategory.getCategories({})
     } catch (error) {
         return error;
     }

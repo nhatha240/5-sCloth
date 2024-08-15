@@ -34,10 +34,10 @@
                         </div>
                     </div>
                     <div class="w-[15%] price-text">
-                        {{ '$' + item?.product?.price }}
+                        {{ '$' + (item?.product?.discountPrice > 0 ? item?.product?.discountPrice : item?.product?.price) }}
                     </div>
                     <div class="w-[15%] price-text">
-                        {{ '$' + item?.product?.price * item?.quantity }}
+                        {{ '$' + (item?.product?.discountPrice > 0 ? (item?.product?.discountPrice * item?.quantity) : (item?.product?.price * item?.quantity)) }}
                     </div>
                     <div class="" @click="removeItemCart(item.product?.id)">
                         <img class="cursor-pointer" src="/images/trash_icon.svg" alt="">

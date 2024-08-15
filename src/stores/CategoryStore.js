@@ -20,9 +20,9 @@ export const useCategoryStore = defineStore('category', {
                     .catch(({ response }) => reject(response))
             })
         },
-        async getCategories() {
+        async getCategories(params) {
             return new Promise((resolve, reject) => {
-                CategoryService.getCategories()
+                CategoryService.getCategories(params)
                     .then(({ data }) => {
                         this.categories = data?.results;
                         resolve(data)

@@ -163,12 +163,10 @@ const addToCart = async (id) => {
 }
 
 const initCategories = async () => {
-    if (!storeCategory.categories){
-        try {
-            await storeCategory.getCategories()
-        } catch (error) {
-            return error
-        }
+    try {
+        await storeCategory.getCategories({})
+    } catch (error) {
+        return error
     }
 }
 
