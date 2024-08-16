@@ -7,6 +7,7 @@ export default {
     async getCategories(query) {
         const params = {
             page: query.page,
+            limit: query.limit,
         }
         return await API.get('/admin/get-categories', {params})
     },

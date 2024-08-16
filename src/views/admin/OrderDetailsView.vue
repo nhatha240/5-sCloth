@@ -223,14 +223,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <img src="/images/icon_location.svg" alt="">
-                        <div class="">
-                            <div class="text-[#4D5464] font-medium text-sm">Billing</div>
-                            <div class="text-[#1A1C21] font-medium text-sm">1833 Bel Meadow Drive, Fontana, California
-                                92335, USA</div>
-                        </div>
-                    </div>
                 </div>
                 <div class="order-details-box">
                     <div class="title-text pb-[18px]">Order Status</div>

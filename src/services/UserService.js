@@ -24,6 +24,9 @@ export default {
     async ratingById(id) {
         return await API.get(`/users/rating/${id}`)
     },
+    async ratingProduct( payload) {
+        return await API.post(`/users/rating`, payload)
+    },
     async exportRatingCsv() {
         const config = {
             responseType: 'blob'

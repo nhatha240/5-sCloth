@@ -51,7 +51,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pb-[40px] border-b border-[#E6E9F4]">
+                    <div class="pb-[40px] border-[#E6E9F4]">
                         <div class="flex gap-[28px]">
                             <div class="w-50">
                                 <div class="mb-1 details-text pb-1">Email Address</div>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pb-6 pt-[28px]">
+                    <!-- <div class="pb-6 pt-[28px]">
                         <div class="label-text">Regional Settings</div>
                         <div class="details-text">Set your language and timezone</div>
                     </div>
@@ -82,7 +82,7 @@
                                 <option value="">GMT +02:00</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                 </BTab>
                 <!-- <BTab :active="isActiveTab(1)" title="Notifications">
                     <div class="notify-tab">

@@ -30,7 +30,7 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-outline-info w-full" :disabled="currentPage == totalPage" @click="loadMore">Load more</button>
+            <button class="btn btn-outline-info w-full mt-[24px]" :disabled="currentPage == totalPage" @click="loadMore">Load more</button>
         </div>
         <div class="" v-else>
             <EmptyAdminData :image="'/images/empty_category_icon.svg'" :titleEmpty="'Create First Category'"
@@ -65,7 +65,8 @@ const loadMore = () => {
 const initCategories = async () => {
     try {
         const params = {
-            page: currentPage.value
+            page: currentPage.value,
+            limit: 9,
         }
         const data = await storeCategory.getCategories(params)
         totalPage.value = data?.totalPages

@@ -23,8 +23,8 @@
                                 KHÁCH HÀNG
                             </div>
                             <div class="body-order">
-                                <div>Nguyễn Long Vũ</div>
-                                <div>{{ orderDetails?.phone }}</div>
+                                <div>{{ orderDetails?.user?.name }}</div>
+                                <div>{{ orderDetails?.user?.phone }}</div>
                             </div>
                         </div>
                     </div>
@@ -34,9 +34,9 @@
                                 NGƯỜI NHẬN
                             </div>
                             <div class="body-order">
-                                <div>Nguyễn Long Vũ</div>
+                                <div>{{ orderDetails?.user?.name }}</div>
                                 <div>
-                                    {{ orderDetails?.address }}
+                                    {{ orderDetails?.user?.address }}
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                         <div class="body-order border-b-[1px] border-[#000000] last:border-none flex items-center gap-1"
                             v-for="(product, i) in orderDetails?.products" :key="i">
                             <div class="w-[22%]">
-                                <div class="">Áo sơ mi ngắn tay size: M</div>
+                                <div class="">{{ product?.product?.name }}</div>
                                 <div class="break-all">Mã sản phẩm: {{ product?._id }}</div>
                             </div>
                             <div class="w-[20%]">
@@ -70,7 +70,7 @@
                             <div class="w-[15%]">
                                 {{ product?.priceTotal }} đ
                             </div>
-                            <div class="cursor-pointer text-[#0495FF]" @click="rateOrder(product?._id)">
+                            <div class="cursor-pointer text-[#0495FF]" @click="toRating(product)">
                                 Đánh Giá
                             </div>
                         </div>
@@ -132,15 +132,20 @@
                     <textarea 
                         class="border border-[#000000] text-[#000000]
                         font-light text-[19px] rounded-[21px] w-full h-[396px] px-[22px] py-[15px]"
-                        name="" id="" placeholder="Đánh giá không quá 200 từ ...." maxlength="200"></textarea>
+                        name="" id="" placeholder="Đánh giá không quá 200 từ ...." maxlength="200" v-model="ratingDetails.comment"></textarea>
                 </div>
                 <div class="flex justify-end gap-[47px]">
                     <div class="flex gap-[19px] items-center">
                         <div class="" v-for="i in 5" :key="i">
-                            <img :src="orderDetails?.rating <= i ? '/images/big_star_active.svg' : '/images/big_star_inactive.svg'" alt="">
+                            <img :src="ratingDetails?.rating < i ? 
+                                '/images/big_star_inactive.svg' : '/images/big_star_active.svg'" 
+                                alt=""
+                                class="cursor-pointer"
+                                @click="chooseStar(i)"
+                            >
                         </div>
                     </div>
-                    <button class="btn-orange w-[318px]">
+                    <button class="btn-orange w-[318px]" @click="rateOrder()">
                         ĐÁNH GIÁ
                     </button>
                 </div>
@@ -198,11 +203,21 @@
 <script setup>
 import { ref, watch, onMounted } from "vue";
 import { useOrderStore } from '@/stores/OrderStore'
+import { useUserStore } from '@/stores/UserStore'
 import { formatDate } from "@/constant/commonFunction";
+import { toastSuccess } from "@/constant/commonUsage";
 
 const storeOrder = useOrderStore()
+const storeUser = useUserStore()
 const modalOrder = ref(false)
 const orderDetails = ref({})
+const ratingDetails = ref({
+    productId: {
+        id: ''
+    },
+    comment: '',
+    rating: 0,
+})
 const items = ref([
     {
         order_id: 1,
@@ -277,8 +292,10 @@ const totalQuantity = (arr) => {
     return arr?.reduce((sum, item) => sum + item.quantity, 0)
 }
 
+const orderId = ref(0)
 const openOrder = async (id) => {
     modalOrder.value = true
+    orderId.value = id
     try {
         const data = await storeOrder.getUserOrderDetails(id)
         console.log(data);
@@ -288,8 +305,41 @@ const openOrder = async (id) => {
     }
 }
 
-const rateOrder = (id) => {
+const chooseStar = (star) => {
+    ratingDetails.value.rating = star
+}
+
+const toRating = async (product) => {
+    if (product?.product?.rating?.length > 0) {
+        try {
+            const data = await storeUser.ratingById(product?.product?.rating?.at(-1))
+            if (data) {
+                ratingDetails.value = data
+            }
+        } catch (error) {
+            return error
+        }
+    } else {
+        ratingDetails.value.productId.id = product?.product?._id ?? ''
+    }
     ratingModal.value = true
+}
+
+const rateOrder = async () => {
+    try {
+        const payload = {
+            productId: ratingDetails.value.productId.id,
+            comment: ratingDetails.value.comment,
+            rating: ratingDetails.value.rating,
+        }
+        await storeUser.ratingProduct(payload)
+        toastSuccess('Rating success')
+        const data = await storeOrder.getUserOrderDetails(orderId.value)
+        orderDetails.value = data
+        ratingModal.value = false
+    } catch (error) {
+        return error
+    }
 }
 </script>
 
