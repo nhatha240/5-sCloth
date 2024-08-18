@@ -21,7 +21,7 @@
                     class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1"
                     @click="addProduct"
                 >
-                    <img src="/images/add_order_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/add_order_icon.svg" alt="">
                     Add Product
                 </button>
             </div>
@@ -39,10 +39,10 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <button class="btn-modify">
-                        <img src="/images/edit_btn_icon.svg" />
+                        <img crossorigin="anonymous" src="/images/edit_btn_icon.svg" />
                     </button>
                     <button class="btn-modify" :disabled="itemsSelected?.length === 0" @click="openDeleteModal">
-                        <img src="/images/icon_delete_btn.svg" />
+                        <img crossorigin="anonymous" src="/images/icon_delete_btn.svg" />
                     </button>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                 :search-field="searchField" :search-value="searchValue" :rows-per-page="10" :hide-rows-per-page="true" @click-row="showRow">
                 <template #item-product="{ name, image, tags }">
                     <div class="flex items-center">
-                        <img :src="image" alt="">
+                        <img crossorigin="anonymous" :src="image" alt="">
                         <div class="flex flex-col">
                             <div class="">{{ name }}</div>
                             <div class="" v-for="(tag, index) in tags" :key="index">
@@ -85,14 +85,14 @@
                     </div>
                 </template>
             </EasyDataTable>
-            <!-- <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2">
                 <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
-                    <img src="/images/page-prev-icon.svg" />
+                    <img crossorigin="anonymous" src="/images/page-prev-icon.svg" />
                 </button>
                 <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
-                    <img src="/images/page-next-icon.svg" />
+                    <img crossorigin="anonymous" src="/images/page-next-icon.svg" />
                 </button>
-            </div> -->
+            </div>
             <PaginateAdmin
                 v-if="totalitem"
                 v-model:page="page"
@@ -200,15 +200,15 @@ onMounted(() => {
 const nextPage = ref('')
 const prevPage = ref('')
 
-const toPage = () => {
-    initProducts()
+const toPage = (cursor) => {
+    initProducts(cursor)
 }
 
-const initProducts = async () => {
+const initProducts = async (cursor) => {
     try {
         const params = {
-            // cursor: cursor,
-            page: page.value,
+            cursor: cursor,
+            // page: page.value,
             pageSize: pageSize.value,
         }
         const data = await storeProduct.getProducts(params)

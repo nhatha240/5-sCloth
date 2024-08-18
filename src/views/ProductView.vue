@@ -41,21 +41,21 @@
           <div class="">
             <div class="quantity-field flex justify-center items-center w-[183px]">
               <div class="cursor-pointer">
-                <img src="/images/minus_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/minus_icon.svg" alt="">
               </div>
               <input class="text-center pointer-events-none" type="number" readonly v-model="product.quantity">
               <div class="cursor-pointer">
-                <img src="/images/plus_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/plus_icon.svg" alt="">
               </div>
             </div>
           </div>
           <button class="buy-btn flex items-center gap-[34px]">
-            <img src="/images/basket_buy_icon.svg" alt="">
+            <img crossorigin="anonymous" src="/images/basket_buy_icon.svg" alt="">
             BUY
           </button>
           <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
-            <img src="/images/heart_icon_inactive.svg" alt="">
-            <!-- <img src="/images/heart_icon.svg" alt=""> -->
+            <img crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
+            <!-- <img crossorigin="anonymous" src="/images/heart_icon.svg" alt=""> -->
           </button>
         </div>
       </div>
@@ -64,13 +64,13 @@
           <!-- Main product images -->
           <div class="flex-[0_0_60%] flex gap-[21px] flex-grow">
             <div class="w-1/2" v-for="(img, i) in product.product_image" :key="i">
-              <img :src="img" alt="Product front" class="w-full object-cover">
+              <img crossorigin="anonymous" :src="img" alt="Product front" class="w-full object-cover">
             </div>
           </div>
 
           <!-- Thumbnail images -->
           <div class="flex-[0_0_125px] flex flex-col gap-[24px] justify-between">
-            <img :src="img" alt="Fabric closeup" class="w-[125px] object-cover" v-for="(img, i) in product.sub_image"
+            <img crossorigin="anonymous" :src="img" alt="Fabric closeup" class="w-[125px] object-cover" v-for="(img, i) in product.sub_image"
               :key="i">
           </div>
         </div>
@@ -104,7 +104,7 @@
               <div class="rating-bar flex flex-col gap-[10px]">
                 <div class="flex items-center gap-[15px]" v-for="(star, index) in ratingDetails" :key="index">
                   <div class="flex items-center gap-[7px]">
-                    <img src="/images/star_rating_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/star_rating_icon.svg" alt="">
                     {{ star.star }}
                   </div>
                   <div class="relative w-[270px] bg-[#DDDDDD] h-[9px] rounded-[15px]">
@@ -146,11 +146,11 @@
             </div>
             <div class="w-full flex gap-[23px] items-center justify-center btn-layout mt-[61px]">
               <button class="bg-[#FFFFFF] border-[1px] border-[#F0E4F4]">
-                <img src="/images/arrow_down_loadmore.svg" alt="">
+                <img crossorigin="anonymous" src="/images/arrow_down_loadmore.svg" alt="">
                 Load More
               </button>
               <button class="bg-[#F0E4F4]">
-                <img src="/images/arrow_up_close.svg" alt="">
+                <img crossorigin="anonymous" src="/images/arrow_up_close.svg" alt="">
                 Close
               </button>
             </div>
@@ -163,10 +163,10 @@
           <div class="flex flex-col gap-[40px]">
             <div class="relative mt-[63px]" v-for="i in 3" :key="i">
               <div class="relate-product-layout overflow-hidden flex justify-end">
-                <img class="absolute left-0 bottom-0 object-cover max-w-[165px] rounded-[20px]" src="/images/product_details_image1.svg" alt="">
+                <img crossorigin="anonymous" class="absolute left-0 bottom-0 object-cover max-w-[165px] rounded-[20px]" src="/images/product_details_image1.svg" alt="">
                 <div class="relate-details p-4 flex flex-col justify-end gap-[10px] flex-[0_0_53%]">
                   <div class="star-rate">
-                    <img src="/images/star_rate_details.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/star_rate_details.svg" alt="">
                     4.5
                   </div>
                   <div class="main-text">

@@ -1,7 +1,7 @@
 <template>
     <div class="orders-details-layout">
         <div class="flex items-center gap-1 cursor-pointer" @click="backToOrder">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[24px]">
@@ -27,7 +27,7 @@
                 <div class="flex flex-col gap-[14px]">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/calendar_add_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/calendar_add_icon.svg" alt="">
                             Added
                         </div>
                         <div class="">
@@ -36,7 +36,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/payment_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/payment_icon.svg" alt="">
                             Payment Method
                         </div>
                         <div class="">
@@ -45,7 +45,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/ship_method_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/ship_method_icon.svg" alt="">
                             Shipping Method
                         </div>
                         <div class="">
@@ -61,7 +61,7 @@
                 <div class="flex flex-col gap-[14px]">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/customer_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/customer_icon.svg" alt="">
                             Customer
                         </div>
                         <div class="">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/email_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/email_icon.svg" alt="">
                             Email
                         </div>
                         <div class="">
@@ -79,7 +79,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/phone_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/phone_icon.svg" alt="">
                             Phone
                         </div>
                         <div class="">
@@ -95,7 +95,7 @@
                 <div class="flex flex-col gap-[14px]">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/invoice_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/invoice_icon.svg" alt="">
                             Invoice
                         </div>
                         <div class="">
@@ -104,7 +104,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/ship_method_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/ship_method_icon.svg" alt="">
                             Shipping
                         </div>
                         <div class="">
@@ -113,7 +113,7 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-2">
-                            <img src="/images/rewards_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/rewards_icon.svg" alt="">
                             Rewards
                         </div>
                         <div class="">
@@ -149,7 +149,7 @@
                             <td>
                                 <div class="flex items-center gap-2">
                                     <div class="rounded-[8px] bg-[#E0E2E7] w-[44px] h-[44px]">
-                                        <img class="object-cover" src="" alt="">
+                                        <img crossorigin="anonymous" class="object-cover" src="" alt="">
                                     </div>
                                     <div class="flex flex-col gap-1">
                                         <div class="text-[#333843] font-medium text-sm">
@@ -215,7 +215,7 @@
                 <div class="order-details-box" v-if="orderData?.address">
                     <div class="title-text pb-[18px]">Address</div>
                     <div class="flex items-center gap-2 pb-[14px]">
-                        <img src="/images/icon_location.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/icon_location.svg" alt="">
                         <div class="">
                             <div class="text-[#4D5464] font-medium text-sm">Billing</div>
                             <div class="text-[#1A1C21] font-medium text-sm">
@@ -228,7 +228,7 @@
                     <div class="title-text pb-[18px]">Order Status</div>
                     <div class="relative flex flex-col gap-2 progress-wrapper">
                         <div class="flex items-center gap-2 progress-field">
-                            <img class="" src="/images/icon_order_place.svg" alt="">
+                            <img crossorigin="anonymous" class="" src="/images/icon_order_place.svg" alt="">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Order Placed</div>
                                 <div class="text-[#4D5464] font-medium text-sm">An order has been placed.</div>
@@ -238,7 +238,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 progress-field">
-                            <img src="/images/icon_processing.svg" alt="" @click="updateStatus('shipping')">
+                            <img crossorigin="anonymous" src="/images/icon_processing.svg" alt="" @click="updateStatus('shipping')">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Processing</div>
                                 <div class="text-[#4D5464] font-medium text-sm">Seller has proccessed your order.</div>
@@ -248,7 +248,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 progress-field" v-if="orderData?.status === 'shipping' || orderData?.status === 'delivery'">
-                            <img src="/images/ship_method_icon.svg" alt="" @click="updateStatus('delivery')">
+                            <img crossorigin="anonymous" src="/images/ship_method_icon.svg" alt="" @click="updateStatus('delivery')">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Shipping</div>
                                 <div class="text-[#858D9D] font-medium text-[12px]">
@@ -257,7 +257,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-2 progress-field" v-if="orderData?.status === 'delivery'">
-                            <img src="/images/deliver_complete_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/deliver_complete_icon.svg" alt="">
                             <div class="">
                                 <div class="text-[#333843] font-medium text-sm">Delivered</div>
                                 <div class="text-[#858D9D] font-medium text-[12px]">

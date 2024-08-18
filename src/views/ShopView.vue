@@ -10,7 +10,7 @@
                     <div class="p-4">
                         <h2 class="text-lg font-semibold mb-3 flex justify-between items-center">
                             Loại sản phẩm
-                            <img class="cursor-pointer" src="/images/arrow_category.svg" alt="" @click="toggleDropdown">
+                            <img crossorigin="anonymous" class="cursor-pointer" src="/images/arrow_category.svg" alt="" @click="toggleDropdown">
                         </h2>
                         <ul class="space-y-2 pl-[29px]" v-if="isOpen">
                             <li v-for="(option, index) in options" :key="index" class="flex items-center">
@@ -26,7 +26,7 @@
                     <div class="p-4">
                         <h2 class="text-lg font-semibold mb-3 flex justify-between items-center">
                             Màu sắc
-                            <img class="cursor-pointer" src="/images/arrow_category.svg" alt=""
+                            <img crossorigin="anonymous" class="cursor-pointer" src="/images/arrow_category.svg" alt=""
                                 @click="toggleDropdownColor">
                         </h2>
                         <ul class="space-y-2 pl-[29px]" v-if="isOpenColor">
@@ -45,7 +45,7 @@
                     <div class="p-4">
                         <h2 class="text-lg font-semibold mb-3 flex justify-between items-center">
                             Mức giá
-                            <img class="cursor-pointer" src="/images/arrow_category.svg" alt=""
+                            <img crossorigin="anonymous" class="cursor-pointer" src="/images/arrow_category.svg" alt=""
                                 @click="toggleDropdownPrice">
                         </h2>
                         <div class="pl-[29px]" v-if="isOpenPrice">
@@ -71,7 +71,7 @@
                                 class="flex items-center justify-between bg-white text-[#D651FF] text-lg font-medium py-[10px] px-[7px] rounded-lg border-[#D651FF] border-[1px] min-w-[126px]">
                                 <div class="flex items-center gap-[16px]">
                                     <div>Mới nhất</div>
-                                    <img src="/images/arrow_sort_icon.svg" alt="">
+                                    <img crossorigin="anonymous" src="/images/arrow_sort_icon.svg" alt="">
                                 </div>
                             </MenuButton>
                             <MenuItems
@@ -88,7 +88,7 @@
                                 @click="changeTag(tag.value)"
                             >
                                 {{ tag.label }}
-                                <img src="/images/check_chose_category.svg" alt="" v-if="tagChoosen === tag.value">
+                                <img crossorigin="anonymous" src="/images/check_chose_category.svg" alt="" v-if="tagChoosen === tag.value">
                                 </MenuItem>
                             </MenuItems>
                         </Menu>
@@ -98,7 +98,7 @@
                     <div class="flex-[0_0_30%]" v-for="(product, index) in productList" :key="index">
                         <div class="h-full flex flex-col justify-between">
                             <div class="relative w-full mb-[30px] group hover:bg-inherit" @click="productDetails(product.id)">
-                                <img class="object-cover rounded-[20px]" :src="product.product_image" alt="">
+                                <img crossorigin="anonymous" class="object-cover rounded-[20px]" :src="product.product_image" alt="">
                                 <div class="absolute top-[28px] left-0" v-if="product.bestSeller">
                                     <div class="best-sell-tag">Best Seller</div>
                                 </div>
@@ -106,28 +106,28 @@
                                     <div class="flex flex-col gap-[30px]">
                                         <div class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
                                             @click="product.is_like = !product.is_like">
-                                            <img class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
                                                 alt="" v-if="product.is_like">
-                                            <img class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
                                                 v-else>
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
                                             @click="productDetails(product.id)"
                                         >
-                                            <img class="w-[38%] center-image" src="/images/search_product_btn.svg"
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/search_product_btn.svg"
                                                 alt="">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                                            <img class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex items-center gap-[10px] rating-field mb-[16px]">
-                                <img src="/images/star_rating_shop.svg" alt="">
+                                <img crossorigin="anonymous" src="/images/star_rating_shop.svg" alt="">
                                 <div class="font-semibold">
                                     {{ product.rating }}
                                 </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="rating-details-layout">
         <div class="flex items-center gap-1 cursor-pointer" @click="backToRating">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[30px]">
@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-[8px]">
-                            <img class="w-[20px]" :src="(productRating?.rating) >= star ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                            <img crossorigin="anonymous" class="w-[20px]" :src="(productRating?.rating) >= star ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
                                 alt="" v-for="star in 5" :key="star">
                         </div>
                     </div>
@@ -84,7 +84,7 @@
             <div class="flex-[0_0_34%] flex flex-col gap-[30px]">
                 <div class="order-details-box">
                     <div class="">
-                        <img class="w-full" :src="productRating?.productId?.image[0] ? productRating?.productId?.image[0] : '/images/details-rating-img.svg'" alt="">
+                        <img crossorigin="anonymous" class="w-full" :src="productRating?.productId?.image[0] ? productRating?.productId?.image[0] : '/images/details-rating-img.svg'" alt="">
                     </div>
                     <div class="!pl-[38px] !pr-[29px]">
                         <div class="pb-[5px] text-[15px] text-[#000000] font-semibold">

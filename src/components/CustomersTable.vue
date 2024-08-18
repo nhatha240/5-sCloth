@@ -14,10 +14,10 @@
             </div>
             <div class="flex items-center gap-3" v-if="modifyOption">
                 <button class="btn-modify" @click="addCustomer">
-                    <img src="/images/edit_btn_icon.svg" />
+                    <img crossorigin="anonymous" src="/images/edit_btn_icon.svg" />
                 </button>
                 <button class="btn-modify">
-                    <img src="/images/icon_delete_btn.svg" @click="deleteCustomer" />
+                    <img crossorigin="anonymous" src="/images/icon_delete_btn.svg" @click="deleteCustomer" />
                 </button>
             </div>
         </div>
@@ -46,7 +46,7 @@
             </template>
             <template #item-rating="{ rating }">
                 <div class="flex gap-[8px] items-center">
-                    <img class="" :src="star <= rating ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                    <img crossorigin="anonymous" class="" :src="star <= rating ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
                         alt="" v-for="star in 5" :key="star">
                 </div>
             </template>

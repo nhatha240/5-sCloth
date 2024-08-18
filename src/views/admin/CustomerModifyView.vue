@@ -1,7 +1,7 @@
 <template>
     <Form class="cutomer-modify-layout" @submit="saveCustomer" ref="form">
         <div class="flex items-center gap-1 cursor-pointer" @click="backToCustomer">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[30px]">
@@ -34,13 +34,13 @@
                 <div class="w-50">
                     <div class="mb-1 details-text pb-1">Full Name</div>
                     <Field 
-                        v-slot="{ field, errors }"
+                        v-slot="{ field, errors, meta }"
                         v-model="customerInfo.name"
                         :name="'customerName'"
                         :rules="'required'"
                     >
-                        <input class="form-control w-full"  :class="{ '!border-red-500': errors[0] }" type="text" v-bind="field">
-                        <div class="text-red-500">
+                        <input class="form-control w-full"  :class="{ '!border-red-500': errors[0] && meta.touched }" type="text" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">
                             {{ errors[0] }}
                         </div>
                     </Field>
@@ -54,13 +54,13 @@
                 <div class="w-50">
                     <div class="mb-1 details-text pb-1">Email Address</div>
                     <Field 
-                        v-slot="{ field, errors }"
+                        v-slot="{ field, errors, meta }"
                         v-model="customerInfo.email"
                         :name="'customerEmail'"
                         :rules="'required|email'"
                     >
-                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] }" type="email" v-bind="field">
-                        <div class="text-red-500">
+                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] && meta.touched }" type="email" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">
                             {{ errors[0] }}
                         </div>
                     </Field>
@@ -68,13 +68,13 @@
                 <div class="w-50">
                     <div class="mb-1 details-text pb-1">Phone Number</div>
                     <Field 
-                        v-slot="{ field, errors }"
+                        v-slot="{ field, errors, meta }"
                         v-model="customerInfo.phone"
                         :name="'customerPhone'"
                         :rules="'required'"
                     >
-                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] }" type="text" v-bind="field">
-                        <div class="text-red-500">
+                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] && meta.touched }" type="text" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">
                             {{ errors[0] }}
                         </div>
                     </Field>
@@ -90,13 +90,13 @@
                 <div class="w-50">
                     <div class="mb-1 details-text pb-1">Address</div>
                     <Field 
-                        v-slot="{ field, errors }"
+                        v-slot="{ field, errors, meta }"
                         v-model="customerInfo.address"
                         :name="'customerAddress'"
                         :rules="'required'"
                     >
-                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] }" type="text" v-bind="field">
-                        <div class="text-red-500">
+                        <input class="form-control w-full" :class="{ '!border-red-500': errors[0] && meta.touched }" type="text" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">
                             {{ errors[0] }}
                         </div>
                     </Field>

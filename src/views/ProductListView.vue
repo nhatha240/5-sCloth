@@ -11,7 +11,7 @@
                         class="flex items-center justify-between bg-white text-[#D651FF] text-lg font-medium py-[10px] px-[7px] rounded-lg border-[#D651FF] border-[1px] min-w-[126px]">
                         <div class="flex items-center gap-[16px]">
                             <div>Mới nhất</div>
-                            <img src="/images/arrow_sort_icon.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/arrow_sort_icon.svg" alt="">
                         </div>
                     </MenuButton>
                     <MenuItems class="z-[1] absolute top-[64px] right-0 w-full origin-top-right divide-y 
@@ -24,7 +24,7 @@
                             'group flex items-center justify-between w-max text-[#D651FF] menu-item-text pt-[14px] py-[10px] px-[25px] cursor-pointer',
                         ]" @click="changeTag(tag)">
                         {{ tag }}
-                        <img src="/images/check_chose_category.svg" alt="" v-if="tagChoosen === tag">
+                        <img crossorigin="anonymous" src="/images/check_chose_category.svg" alt="" v-if="tagChoosen === tag">
                         </MenuItem>
                     </MenuItems>
                 </Menu>
@@ -35,7 +35,7 @@
                 <div class="flex-[0_0_25%]" v-for="(product, index) in productList" :key="index">
                     <div class="h-full flex flex-col justify-between">
                         <div class="relative w-full mb-[30px] group hover:bg-inherit">
-                            <img class="object-cover rounded-[20px]" 
+                            <img crossorigin="anonymous" class="object-cover rounded-[20px]" 
                                 :src="product.image[0] == 'public/uploads/products/default.jpg' 
                                     ? imageList[Math.floor(Math.random() * (5 - 0) + 0)] : product.image[0]" 
                                 alt=""
@@ -49,14 +49,14 @@
                                     <div class="flex flex-col gap-[30px]">
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product.id)">
-                                            <img class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
                                             @click="productDetails(product.id)"
                                         >
-                                            <img class="w-[38%] center-image" src="/images/search_product_btn.svg"
+                                            <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/search_product_btn.svg"
                                                 alt="">
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-[10px] rating-field mb-[16px]">
-                            <img src="/images/star_rating_shop.svg" alt="">
+                            <img crossorigin="anonymous" src="/images/star_rating_shop.svg" alt="">
                             <div class="font-semibold">
                                 {{ product.userRating }}
                             </div>

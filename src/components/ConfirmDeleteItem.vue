@@ -7,7 +7,7 @@
             </div>
             <div class="content-text pb-[20px]" v-html="contentText">
             </div>
-            <img class="cursor-pointer absolute right-3 top-3" src="/images/close_modal_category_icon.svg" alt="" @click="cancelModal">
+            <img crossorigin="anonymous" class="cursor-pointer absolute right-3 top-3" src="/images/close_modal_category_icon.svg" alt="" @click="cancelModal">
             <div class="flex items-center justify-end gap-[28px]">
                 <button type="button" class="font-common text-[#F0142F] text-base bg-[#FFFFFF] border-none py-2 px-[25px] rounded-[4px]" @click="cancelModal">
                     Cancel

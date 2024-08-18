@@ -11,7 +11,7 @@
                         <div class="MuiBox-root css-10596f4">
                             <a herf="/admin"
                                 class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-uehu5v-MuiTypography-root-MuiLink-root">
-                                <img class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-70z4a9-MuiSvgIcon-root"
+                                <img crossorigin="anonymous" class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-70z4a9-MuiSvgIcon-root"
                                     src="/images/main_logo.svg" />
                             </a>
                         </div>
@@ -35,7 +35,7 @@
                                                                     class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-2s14r3-MuiTypography-root-MuiLink-root-MuiButtonBase-root-MuiListItemButton-root">
                                                                     <div
                                                                         class="MuiListItemIcon-root css-v696f9-MuiListItemIcon-root">
-                                                                        <img :src="item.icon" alt="">
+                                                                        <img crossorigin="anonymous" :src="item.icon" alt="">
                                                                     </div>
                                                                     <div
                                                                         class="MuiListItemText-root css-l5c327-MuiListItemText-root">
@@ -60,7 +60,7 @@
                                                                     class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-2s14r3-MuiTypography-root-MuiLink-root-MuiButtonBase-root-MuiListItemButton-root">
                                                                     <div
                                                                         class="MuiListItemIcon-root css-v696f9-MuiListItemIcon-root">
-                                                                        <img :src="item.icon" alt="">
+                                                                        <img crossorigin="anonymous" :src="item.icon" alt="">
                                                                     </div>
                                                                     <div
                                                                         class="MuiListItemText-root css-l5c327-MuiListItemText-root">
@@ -81,7 +81,7 @@
                                                                     class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone MuiButtonBase-root MuiListItemButton-root MuiListItemButton-gutters css-2s14r3-MuiTypography-root-MuiLink-root-MuiButtonBase-root-MuiListItemButton-root">
                                                                     <div
                                                                         class="MuiListItemIcon-root css-v696f9-MuiListItemIcon-root">
-                                                                        <img :src="item.icon" alt="">
+                                                                        <img crossorigin="anonymous" :src="item.icon" alt="">
                                                                     </div>
                                                                     <div
                                                                         class="MuiListItemText-root css-l5c327-MuiListItemText-root">
@@ -111,7 +111,7 @@
                     <div class="MuiStack-root css-1dpk9xp-MuiStack-root">
                         <div class="MuiInputBase-root css-307j87-MuiInputBase-root-MuiInput-root">
                             <div class="MuiInputAdornment-root MuiInputAdornment-positionStart MuiInputAdornment-standard MuiInputAdornment-sizeMedium css-19bvrkn-MuiInputAdornment-root">
-                                <img class="w-[24px]" src="/images/icon_admin_search.svg" alt="">
+                                <img crossorigin="anonymous" class="w-[24px]" src="/images/icon_admin_search.svg" alt="">
                             </div>
                             <input aria-invalid="false" id=":r3:" placeholder="Search..." type="text"
                             class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedStart css-lg0vho-MuiInputBase-input-MuiInput-input"
@@ -120,11 +120,11 @@
                     </div>
                     <div class="MuiStack-root css-95rbei-MuiStack-root">
                         <!-- <button class="MuiIconButton-sizeMedium css-a7o5bl-MuiButtonBase-root-MuiIconButton-root">
-                            <img class="" src="/images/icon_chat_log.svg" alt="">
+                            <img crossorigin="anonymous" class="" src="/images/icon_chat_log.svg" alt="">
                         </button>
                         <button class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeMedium css-1igjtp5-MuiButtonBase-root-MuiIconButton-root">
                             <span class="MuiBadge-root css-1c32n2y-MuiBadge-root">
-                                <img class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-17ceore-MuiSvgIcon-root" src="/images/bell_icon.svg" alt="">
+                                <img crossorigin="anonymous" class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-17ceore-MuiSvgIcon-root" src="/images/bell_icon.svg" alt="">
                                 <span class="MuiBadge-badge MuiBadge-standard MuiBadge-anchorOriginTopRight MuiBadge-anchorOriginTopRightRectangular MuiBadge-overlapRectangular MuiBadge-colorPrimary css-165qbg4-MuiBadge-badge">
                                     5
                                 </span>
@@ -134,7 +134,7 @@
                             <div class="absolute profile-menu-layout" :class="{ 'hidden': profileMenu }">
                                 <ul class="menu-ul">
                                     <li @click="toSettingAccount">
-                                        <img src="/images/profile_admin_icon.svg" alt="">
+                                        <img crossorigin="anonymous" src="/images/profile_admin_icon.svg" alt="">
                                         <div class="menu-text">
                                             My Profile
                                         </div>
@@ -149,7 +149,7 @@
                             <button class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root" @click="openProfileMenu">
                                 <div class="MuiStack-root css-1oxsjqv-MuiStack-root">
                                     <div class="MuiAvatar-root MuiAvatar-rounded css-14wdk2t-MuiAvatar-root">
-                                        <img class="MuiAvatar-img css-1pqm26d-MuiAvatar-img" src="" alt="">
+                                        <img crossorigin="anonymous" class="MuiAvatar-img css-1pqm26d-MuiAvatar-img" src="" alt="">
                                     </div>
                                     <h6 class="MuiTypography-root MuiTypography-subtitle1 css-lh1uqt-MuiTypography-root">
                                         {{ storeAuth.admin?.name }}

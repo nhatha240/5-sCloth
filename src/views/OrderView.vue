@@ -59,7 +59,7 @@
                                 <div class="break-all">Mã sản phẩm: {{ product?._id }}</div>
                             </div>
                             <div class="w-[20%]">
-                                <img src="/images/order_image_product1.svg" alt="">
+                                <img crossorigin="anonymous" src="/images/order_image_product1.svg" alt="">
                             </div>
                             <div class="w-[14%] text-center">
                                 {{ product?.quantity }}
@@ -137,7 +137,7 @@
                 <div class="flex justify-end gap-[47px]">
                     <div class="flex gap-[19px] items-center">
                         <div class="" v-for="i in 5" :key="i">
-                            <img :src="ratingDetails?.rating < i ? 
+                            <img crossorigin="anonymous" :src="ratingDetails?.rating < i ? 
                                 '/images/big_star_inactive.svg' : '/images/big_star_active.svg'" 
                                 alt=""
                                 class="cursor-pointer"
@@ -152,7 +152,7 @@
             </div>
             <div class="flex-[0_0_30%] flex flex-col">
                 <div class="rounded-[20px] max-w-[357px] max-h-[473px] pb-[31px]">
-                    <img src="/images/rating_product_image1.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/rating_product_image1.svg" alt="">
                 </div>
                 <div class="pb-[21px] product-text">
                     Quần đùi thun vải nỉ

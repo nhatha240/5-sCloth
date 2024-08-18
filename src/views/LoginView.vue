@@ -30,7 +30,7 @@
                             ref="password"
                         >
                             <input v-bind="field" type="password">
-                            <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
                             <div class="text-red-500">{{ errors[0] }}</div>
                         </Field>
                     </div>
@@ -47,7 +47,7 @@
                             }"
                         >
                             <input v-bind="field" type="password">
-                            <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
                             <div class="text-red-500">{{ errors[0] }}</div>
                         </Field>
                     </div>
@@ -65,7 +65,7 @@
                     <div class="label-text">Mật Khẩu*</div>
                     <div class="relative">
                         <input type="password" v-model="user.password" required>
-                        <img class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                        <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
                     </div>
                 </div>
                 <button class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
@@ -74,7 +74,7 @@
             </form>
             <div class="flex-[0_0_50%] bg-[#F0E4F4] rounded-[12px]">
                 <div class="flex flex-col items-center px-[24px] py-[44px]">
-                    <img class="" src="/images/main_logo_no_bg.svg" alt="">
+                    <img crossorigin="anonymous" class="" src="/images/main_logo_no_bg.svg" alt="">
                     <div class="text-center font-medium text-xl ">
                         Đăng ký ngay bây giờ để có quyền truy cập độc quyền vào<br />
                         sản phẩm, sự kiện và ưu đãi.<br />
@@ -82,7 +82,7 @@
                         tự do tham gia và mở cửa cho tất cả mọi người..
                     </div>
                     <button class="google-btn mt-[58px] mb-[21px]">
-                        <img src="/images/google_btn_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/google_btn_icon.svg" alt="">
                         Tiếp tục với Google
                     </button>
                     <div class="text-center font-medium text-xl">Hoặc</div>

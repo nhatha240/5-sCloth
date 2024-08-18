@@ -5,7 +5,7 @@
         <div class="w-[690px] bg-[#D9D9D9] text-[#1E1E1E] pb-[32px] px-[16px] rounded-3xl shadow-[10px_5px_5px_rgb(23,30,28)]">
           <div class="border-b-[1.5px] border-[#D0CFCF]">
             <div class="flex justify-center">
-              <img class="cursor-pointer" src="/images/arrow_up_icon.svg" alt="" @click="openBasket">
+              <img crossorigin="anonymous" class="cursor-pointer" src="/images/arrow_up_icon.svg" alt="" @click="openBasket">
             </div>
             <div class="text-center main-text">Tiếp tục mua sắm</div>
           </div>
@@ -18,7 +18,7 @@
               <div class="flex items-center justify-between py-[11px] pr-[24px] pl-[10px] bg-[#D651FF] rounded-[15px]"
                 v-for="(item, i) in storeProduct.cartItem" :key="i">
                 <div class="max-w-[85px] h-[93px]">
-                  <img class="object-cover" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
+                  <img crossorigin="anonymous"  class="object-cover" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
                 </div>
                 <div class="flex flex-col pr-[86px]">
                   <div class="font-medium main-text">{{ item.product.name }}</div>
@@ -41,15 +41,15 @@
                     {{ item.quantity }}
                   </div>
                   <div class="flex flex-col gap-[3px]">
-                    <img class="cursor-pointer" src="/images/up_icon.svg" alt="" @click="updateCart(item.product.id, 1)">
-                    <img class="cursor-pointer" src="/images/down_icon.svg" alt="" @click="updateCart(item.product.id, -1)">
+                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/up_icon.svg" alt="" @click="updateCart(item.product.id, 1)">
+                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/down_icon.svg" alt="" @click="updateCart(item.product.id, -1)">
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
                   ${{ item.product.discountPrice ? (item.product.discountPrice * item.quantity) : (item.product.price * item.quantity) }}
                 </div>
                 <div class="" @click="removeItemCart(item.product.id)">
-                  <img class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">
+                  <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">
                 </div>
               </div>
             </div>
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="flex items-center">
-        <img src="/images/main_logo.svg" alt="Clevr Logo" class="cursor-pointer" @click="() => { router.push({ name: 'home' }) }" />
+        <img crossorigin="anonymous" src="/images/main_logo.svg" alt="Clevr Logo" class="cursor-pointer" @click="() => { router.push({ name: 'home' }) }" />
       </div>
       <ul class="flex space-x-6" v-if="route.name === 'home'">
         <li v-for="(page, index) in menuContent" :key="index">
@@ -85,7 +85,7 @@
               <div class="flex items-center gap-[10px] font-semibold text-lg">
                 Menu
               </div>
-              <img class="cursor-po" src="/images/arrow_icon_menu.svg" alt="">
+              <img crossorigin="anonymous" class="cursor-po" src="/images/arrow_icon_menu.svg" alt="">
             </MenuButton>
             <MenuItems
               class="z-[1] absolute right-0 w-full origin-top-right divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
@@ -100,12 +100,12 @@
         </div>
         <div class="relative search-header-input flex items-center">
           <input type="text" placeholder="Nhập tên sản phẩm" v-model="storeShop.product">
-          <img class="absolute right-[30px] cursor-pointer" src="/images/search_icon.svg" alt="" @click="searchProduct" />
+          <img crossorigin="anonymous" class="absolute right-[30px] cursor-pointer" src="/images/search_icon.svg" alt="" @click="searchProduct" />
         </div>
       </div>
       <div class="flex items-center gap-12">
         <div class="relative w-10 cursor-pointer" @click="openBasket" v-if="storeAuth.user">
-          <img src="/images/basket.svg" alt="basket" />
+          <img crossorigin="anonymous" src="/images/basket.svg" alt="basket" />
           <span
             class="absolute right-0 bg-[#D651FF] w-[23px] h-[23px] border-[#FFFFFF] border-2 rounded-[50%] basket-number">1</span>
         </div>
@@ -113,7 +113,7 @@
           <MenuButton
             class="flex items-center justify-between bg-white text-[#D651FF] font-semibold py-2 px-4 rounded-lg border-[#D651FF] border min-w-[261px]">
             <div class="flex items-center gap-[21px]">
-              <img src="/images/icon_user.svg" alt="user" />
+              <img crossorigin="anonymous" src="/images/icon_user.svg" alt="user" />
               {{ storeAuth.user?.name }}
             </div>
             <svg width="15" height="8" viewBox="0 0 15 8" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -1,10 +1,10 @@
 <template>
     <RouterView></RouterView>
     <div class="bg-[#D651FF] relative sign-up-layout">
-        <img class="absolute right-0 bottom-[0]" src="/images/bg_dot_element.svg" alt="">
+        <img crossorigin="anonymous" class="absolute right-0 bottom-[0]" src="/images/bg_dot_element.svg" alt="">
         <div class="flex justify-between mx-[50px] py-[115px]">
             <div class="relative">
-                <img class="absolute left-[-30px] top-[-30px]" src="/images/bg_dot_element_sm.svg" alt="">
+                <img crossorigin="anonymous" class="absolute left-[-30px] top-[-30px]" src="/images/bg_dot_element_sm.svg" alt="">
                 <div class="font-semibold text-[40px] text-[#FFFFFF]">
                     Đăng kí tải khoản để cập<br />
                     nhật sản phẩn sớm nhất
@@ -21,7 +21,7 @@
     <div class="footer-layout">
         <div class="row justify-between mb-[150px]">
             <div class="flex-[0_0_431px]">
-                <img src="/images/main_logo.svg" alt="">
+                <img crossorigin="anonymous" src="/images/main_logo.svg" alt="">
                 <div class="text-link-footer pb-[70px] pt-[11px]">
                     Clevr is a online bookstore website who sells all genres of books from around the world. Find your
                     book here now
@@ -29,11 +29,11 @@
                 <div class="">
                     <div class="text-info-footer pb-[25px]">Follow Us</div>
                     <div class="flex gap-[14px] items-center">
-                        <img src="/images/fb_icon.svg" alt="">
-                        <img src="/images/youtube_icon.svg" alt="">
-                        <img src="/images/twitter_icon.svg" alt="">
-                        <img src="/images/linkin_icon.svg" alt="">
-                        <img src="/images/instagram_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/fb_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/youtube_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/twitter_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/linkin_icon.svg" alt="">
+                        <img crossorigin="anonymous" src="/images/instagram_icon.svg" alt="">
                     </div>
                 </div>
             </div>

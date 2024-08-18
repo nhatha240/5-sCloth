@@ -1,7 +1,7 @@
 <template>
     <div class="customer-info-layout">
         <div class="flex items-center gap-1 cursor-pointer" @click="() => {router.push({ name: 'CustomerListView' })}">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[30px]">
@@ -27,7 +27,7 @@
                             </div>
                         </div>
                         <div class="flex items-center gap-[3px]">
-                            <img :src="Math.round(orderData?.comments?.rating) >= star ? '/images/star_customer_icon_active.svg' : '/images/star_details_icon_inactive.svg'"
+                            <img crossorigin="anonymous" :src="Math.round(orderData?.comments?.rating) >= star ? '/images/star_customer_icon_active.svg' : '/images/star_details_icon_inactive.svg'"
                                 alt="" v-for="star in 5" :key="star">
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                                 v-for="(tag, index) in tagList" :key="index"
                             >
                                 {{ tag.tag }}
-                                <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="">
+                                <img crossorigin="anonymous" class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="">
                             </div>
                         </div>
                     </div>

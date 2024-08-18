@@ -22,10 +22,10 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <button class="btn-modify">
-                        <img src="/images/edit_btn_icon.svg" />
+                        <img crossorigin="anonymous" src="/images/edit_btn_icon.svg" />
                     </button>
                     <button class="btn-modify">
-                        <img src="/images/icon_delete_btn.svg" />
+                        <img crossorigin="anonymous" src="/images/icon_delete_btn.svg" />
                     </button>
                 </div>
             </div>
@@ -73,10 +73,10 @@
             </EasyDataTable>
             <div class="flex items-center gap-2">
                 <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
-                    <img src="/images/page-prev-icon.svg" />
+                    <img crossorigin="anonymous" src="/images/page-prev-icon.svg" />
                 </button>
                 <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
-                    <img src="/images/page-next-icon.svg" />
+                    <img crossorigin="anonymous" src="/images/page-next-icon.svg" />
                 </button>
             </div>
         </div>

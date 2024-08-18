@@ -1,7 +1,7 @@
 <template>
     <div class="category-details-layout">
         <div class="flex items-center gap-1 cursor-pointer" @click="backToCategories">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[28px]">
@@ -27,16 +27,16 @@
                 </div>
                 <div class="product-list-layout">
                     <div class="product" v-for="(product, index) in categoryData.products" :key="index">
-                        <img src="/images/dotted_product_icon.svg" />
+                        <img crossorigin="anonymous" src="/images/dotted_product_icon.svg" />
                         <div class="w-[48px] h-[48px]">
-                            <img class="object-cover" src="/images/product1_img.svg" alt="">
+                            <img crossorigin="anonymous"  class="object-cover" :src="product?.image.length > 0 ? urlApi + product.image[0] : '/images/product1_img.svg'" alt="">
                         </div>
                         <div class="">
                             {{ product.name }}
                         </div>
                     </div>
                     <button class="add-prod-btn">
-                        <img :src="product?.image[0] ? urlApi + product.image[0] : '/images/add_product_icon.svg'" alt="">
+                        <img crossorigin="anonymous"  :src="'/images/add_product_icon.svg'" alt="">
                         <div class="btn-text" @click="toAddProduct">Add Pr</div>
                     </button>
                 </div>
@@ -69,8 +69,9 @@
                                 @dragenter.prevent="setActive" >
                                 <div class="image-viewer-layout">
                                     <div class="file-image-review">
-                                        <img class="image-view" :src="urlApi + categoryData.image" alt="">
-                                        <img class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
+                                        <img crossorigin="anonymous"  class="image-view" :src="uploadImg" alt="" v-if="uploadImg">
+                                        <img crossorigin="anonymous"  class="image-view" :src="urlApi + categoryData.image" alt="" v-else>
+                                        <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                     </div>
                                 </div>
                                 <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
@@ -118,6 +119,7 @@ const setInactive = () => {}
 const backToCategories = () => {
     router.push({ name: 'CategoriesView' })
 }
+const uploadImg = ref()
 const dropFile = (event) => {
     handleUpload(event);
 }
@@ -127,22 +129,7 @@ const handleUpload = (event) => {
 
     if (files && files.length > 0) {
         categoryData.value.image = 'public/uploads/' + files[0]
-    //     let max = Number(setting.value.max) - Number(setting.value.value.length);
-
-    //     if (max > files.length) {
-    //         max = files.length;
-    //     }
-    //     for (let index = 0; index < max; index++) {
-    //         setting.value.value?.push({
-    //             file: files[index],
-    //             type: EventFormContentSettingTypes.FileInput,
-    //             image: helperFunctions?.isImage(files[index].type) ? URL.createObjectURL(files[index]) : '',
-    //             name: files[index].name,
-    //             file_size: files[index].size,
-    //             file_mime_type: files[index].type,
-    //             step: currentStep.value,
-    //         });
-    //     }
+        uploadImg.value = URL.createObjectURL(files[0])
     }
     event.target.value = '';
 }

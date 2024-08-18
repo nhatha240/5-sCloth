@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between">
             <div class="title-text">Dashboard</div>
             <button class="bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px] flex items-center gap-1">
-                <img src="/images/manage_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/manage_icon.svg" alt="">
                 Manage
             </button>
         </div>
@@ -19,12 +19,12 @@
                         }"
                     >
                         {{ totalData?.percentageChange ?? 0 }}%
-                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.percentageChange > 0">
-                        <img src="/images/down_stink_icon.svg" alt="" v-else>
+                        <img crossorigin="anonymous" src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.percentageChange > 0">
+                        <img crossorigin="anonymous" src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
-                    <img src="/images/revenue_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/revenue_icon.svg" alt="">
                 </div>
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
@@ -38,12 +38,12 @@
                         }"
                     >
                         {{ totalData?.orderPercentageChange ?? 0 }}%
-                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.orderPercentageChange > 0">
-                        <img src="/images/down_stink_icon.svg" alt="" v-else>
+                        <img crossorigin="anonymous" src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.orderPercentageChange > 0">
+                        <img crossorigin="anonymous" src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
-                    <img src="/images/order_cart_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/order_cart_icon.svg" alt="">
                 </div>
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
@@ -57,12 +57,12 @@
                         }"
                     >
                         {{ totalData?.loginUserPercentageChange ?? 0 }}%
-                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.loginUserPercentageChange > 0">
-                        <img src="/images/down_stink_icon.svg" alt="" v-else>
+                        <img crossorigin="anonymous" src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.loginUserPercentageChange > 0">
+                        <img crossorigin="anonymous" src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
-                    <img src="/images/active_user_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/active_user_icon.svg" alt="">
                 </div>
             </div>
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">
@@ -76,12 +76,12 @@
                         }"
                     >
                         {{ totalData?.newUserPercentageChange ?? 0 }}%
-                        <img src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.newUserPercentageChange > 0">
-                        <img src="/images/down_stink_icon.svg" alt="" v-else>
+                        <img crossorigin="anonymous" src="/images/up_stonk_icon.svg" alt="" v-if="totalData?.newUserPercentageChange > 0">
+                        <img crossorigin="anonymous" src="/images/down_stink_icon.svg" alt="" v-else>
                     </div>
                 </div>
                 <div class="">
-                    <img src="/images/total_user_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/total_user_icon.svg" alt="">
                 </div>
             </div>
         </div>
@@ -145,7 +145,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="transaction in items" :key="transaction.name" class="shared-classes">
-                            <td class="px-4 py-2 text-classes">{{ transaction?.idUser.name }}</td>
+                            <td class="px-4 py-2 text-classes">{{ transaction?.idUser?.name }}</td>
                             <td class="px-4 py-2 text-classes">
                                 {{ transaction?.createdAt ? formatDate(transaction?.createdAt, 'DD.MM.YYYY') : '' }}
                             </td>
@@ -182,7 +182,7 @@
                             <td class="px-4 py-2 text-classes">
                                 <div class="flex items-center gap-[12px]">
                                     <div class="w-9 h-9">
-                                        <img class="object-cover" :src="product.img" alt="">
+                                        <img crossorigin="anonymous" class="object-cover" :src="product.img" alt="">
                                     </div>
                                     {{ product.name }}
                                 </div>

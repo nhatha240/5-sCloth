@@ -1,6 +1,6 @@
 <template>
     <div class="empty-admin-layout">
-        <img class="pb-[24px]" :src="image" alt="">
+        <img crossorigin="anonymous" class="pb-[24px]" :src="image" alt="">
         <div class="title-text pb-3">
             {{ titleEmpty }}
         </div>
@@ -9,7 +9,7 @@
             class="font-common text-[#FFFFFF] text-base bg-[#1E5EFF] py-2 px-[20px] rounded-[4px] flex items-center gap-1 mb-[12px]"
             @click="toAddDataPage"   
         >
-            <img src="/images/add_order_icon.svg" alt="">
+            <img crossorigin="anonymous" src="/images/add_order_icon.svg" alt="">
             {{ buttonText }}
         </button>
         <div class="text-details !text-[#1E5EFF] cursor-pointer" @click="toReadMore">

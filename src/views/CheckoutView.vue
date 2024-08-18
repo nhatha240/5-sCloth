@@ -12,7 +12,7 @@
             <div class="mt-[30px] flex flex-col gap-[30px]">
                 <div class="flex item-layout items-center" v-for="(item, index) in items" :key="index">
                     <div class="w-[45%] flex gap-[34px]">
-                        <img :src="item.image" alt="">
+                        <img crossorigin="anonymous" :src="item.image" alt="">
                         <div class="flex flex-col justify-center gap-[10px]">
                             <div class="code-text">{{ item?.product?.id }}</div>
                             <div class="product-text">{{ item?.product?.name }}</div>
@@ -24,12 +24,12 @@
                     <div class="w-[20%]">
                         <div class="quantity-field flex justify-center items-center w-[183px]">
                             <div class="cursor-pointer" @click="updateCart(item.product.id, -1)">
-                                <img src="/images/minus_icon.svg" alt="">
+                                <img crossorigin="anonymous" src="/images/minus_icon.svg" alt="">
                             </div>
                             <input class="text-center pointer-events-none" type="number" readonly
                                 v-model="item.quantity">
                             <div class="cursor-pointer" @click="updateCart(item.product.id, 1)">
-                                <img src="/images/plus_icon.svg" alt="">
+                                <img crossorigin="anonymous" src="/images/plus_icon.svg" alt="">
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                         {{ '$' + (item?.product?.discountPrice > 0 ? (item?.product?.discountPrice * item?.quantity) : (item?.product?.price * item?.quantity)) }}
                     </div>
                     <div class="" @click="removeItemCart(item.product?.id)">
-                        <img class="cursor-pointer" src="/images/trash_icon.svg" alt="">
+                        <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_icon.svg" alt="">
                     </div>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                             <div class="coupon-field">
                                 <input class="" type="text" placeholder="Enter promo code here">
                                 <button class="">
-                                    <img src="/images/arrow_coupon_icon.svg" alt="">
+                                    <img crossorigin="anonymous" src="/images/arrow_coupon_icon.svg" alt="">
                                 </button>
                             </div>
                         </div>

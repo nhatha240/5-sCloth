@@ -4,14 +4,14 @@
             <div class="font-bold text-4xl">Sản phẩm bán chạy </div>
             <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
                 Xem Thêm
-                <img src="/images/arrow_find_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
             </div>
         </div>
         <swiper :slides-per-view="3" :space-between="50" :navigation="true">
             <swiper-slide v-for="(product, index) in saleWellProducts" :key="index">
                 <div class="grid grid-cols-2 bg-[#FFFFFF] rounded-[10px]">
                     <div class="col-span-1 w-[200px]">
-                        <img :src="product.product_image" alt="">
+                        <img crossorigin="anonymous" :src="product.product_image" alt="">
                     </div>
                     <div class="col-span-1 flex flex-col gap-[30px] flex-grow">
                         <div class="flex items-center gap-8">
@@ -19,7 +19,7 @@
                                 {{ product.tag }}
                             </div>
                             <div class="star-rating flex items-center justify-center gap-[5px] px-[20px] py-[11px]">
-                                <img src="/images/star_rating_icon.svg" alt="">
+                                <img crossorigin="anonymous" src="/images/star_rating_icon.svg" alt="">
                                 <div>{{ product.rating }}</div>
                             </div>
                         </div>

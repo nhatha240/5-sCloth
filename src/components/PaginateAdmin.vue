@@ -17,12 +17,12 @@
             >
                 <template #prev-text>
                     <div class="arrow-paging">
-                        <img src="/images/page-prev-icon.svg" />
+                        <img crossorigin="anonymous" src="/images/page-prev-icon.svg" />
                     </div>
                 </template>
                 <template #next-text>
                     <div class="arrow-paging">
-                        <img src="/images/page-next-icon.svg" />
+                        <img crossorigin="anonymous" src="/images/page-next-icon.svg" />
                     </div>
                 </template>
                 <template #page="{ page, active }">

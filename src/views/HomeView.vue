@@ -78,34 +78,34 @@
       </div>
       <div class="grid grid-rows-2 grid-flow-col gap-4">
         <div class="row-span-2">
-          <img src="/images/hot_trend_img.svg" alt="">
+          <img crossorigin="anonymous" src="/images/hot_trend_img.svg" alt="">
         </div>
         <div class="col-span-3  flex gap-[31px] justify-center">
           <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-            <img src="/images/sub_hot_trend1.svg" alt="">
+            <img crossorigin="anonymous" src="/images/sub_hot_trend1.svg" alt="">
             <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
               <div
                 class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                <img src="/images/search_details_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
               </div>
             </div>
           </div>
           <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-            <img src="/images/sub_hot_trend2.svg" alt="">
+            <img crossorigin="anonymous" src="/images/sub_hot_trend2.svg" alt="">
             <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
               <div
                 class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                <img src="/images/search_details_icon.svg" alt="">
+                <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
               </div>
             </div>
           </div>
           <div>
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img src="/images/sub_hot_trend3.svg" alt="">
+              <img crossorigin="anonymous" src="/images/sub_hot_trend3.svg" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                  <img src="/images/search_details_icon.svg" alt="">
+                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
                 </div>
               </div>
             </div>
@@ -114,33 +114,33 @@
         <div class="col-span-3  flex gap-[31px] justify-center">
           <div>
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img src="/images/sub_hot_trend4.svg" alt="">
+              <img crossorigin="anonymous" src="/images/sub_hot_trend4.svg" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                  <img src="/images/search_details_icon.svg" alt="">
+                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
                 </div>
               </div>
             </div>
           </div>
           <div>
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img src="/images/sub_hot_trend5.svg" alt="">
+              <img crossorigin="anonymous" src="/images/sub_hot_trend5.svg" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                  <img src="/images/search_details_icon.svg" alt="">
+                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
                 </div>
               </div>
             </div>
           </div>
           <div>
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img src="/images/sub_hot_trend5.svg" alt="">
+              <img crossorigin="anonymous" src="/images/sub_hot_trend5.svg" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                  <img src="/images/search_details_icon.svg" alt="">
+                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
                 </div>
               </div>
             </div>
@@ -153,7 +153,7 @@
         <div class="font-bold text-4xl">Sản phẩm nổi bật</div>
         <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
           Xem Thêm
-          <img src="/images/arrow_find_icon.svg" alt="">
+          <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
         </div>
       </div>
       <div class="pb-[150px]">
@@ -162,7 +162,7 @@
           <swiper-slide v-for="(product, index) in newProducts" :key="index">
             <div class="grid grid-cols-2 p-[50px] bg-[#FAFAFA] rounded-[10px] gap-[80px]">
               <div class="col-span-1 w-[270px]">
-                <img :src="product.product_image" alt="">
+                <img crossorigin="anonymous" :src="product.product_image" alt="">
               </div>
               <div class="col-span-1 flex flex-col justify-between">
                 <div class="flex items-center gap-8">
@@ -170,7 +170,7 @@
                     {{ product.tag }}
                   </div>
                   <div class="rating pr-[16px] flex items-center">
-                    <img class="cursor-pointer"
+                    <img crossorigin="anonymous" class="cursor-pointer"
                       :src="star.rate ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
                       v-for="(star, i) in product.rating" :key="i">
                     <div class="review-count pl-4">{{ product.reviews_count }} Reviews</div>
@@ -186,11 +186,11 @@
                 </div>
                 <div class="flex items-center gap-[30px] pt-[68px]">
                   <button class="add-cart-purple-button">
-                    <img src="/images/basket_white.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                     Thêm vào giỏ
                   </button>
                   <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
-                    <img src="/images/heart_icon.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/heart_icon.svg" alt="">
                   </button>
                   <div class="purple-text-500">Xem chi tiết</div>
                 </div>
@@ -201,19 +201,19 @@
       </div>
       <div class="bg-[#FCF8FD] w-full px-auto flex justify-around mb-[150px] pt-[84px] pb-[114px]">
         <div class="flex flex-col justify-center items-center gap-[42px]">
-          <img class="w-[60px]" src="/images/fast_clock_icon.svg" alt="">
+          <img crossorigin="anonymous" class="w-[60px]" src="/images/fast_clock_icon.svg" alt="">
           <div class="black-text-500">Chuyển phát nhanh</div>
         </div>
         <div class="flex flex-col justify-center items-center gap-[42px]">
-          <img class="w-[60px]" src="/images/credit_card_icon.svg" alt="">
+          <img crossorigin="anonymous" class="w-[60px]" src="/images/credit_card_icon.svg" alt="">
           <div class="black-text-500">Thanh toán an toàn</div>
         </div>
         <div class="flex flex-col justify-center items-center gap-[42px]">
-          <img class="w-[60px]" src="/images/best_quality_icon.svg" alt="">
+          <img crossorigin="anonymous" class="w-[60px]" src="/images/best_quality_icon.svg" alt="">
           <div class="black-text-500">Chất lượng tốt nhất</div>
         </div>
         <div class="flex flex-col justify-center items-center gap-[42px]">
-          <img class="w-[60px]" src="/images/safe_icon.svg" alt="">
+          <img crossorigin="anonymous" class="w-[60px]" src="/images/safe_icon.svg" alt="">
           <div class="black-text-500">Đảm bảo hoàn trả</div>
         </div>
       </div>
@@ -223,16 +223,16 @@
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
           <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
             Xem Thêm
-            <img src="/images/arrow_find_icon.svg" alt="">
+            <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
           </div>
         </div>
         <div class="px-[50px] top-product-layout">
           <swiper :slides-per-view="'6'" :space-between="100" :navigation="true" :loop="true">
             <swiper-slide v-for="(product, index) in topProducts" :key="index">
               <div class="flex flex-col justify-between min-h-[491px]">
-                <img :src="product.product_image" alt="">
+                <img crossorigin="anonymous" :src="product.product_image" alt="">
                 <div class="pt-[21px] flex gap-[5px]">
-                  <img src="/images/star_active.svg" alt="" v-for="star in product.rating" :key="star">
+                  <img crossorigin="anonymous" src="/images/star_active.svg" alt="" v-for="star in product.rating" :key="star">
                 </div>
                 <div class="pt-[14px]">
                   {{ product.product_name }}
@@ -245,7 +245,7 @@
                   product.product_price }}</div>
                   <div class="sub-price">{{ product.product_sale_price ? product.product_price : '' }}</div>
                   <div class="cart-btn-icon w-[57px] h-[57px] bg-[#D651FF] rounded-[50%]">
-                    <img src="/images/basket_white.svg" alt="">
+                    <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                   </div>
                 </button>
               </div>
@@ -282,14 +282,14 @@
               <div class="bg-[#310043] rounded-[20px] p-[30px] text-white row gap-[38px]">
                 <!-- Product image -->
                 <div class="flex-[0_0_200px] object-cover rounded-xl mb-3 w-[200px]">
-                  <img :src="product.image" alt="Áo thun cổ trơn dài tay">
+                  <img crossorigin="anonymous" :src="product.image" alt="Áo thun cổ trơn dài tay">
                 </div>
                 <div class="col mt-[28px]">
                   <!-- Rating -->
                   <div class="flex items-center gap-[38px] mb-6">
                     <div class="top-sale-text">SALE</div>
                     <div class="flex gap-[7px]">
-                      <img class="cursor-pointer"
+                      <img crossorigin="anonymous" class="cursor-pointer"
                         :src="star.rate ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
                         v-for="(star, i) in product.rating" :key="i">
                       <span class="ml-1 text-sm">({{ product.rating_count }})</span>
@@ -318,7 +318,7 @@
                     </div>
                     <!-- Cart button -->
                     <button class="bg-purple-500 rounded-full p-[17px]">
-                      <img class="min-w-[24px]" src="/images/basket_white.svg" alt="" />
+                      <img crossorigin="anonymous" class="min-w-[24px]" src="/images/basket_white.svg" alt="" />
                     </button>
                   </div>
                 </div>
@@ -335,7 +335,7 @@
         </div>
         <div class="row flex gap-[44px] justify-between">
           <div class="flex-[0_0_auto] flex flex-col !w-[372px]" v-for="index in 3" :key="index">
-            <div class="cursor-pointer"><img src="/images/image_new1.svg" alt=""></div>
+            <div class="cursor-pointer"><img crossorigin="anonymous" src="/images/image_new1.svg" alt=""></div>
             <div class="text-[#000000] text-[18px] font-semibold text-left pt-[25px] pb-[14px]">Xu hướng thời trang nam
               mùa hè năm nay có gì đặc biệt?</div>
             <div class="text-[#00000080] text-sm font-normal text-left">
@@ -347,7 +347,7 @@
         <div class="pt-[148px] flex justify-center mb-[50px]">
           <button class="view-more-btn">
             Xem thêm
-            <img src="/images/arrow_right_white.svg" alt="">
+            <img crossorigin="anonymous" src="/images/arrow_right_white.svg" alt="">
           </button>
         </div>
       </div>
@@ -363,7 +363,7 @@
             <swiper-slide v-for="(rate, index) in ratingList" :key="index">
               <div class="p-[30px] rating-details">
                 <div class="flex items-center gap-3">
-                  <img class="cursor-pointer" :src="star.rate ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                  <img crossorigin="anonymous" class="cursor-pointer" :src="star.rate ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
                     alt="" v-for="(star, i) in rate.rating" :key="i">
                 </div>
                 <div class="my-[30px] text-left">
@@ -375,7 +375,7 @@
                     <div class="text-[#3D3D3D] font-normal text-sm">{{ rate.comment_date }}</div>
                   </div>
                   <div class="">
-                    <img :src="rate.avatar" alt="" v-if="rate.avatar">
+                    <img crossorigin="anonymous" :src="rate.avatar" alt="" v-if="rate.avatar">
                     <div class="avatar-empty" v-else></div>
                   </div>
                 </div>
@@ -388,7 +388,7 @@
         <div class="flex justify-center pt-[117px] pb-[101px] gap-[131px]">
           <div class="flex flex-col items-center" v-for="(brand, index) in brandInfo" :key="index">
             <div class="flex gap-[34px] items-center">
-              <img class="w-full" :src="brand.logo" alt="">
+              <img crossorigin="anonymous" class="w-full" :src="brand.logo" alt="">
               <span class="text-[#FFFFFF] text-[50px] font-semibold">{{ brand.count }}</span>
             </div>
             <div class="text-[#FFFFFF99] text-[20px] font-normal pt-[29px]">

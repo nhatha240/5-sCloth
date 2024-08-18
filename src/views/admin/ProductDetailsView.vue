@@ -3,7 +3,7 @@
         <AddCategoryPopup v-model="modalCategory" :model-value="modalCategory" :title="'Add Category'"
             @update:model-value="() => { modalCategory = false }" @update:addCategory="confirmAddCategory" />
         <div class="flex items-center gap-1 cursor-pointer" @click="backToProduct">
-            <img src="/images/icon_back_screen.svg" alt="">
+            <img crossorigin="anonymous" src="/images/icon_back_screen.svg" alt="">
             Back
         </div>
         <div class="flex items-center justify-between mb-[30px]">
@@ -47,8 +47,13 @@
                                 @dragenter.prevent="setActive" >
                                 <div class="image-viewer-layout">
                                     <div class="file-image-review" v-for="image in productDetails.image" :key="image">
-                                        <img class="image-view" :src="urlApi + image" alt="">
-                                        <img class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
+                                        <img crossorigin="anonymous"  class="image-view" :src="urlApi + image" alt="">
+                                        <!-- <img crossorigin="anonymous"  class="image-view" :src="image" alt=""> -->
+                                        <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
+                                    </div>
+                                    <div class="file-image-review" v-for="image in uploadImg" :key="image">
+                                        <img crossorigin="anonymous"  class="image-view" :src="image" alt="">
+                                        <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                     </div>
                                 </div>
                                 <label :for="'file'" class="upload-btn" @click="handleUpload($event)">Add
@@ -109,7 +114,7 @@
                                     <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-[2px] bg-[#E6E9F4] w-fit"
                                         v-for="(tag, index) in productDetails?.options[0].size" :key="index">
                                         {{ tag }}
-                                        <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeSize(index)">
+                                        <img crossorigin="anonymous" class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeSize(index)">
                                     </div>
                                 </div>
                             </div>
@@ -134,7 +139,7 @@
                                     <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-[2px] bg-[#E6E9F4] w-fit"
                                         v-for="(color, index) in productDetails?.options[0].color" :key="index">
                                         {{ color }}
-                                        <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeColor(index)">
+                                        <img crossorigin="anonymous" class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeColor(index)">
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +171,7 @@
                             <div class="flex items-center gap-[5px] rounded-[6px] px-3 p-1 bg-[#E6E9F4] w-fit"
                                 v-for="(tag, index) in productDetails.tags" :key="index">
                                 {{ tag }}
-                                <img class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeTag(index)">
+                                <img crossorigin="anonymous" class="cursor-pointer" src="/images/icon_delete_tag.svg" alt="" @click="removeTag(index)">
                             </div>
                         </div>
                     </div>
@@ -205,20 +210,7 @@ const router = useRouter();
 const route = useRoute();
 const productId = ref(route?.params?.id)
 const modalCategory = ref(false)
-const tagList = ref([
-    {
-        id: 1,
-        tag: 'T-Shirt'
-    },
-    {
-        id: 2,
-        tag: 'Men Clothes'
-    },
-    {
-        id: 3,
-        tag: 'Summer Collection'
-    },
-])
+const uploadImg = ref([])
 const selectedColor = ref('Màu')
 const selectedSize = ref('Size')
 const productDetails = ref({
@@ -274,25 +266,33 @@ const addCategory = () => {
     modalCategory.value = !modalCategory.value
 }
 
-const confirmAddCategory = () => { }
+const confirmAddCategory = () => {
+    initCategories();
+    if (productId.value) {
+        initProductDetails();
+    }
+}
 
+async function blobUrlToBlob(blobUrl) {
+  const response = await fetch(blobUrl);
+  const blob = await response.blob();
+  console.log(blob)
+  return blob;
+}
 const dropFile = (event) => {
     handleUpload(event);
 }
-const handleUpload = (event) => {
+const handleUpload = async (event) => {
     const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
     console.log(files);
     console.log(files?.length);
 
     if (files?.length > 0) {
-    //     let max = Number(setting.value.max) - Number(setting.value.value.length);
-
-    //     if (max > files.length) {
-    //         max = files.length;
-    //     }
         for (let index = 0; index < files.length; index++) {
+            
             // productDetails.value.image?.push(URL.createObjectURL(files[index]))
-            productDetails.value.image?.push('public/uploads/' + files[index]?.name)
+            uploadImg.value?.push(URL.createObjectURL(files[index]))
+            // productDetails.value.image?.push(files[index])
     //         setting.value.value?.push({
     //             file: files[index],
     //             type: EventFormContentSettingTypes.FileInput,
@@ -338,6 +338,18 @@ const removeColor = (index) => {
 }
 
 const saveProduct = async () => {
+    // uploadImg.value.forEach(async (img) => {
+    //     const blobImg = await blobUrlToBlob(img).then(blob => {
+    //         return blob
+    //     });
+    //     console.log(blobImg)
+    //     formData.append(img, blobImg, 'image.name');
+    //     formData.append('productName', 'Your Product Name');
+    //     console.log(formData)
+    // });
+    uploadImg.value?.forEach((img) => {
+        productDetails.value.image?.push(img)
+    })
     const payload = {
         name: productDetails.value.name,
         images: productDetails.value.image,
@@ -353,6 +365,11 @@ const saveProduct = async () => {
         quantity: productDetails.value.quantity,
         tags: productDetails.value.tags,
     }
+    // const formData = new FormData();
+    // for ( var key in payload ) {
+    //     formData.append(key, JSON.stringify(payload[key]));
+    // }
+    // console.log(formData)
     if (productId.value) {
         try {
             await storeProduct.updateProduct(productId.value, payload)

@@ -166,7 +166,7 @@
         <div class="cart-payment-layout">
           <div class="flex items-center justify-around" v-for="(product, index) in storeProduct.cartItem" :key="index">
             <div class="flex items-center gap-2">
-              <img :src="urlApi + product?.product?.image[0]" alt="">
+              <img crossorigin="anonymous"  :src="urlApi + product?.product?.image[0]" alt="">
               <div class="flex flex-col">
                 <div class="">
                   {{ product?.product?.name }}

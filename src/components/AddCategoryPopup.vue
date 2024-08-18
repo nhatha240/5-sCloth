@@ -5,7 +5,7 @@
             <div class="title-modal pb-[28px]">
                 {{ title }}
             </div>
-            <img class="cursor-pointer absolute right-3 top-3" src="/images/close_modal_category_icon.svg" alt="" @click="cancelModal">
+            <img crossorigin="anonymous" class="cursor-pointer absolute right-3 top-3" src="/images/close_modal_category_icon.svg" alt="" @click="cancelModal">
             <div class="pb-6">
                 <div class="details-text pb-1">
                     Category Name
@@ -24,7 +24,7 @@
             </div>
             <div class="pb-6">
                 <div class="details-text pb-1">
-                    Add Products
+                    Description
                 </div>
                 <Field 
                     v-slot="{ field, errors }"
@@ -115,7 +115,11 @@ const cancelModal = () => {
 const handleUpload = (event) => {
     const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
     if (files.length) {
-        category.value.image = 'public/uploads/' + files[0]?.name
+        category.value.image = '/public/uploads/' + files[0]?.name
+        // category.value.image = files[0]
+        // const fileUrl = URL.createObjectURL(files[0])
+        // category.value.image = fileUrl?.replace(window.location.protocol + '//' + window.location.host, import.meta.env.VITE_BASE_URL)
+        
     }
 }
 

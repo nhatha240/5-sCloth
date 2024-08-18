@@ -1,7 +1,7 @@
 <template>
     <div class="">
         <div class="mt-xl-0 flex justify-center">
-            <img src="/images/main_logo.svg" alt="">
+            <img crossorigin="anonymous" src="/images/main_logo.svg" alt="">
         </div>
         <Form @submit="loginAdmin" ref="form" class="mt-5">
             <label for="" class="v-label text-subtitle-1 font-weight-semibold pb-2 text-lightText">
