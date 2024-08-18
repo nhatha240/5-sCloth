@@ -120,7 +120,7 @@ const storeCategory = useCategoryStore()
 const route = useRoute()
 const router = useRouter()
 const page = ref(route?.query?.page ? route.query.page : 1)
-const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 12)
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 100)
 const productList = ref([])
 const imageList = ref([
     '/images/product_shirt1.svg',
@@ -145,7 +145,7 @@ const totalPage = ref()
 const totalItems = ref()
 
 const toPage = () => {
-
+    initProducts()
 }
 
 const addToCart = async (id) => {
@@ -176,7 +176,11 @@ const findCategoryName = (id) => {
 
 const initProducts = async () => {
     try {
-        const data = await storeProduct.getAllProduct()
+        const params = {
+            page: page.value,
+            pageSize: pageSize.value,
+        }
+        const data = await storeProduct.getAllProduct(params)
         console.log(data);
         if (data?.results && data?.results?.length > 0) {
             productList.value = data?.results

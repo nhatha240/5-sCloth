@@ -6,55 +6,55 @@
         <div class="flex items-center gap-[20px]">
           <div class="star-rating-details">
             <img
-              :src="Math.round(product.rating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+              :src="Math.round(product?.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
               alt="" v-for="star in 5" :key="star">
-            {{ product.rating }}
+            {{ product?.userRating }}
           </div>
           <div class="count-rating-details">
-            {{ product.rating_count }} Reviews
+            {{ product?.totalRating }} Reviews
           </div>
         </div>
         <div class="text-[#000000] text-[30px] font-semibold">
-          {{ product.product_name }}
+          {{ product?.name }}
         </div>
         <div class="text-[#000000] font-normal text-2xl">
-          Còn: {{ product.stock }}
+          Còn: {{ product?.quantity }}
         </div>
         <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]">
           <div class="border-1 border-[#D651FF] rounded-[50%] w-[30px] h-[30px] cursor-pointer"
-            :class="{ 'choosen-color': color.active }" :style="`background-color: ${color.color};`"
-            v-for="(color, i) in product.color_list" :key="i" @click="chooseColor(i)">
+            :class="{ 'choosen-color': color.active }" :style="`background-color: ${color};`"
+            v-for="(color, i) in product?.options[0]?.color" :key="i" @click="chooseColor(i)">
           </div>
         </div>
         <div class="relative flex gap-19px">
           <div class="text-[#D651FF] font-semibold text-[45px]">
-            ${{ product.sale_price ? product.sale_price : product.price }}
+            ${{ product.discountPrice ? product.discountPrice : product.price }}
           </div>
-          <span class="text-[#636363] font-normal text-sm flex gap-[9px] items-end" v-if="product.sale_price">
+          <span class="text-[#636363] font-normal text-sm flex gap-[9px] items-end" v-if="product.discountPrice">
             <div class="line-through">${{ product.price }}</div>
             <div class="rounded-[8px] pt-[2px] pb-[3px] px-[14px] bg-[#FF7A00] text-[#FFFFFF] text-base font-medium">
-              {{ Math.round((product.price - product.sale_price) / product.price * 100) }}%
+              {{ Math.round((product.price - product.discountPrice) / product.price * 100) }}%
             </div>
           </span>
         </div>
         <div class="flex items-center gap-[18px]">
           <div class="">
             <div class="quantity-field flex justify-center items-center w-[183px]">
-              <div class="cursor-pointer">
+              <div class="cursor-pointer" @click="updateStock(product, false)">
                 <img crossorigin="anonymous" src="/images/minus_icon.svg" alt="">
               </div>
-              <input class="text-center pointer-events-none" type="number" readonly v-model="product.quantity">
-              <div class="cursor-pointer">
+              <input class="text-center pointer-events-none" type="number" readonly v-model="product.stock">
+              <div class="cursor-pointer" @click="updateStock(product, true)">
                 <img crossorigin="anonymous" src="/images/plus_icon.svg" alt="">
               </div>
             </div>
           </div>
-          <button class="buy-btn flex items-center gap-[34px]">
+          <button class="buy-btn flex items-center gap-[34px]" @click="updateCart(product.id, product.stock)">
             <img crossorigin="anonymous" src="/images/basket_buy_icon.svg" alt="">
             BUY
           </button>
           <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
-            <img crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
+            <img class="max-w[31px]" crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
             <!-- <img crossorigin="anonymous" src="/images/heart_icon.svg" alt=""> -->
           </button>
         </div>
@@ -63,14 +63,15 @@
         <div class="row gap-4">
           <!-- Main product images -->
           <div class="flex-[0_0_60%] flex gap-[21px] flex-grow">
-            <div class="w-1/2" v-for="(img, i) in product.product_image" :key="i">
-              <img crossorigin="anonymous" :src="img" alt="Product front" class="w-full object-cover">
+            <div class="w-1/2" v-for="(img, i) in product.image" :key="i">
+              <img crossorigin="anonymous" :src="img == 'public/uploads/products/default.jpg' 
+                                    ? imageList[Math.floor(Math.random() * (1 - 0) + 0)] : img"  alt="Product front" class="w-full object-cover">
             </div>
           </div>
 
           <!-- Thumbnail images -->
           <div class="flex-[0_0_125px] flex flex-col gap-[24px] justify-between">
-            <img crossorigin="anonymous" :src="img" alt="Fabric closeup" class="w-[125px] object-cover" v-for="(img, i) in product.sub_image"
+            <img crossorigin="anonymous" :src="img" alt="Fabric closeup" class="w-[125px] object-cover" v-for="(img, i) in subImage"
               :key="i">
           </div>
         </div>
@@ -87,14 +88,14 @@
               <div class="flex flex-col gap-[21px]">
                 <div class="flex gap-[14px]">
                   <div class="text-[#4D4D4D] font-semibold text-[45px]">
-                    {{ product.rating }}
+                    {{ product.userRating }}
                     <span class="text-[#4D4D4D] font-medium text-base">out of 5</span>
                   </div>
                 </div>
                 <div class="flex gap-[10px]">
                   <img
                     class="w-[24px]"
-                    :src="Math.round(product.rating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+                    :src="Math.round(product.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
                     alt="" v-for="star in 5" :key="star">
                 </div>
               </div>
@@ -108,10 +109,10 @@
                     {{ star.star }}
                   </div>
                   <div class="relative w-[270px] bg-[#DDDDDD] h-[9px] rounded-[15px]">
-                    <div class="absolute bg-[#D651FF] h-[9px] rounded-[15px]" :style="{'width': star.rating_percent }"></div>
+                    <div class="absolute bg-[#D651FF] h-[9px] rounded-[15px]" :style="{'width': star.userRating_percent }"></div>
                   </div>
                   <div class="">
-                    {{ star.rating_percent }}
+                    {{ star.userRating_percent }}
                   </div>
                 </div>
               </div>
@@ -120,13 +121,13 @@
               <div class="flex flex-col gap-[21px]">
                 <div class="flex gap-[14px]">
                   <div class="text-[#FF7020] font-bold text-[26px]">
-                    {{ product.rating }}
+                    {{ product.userRating }}
                   </div>
                 </div>
                 <div class="flex gap-[10px]">
                   <img
                     class="w-[24px]"
-                    :src="Math.round(product.rating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+                    :src="Math.round(product.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
                     alt="" v-for="star in 5" :key="star">
                 </div>
               </div>
@@ -187,15 +188,21 @@
 
 <script lang="js" setup>
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { generateSingleData } from '../constant/commonFunction'
 import { useProductStore } from '@/stores/ProductStore'
 
 const route = useRoute()
+const router = useRouter()
 const storeProduct = useProductStore()
 const productId = ref(route.params.id ? route.params.id : 0)
-const product = ref({})
+const product = ref({
+  options: [
+    {color:[]}
+  ],
+  stock: 0
+})
 const imageList = ref([
   '/images/product_details_image1.svg',
   '/images/product_details_image1.svg',
@@ -209,33 +216,33 @@ const subImage = ref([
 const ratingDetails = ref([
   {
     star: 5,
-    rating_percent: '86%',
-    rating_count: 0,
+    totalRating: '86%',
+    userRating: 0,
   },
   {
     star: 4,
-    rating_percent: '61%',
-    rating_count: 0,
+    totalRating: '61%',
+    userRating: 0,
   },
   {
     star: 3,
-    rating_percent: '12%',
-    rating_count: 0,
+    totalRating: '12%',
+    userRating: 0,
   },
   {
     star: 2,
-    rating_percent: '5%',
-    rating_count: 0,
+    totalRating: '5%',
+    userRating: 0,
   },
   {
     star: 1,
-    rating_percent: '8%',
-    rating_count: 0,
+    totalRating: '8%',
+    userRating: 0,
   },
 ])
 
 onMounted(() => {
-  product.value = generateSingleData(productId.value, imageList.value, subImage.value)
+  // product.value = generateSingleData(productId.value, imageList.value, subImage.value)
   initProduct()
   console.log(product.value);
 })
@@ -243,8 +250,9 @@ onMounted(() => {
 const initProduct = async () => {
   try {
     const data = await storeProduct.getProduct(productId.value)
-    console.log(data);
-    // product.value = data?.results
+    data.stock = 0
+    product.value = data
+    console.log(data)
   } catch (error) {
     return error
   }
@@ -254,9 +262,33 @@ const getProductName = (e) => {
   console.log(e);
 }
 const chooseColor = (indexColor) => {
-  product.value.color_list.forEach((color, i) => {
-    color.active = i === indexColor;
-  });
+  // product.value.color_list.forEach((color, i) => {
+  //   color.active = i === indexColor;
+  // });
+}
+const updateStock = async (product, up) => {
+  if (up) {
+    product.stock++
+  } else {
+    if (product.stock > 0) {
+      product.stock--
+    }
+  }
+}
+
+const updateCart = async (id, quantity) => {
+  if (quantity) {
+    try {
+        const payload = {
+            productId: id,
+            quantity: quantity,
+        }
+        await storeProduct.addCart(payload)
+        router.push({ name: 'Checkout' })
+    } catch (error) {
+        return error
+    }
+  }
 }
 </script>
 
