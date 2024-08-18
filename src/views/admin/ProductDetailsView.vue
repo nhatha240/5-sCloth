@@ -223,7 +223,7 @@ const selectedColor = ref('Màu')
 const selectedSize = ref('Size')
 const productDetails = ref({
     name: '',
-    images: [],
+    image: [],
     description: '',
     discountPrice: '',
     price: '',
@@ -291,7 +291,8 @@ const handleUpload = (event) => {
     //         max = files.length;
     //     }
         for (let index = 0; index < files.length; index++) {
-            productDetails.value.image?.push(URL.createObjectURL(files[index]))
+            // productDetails.value.image?.push(URL.createObjectURL(files[index]))
+            productDetails.value.image?.push('public/uploads/' + files[index]?.name)
     //         setting.value.value?.push({
     //             file: files[index],
     //             type: EventFormContentSettingTypes.FileInput,
@@ -339,7 +340,7 @@ const removeColor = (index) => {
 const saveProduct = async () => {
     const payload = {
         name: productDetails.value.name,
-        images: productDetails.value.images,
+        images: productDetails.value.image,
         description: productDetails.value.description,
         discountPrice: productDetails.value.discountPrice,
         price: productDetails.value.price,

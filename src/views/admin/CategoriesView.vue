@@ -18,7 +18,7 @@
                 <div class="flex-[0_0_31%] bg-[#FFFFFF] shadow-[0px_1px_4px_0px_rgba(21,34,50,0.08)] p-0 rounded-[8px]"
                     v-for="(category, index) in categories" :key="index" @click="toCategoryDetails(category.id)">
                     <div class="w-full">
-                        <img class="w-full object-cover" :src="category.image ? urlApi + category.image : ''" alt="">
+                        <img crossorigin="anonymous" class="w-full object-cover" :src="category.image ? urlApi + category.image : ''" alt="">
                     </div>
                     <div class="px-[28px] py-[20px]">
                         <div class="text-[#131523] font-bold text-base">

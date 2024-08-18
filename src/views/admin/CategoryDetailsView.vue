@@ -37,7 +37,7 @@
                     </div>
                     <button class="add-prod-btn">
                         <img :src="product?.image[0] ? urlApi + product.image[0] : '/images/add_product_icon.svg'" alt="">
-                        <div class="btn-text">Add Pr</div>
+                        <div class="btn-text" @click="toAddProduct">Add Pr</div>
                     </button>
                 </div>
             </div>
@@ -125,7 +125,8 @@ const handleUpload = (event) => {
     const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
     console.log(files);
 
-    // if (files.length) {
+    if (files && files.length > 0) {
+        categoryData.value.image = 'public/uploads/' + files[0]
     //     let max = Number(setting.value.max) - Number(setting.value.value.length);
 
     //     if (max > files.length) {
@@ -142,8 +143,12 @@ const handleUpload = (event) => {
     //             step: currentStep.value,
     //         });
     //     }
-    // }
+    }
     event.target.value = '';
+}
+
+const toAddProduct = () => {
+    router.push({ name: 'ProductDetailsView' })
 }
 
 const saveCategory = async () => {
@@ -156,6 +161,7 @@ const saveCategory = async () => {
         await storeCategory.updateCategory(categoryData.value)
         router.push({ name: 'CategoriesView' }).then(() => toastSuccess('Update Success'))
     } catch (error) {
+        initCategory()
         return error
     }
 }

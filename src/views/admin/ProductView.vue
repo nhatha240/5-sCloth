@@ -85,6 +85,14 @@
                     </div>
                 </template>
             </EasyDataTable>
+            <!-- <div class="flex items-center gap-2">
+                <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
+                    <img src="/images/page-prev-icon.svg" />
+                </button>
+                <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
+                    <img src="/images/page-next-icon.svg" />
+                </button>
+            </div> -->
             <PaginateAdmin
                 v-if="totalitem"
                 v-model:page="page"
@@ -189,6 +197,9 @@ onMounted(() => {
     initProducts()
 })
 
+const nextPage = ref('')
+const prevPage = ref('')
+
 const toPage = () => {
     initProducts()
 }
@@ -196,6 +207,7 @@ const toPage = () => {
 const initProducts = async () => {
     try {
         const params = {
+            // cursor: cursor,
             page: page.value,
             pageSize: pageSize.value,
         }
@@ -203,6 +215,8 @@ const initProducts = async () => {
         console.log(data);
         items.value = data?.results
         console.log(items.value);
+        nextPage.value = data?.nextCursor
+        prevPage.value = data?.prevCursor
         totalPage.value = data?.totalPages
         totalitem.value = data?.totalResults
     } catch (error) {
