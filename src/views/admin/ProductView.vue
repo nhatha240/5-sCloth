@@ -110,7 +110,7 @@
                 :titleEmpty="'Add Products'"
                 :contentEmpty="'Start making sales by adding your products.<br/>You can import and manage your products at any time.'"
                 :buttonText="'Add Product'"
-                :pageDataAddName="'ProductDetailsView'"
+                :pageDataAddName="'CreateProductView'"
             ></EmptyAdminData>
         </div>
     </div>
@@ -228,7 +228,7 @@ const showRow = (item) => {
     router.push({ name: 'ProductDetailsView', params: { id: item.id } })
 };
 const addProduct = () => {
-    router.push({ name: 'ProductDetailsView' })
+    router.push({ name: 'CreateProductView' })
 }
 const openDeleteModal = () => {
     modalDelete.value = true

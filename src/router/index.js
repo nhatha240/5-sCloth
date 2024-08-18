@@ -201,7 +201,15 @@ const router = createRouter({
           }
         },
         {
-          path: 'products-details/:id?',
+          path: 'create-product',
+          name: 'CreateProductView',
+          component: ProductDetailsView,
+          meta: {
+            title: 'CreateProduct'
+          }
+        },
+        {
+          path: 'update-product/:id?',
           name: 'ProductDetailsView',
           component: ProductDetailsView,
           meta: {

@@ -148,7 +148,7 @@ const handleUpload = (event) => {
 }
 
 const toAddProduct = () => {
-    router.push({ name: 'ProductDetailsView' })
+    router.push({ name: 'CreateProductView' })
 }
 
 const saveCategory = async () => {

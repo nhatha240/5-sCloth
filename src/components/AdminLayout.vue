@@ -200,7 +200,7 @@ const routeList = ref([
         label: 'Orders', path: '/admin/orders', icon: '/images/orders_icon.svg', notifyCount: '', name: ['OrderListView', 'OrderDetailsView']
     },
     {
-        label: 'Products', path: '/admin/products', icon: '/images/products_icon.svg', notifyCount: '', name: ['ProductViewAdmin', 'ProductDetailsView']
+        label: 'Products', path: '/admin/products', icon: '/images/products_icon.svg', notifyCount: '', name: ['ProductViewAdmin', 'ProductDetailsView', 'CreateProductView']
     },
     {
         label: 'Categories', path: '/admin/categories', icon: '/images/categories_icon.svg', notifyCount: '', name: ['CategoriesView', 'CategoryDetailsView']
