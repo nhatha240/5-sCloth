@@ -8,7 +8,7 @@
                 Email
             </label>
             <Field 
-                v-slot="{ field, errors }"
+                v-slot="{ field, errors, meta }"
                 v-model="admin.email"
                 :name="'email'"
                 :rules="'required|email'"
@@ -18,7 +18,7 @@
                     type="email"
                     v-bind="field"
                 >
-                <div class="text-red-500 mb-8">
+                <div class="text-red-500 mb-8" v-if="meta.touched && errors[0]">
                     {{ errors[0] }}
                 </div>
             </Field>
@@ -26,7 +26,7 @@
                 Password
             </label>
             <Field 
-                v-slot="{ field, errors }"
+                v-slot="{ field, errors, meta }"
                 v-model="admin.password"
                 :name="'password'"
                 :rules="'required'"
@@ -36,7 +36,7 @@
                     type="password"
                     v-bind="field"
                 >
-                <div class="text-red-500">
+                <div class="text-red-500 mb-8" v-if="meta.touched && errors[0]">
                     {{ errors[0] }}
                 </div>
             </Field>

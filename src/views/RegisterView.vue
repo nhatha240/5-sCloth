@@ -3,7 +3,7 @@
     <div class="signup-box mx-auto my-[50px] w-[80%]">
         <div class="bg-[#D651FF] rounded-[10px] h-[88px]"></div>
         <div class="row m-0">
-            <Form ref="form" @submit="confirmRegister" class="signup-input-layout flex-[0_0_50%]" v-if="isRegister">
+            <Form ref="form" @submit="confirmRegister" class="signup-input-layout flex-[0_0_50%]">
                 <div class="">
                     <div class="label-text">Tên *</div>
                     <input type="text" v-model="userInfo.name">
@@ -56,22 +56,6 @@
                     Đăng Kí
                 </button>
             </Form>
-            <form @submit.prevent="login" class="signup-input-layout flex-[0_0_50%]" v-else>
-                <div class="">
-                    <div class="label-text">Email *</div>
-                    <input type="email" v-model="user.email" required>
-                </div>
-                <div class="">
-                    <div class="label-text">Mật Khẩu*</div>
-                    <div class="relative">
-                        <input type="password" v-model="user.password" required>
-                        <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
-                    </div>
-                </div>
-                <button class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
-                    Đăng Nhập
-                </button>
-            </form>
             <div class="flex-[0_0_50%] bg-[#F0E4F4] rounded-[12px]">
                 <div class="flex flex-col items-center px-[24px] py-[44px]">
                     <img crossorigin="anonymous" class="" src="/images/main_logo_no_bg.svg" alt="">
@@ -86,11 +70,7 @@
                         Tiếp tục với Google
                     </button>
                     <div class="text-center font-medium text-xl">Hoặc</div>
-                    <div class="text-center font-medium text-xl" v-if="isLogin">
-                        Tôi chưa có tài khoản
-                        <span class="text-[#005491] cursor-pointer" @click="toRegister">ĐĂNG KÍ ngay!!</span>
-                    </div>
-                    <div class="text-center font-medium text-xl" v-else>
+                    <div class="text-center font-medium text-xl">
                         Tôi đã có tài khoản
                         <span class="text-[#005491] cursor-pointer" @click="toLogin">ĐĂNG Nhập ngay!!</span>
                     </div>
@@ -107,10 +87,6 @@ import router from '@/router';
 import { useForm } from "vee-validate";
 
 const storeAuth = useAuthStore()
-const user = ref({
-    email: '',
-    password: ''
-})
 const userInfo = ref({
     name: '',
     email: '',
@@ -119,27 +95,12 @@ const userInfo = ref({
     phone: '',
     address: '',
 })
-const isRegister = ref(false)
 const isLogin = ref(true)
 const toLogin = () => {
-    isRegister.value = false
-    isLogin.value = true
-    user.value = {
-        email: '',
-        password: ''
-    }
+    router.push({ name: 'LoginView' })
 }
 const toRegister = () => {
-    router.push({ name: 'RegisterView' })
-}
-
-const login = async () => {
-    try {
-        await storeAuth.loginUser(user.value)
-        router.push(({ name: 'home' }))
-    } catch (error) {
-        return error
-    }
+    
 }
 
 const { handleSubmit } = useForm(userInfo.value);

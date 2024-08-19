@@ -12,7 +12,7 @@
             </div>
             <div class="flex gap-[15px] items-center">
                 <input class="input-white-field w-[488px]" type="text" placeholder="Nhập email của bạn">
-                <button class="sign-up-btn">
+                <button class="sign-up-btn" @click="toRegister">
                     Đăng Ký
                 </button>
             </div>
@@ -40,22 +40,21 @@
             <div class="flex-[0_0_15%]">
                 <div class="text-info-footer pb-[27px]">Quick Links</div>
                 <div class="flex flex-col gap-[20px]">
-                    <a href="#" class="">About us</a>
-                    <a href="#" class="">Contact us</a>
-                    <a href="#" class="">Products</a>
-                    <a href="#" class="">Login</a>
-                    <a href="#" class="">Sign Up</a>
+                    <a href="/about-us" class="">About us</a>
+                    <a href="/contact-us" class="">Contact us</a>
+                    <a href="/product" class="">Products</a>
+                    <a href="/login" class="">Login</a>
+                    <a href="/register" class="">Sign Up</a>
                 </div>
             </div>
             <div class="flex-[0_0_15%]">
                 <div class="text-info-footer pb-[27px]">Customer Area</div>
                 <div class="flex flex-col gap-[20px]">
                     <a href="#" class="">My Account</a>
-                    <a href="#" class="">Orders</a>
-                    <a href="#" class="">Tracking List</a>
-                    <a href="#" class="">Terms</a>
-                    <a href="#" class="">Privacy Policy</a>
-                    <a href="#" class="">FAQ</a>
+                    <a href="/order" class="">Orders</a>
+                    <a href="/terms" class="">Terms</a>
+                    <a href="/privacy-policy" class="">Privacy Policy</a>
+                    <a href="/faq" class="">FAQ</a>
                 </div>
             </div>
             <div class="flex-[0_0_427px]">
@@ -65,7 +64,7 @@
                     ut</div>
                 <div class="flex items-center gap-[15px]">
                     <input class="input-gray-field w-[268px]" type="text" placeholder="Type your email here">
-                    <button class="subscribe-purple-button">Subscribe</button>
+                    <button class="subscribe-purple-button" @click="toRegister">Subscribe</button>
                 </div>
             </div>
         </div>
@@ -77,7 +76,12 @@
 </template>
 
 <script lang="js" setup>
+import router from '@/router';
 
+const toRegister = () => {
+    router.push({ name: 'RegisterView' })
+    scrollTo(0, 0)
+}
 </script>
 
 <style scoped>

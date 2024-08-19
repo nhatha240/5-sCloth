@@ -92,6 +92,27 @@
                         </label>
                         Is best seller
                     </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <label class="switch">
+                            <input type="checkbox" :checked="productDetails.isFastSale" v-model="productDetails.isFastSale">
+                            <span class="slider round"></span>
+                        </label>
+                        Is FlashSale
+                    </div>
+                    <div class="flex flex gap-[28px] pb-4" v-if="productDetails.isFastSale">
+                        <div class="w-50">
+                            <div class="mb-1">Sale start date</div>
+                            <input class="form-control w-full" type="date" placeholder="start date" v-model="productDetails.fastSaleStartDate">
+                        </div>
+                        <div class="w-50">
+                            <div class="mb-1">Sale start date</div>
+                            <input class="form-control w-full" type="date" placeholder="end date" v-model="productDetails.fastSaleEndDate">
+                        </div>
+                    </div>
+                    <div class="flex flex-col gap-6 pb-4" v-if="productDetails.isFastSale">
+                        <div class="mb-1">FlashSale price</div>
+                        <input class="form-control w-full" type="number" placeholder="Flashsale price" v-model="productDetails.fastSalePrice">
+                    </div>
                     <div class="flex flex-col gap-6 border-b border-[#D7DBEC] pb-4">
                         <div class="mb-1">Quantity</div>
                         <input class="form-control w-full" type="number" placeholder="Quantity" v-model="productDetails.quantity">
@@ -202,6 +223,7 @@ import { useProductStore } from '@/stores/ProductStore';
 import { useCategoryStore } from '@/stores/CategoryStore';
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
 import { toastSuccess } from '@/constant/commonUsage'
+import { formatDate } from '@/constant/commonFunction';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
@@ -229,8 +251,12 @@ const productDetails = ref({
     status: '',
     isSale: false,
     isBestSeller: false,
+    isFastSale: false,
     quantity: 0,
     tags: [],
+    fastSaleStartDate: '',
+    fastSaleEndDate: '',
+    fastSalePrice: '',
 })
 const tagInput = ref('')
 
@@ -249,6 +275,8 @@ const initProductDetails = async () => {
     try {
         const data = await storeProduct.getProduct(productId.value)
         productDetails.value = data;
+        productDetails.value.fastSaleStartDate = formatDate(productDetails.value.fastSaleStartDate, 'YYYY-MM-DD')
+        productDetails.value.fastSaleEndDate = formatDate(productDetails.value.fastSaleEndDate, 'YYYY-MM-DD')
     } catch (error) {
         return error
     }
@@ -282,6 +310,7 @@ async function blobUrlToBlob(blobUrl) {
 const dropFile = (event) => {
     handleUpload(event);
 }
+const imageFile = ref([])
 const handleUpload = async (event) => {
     const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
     console.log(files);
@@ -292,6 +321,8 @@ const handleUpload = async (event) => {
             
             // productDetails.value.image?.push(URL.createObjectURL(files[index]))
             uploadImg.value?.push(URL.createObjectURL(files[index]))
+            imageFile.value?.push(files[index])
+            console.log(imageFile.value);
             // productDetails.value.image?.push(files[index])
     //         setting.value.value?.push({
     //             file: files[index],
@@ -337,6 +368,41 @@ const removeColor = (index) => {
     productDetails.value?.options[0].color?.splice(index, 1)
 }
 
+const convertFormData = (data) => {
+    const formData = new FormData();
+
+    console.log(imageFile.value);
+    if (imageFile.value && imageFile.value?.length > 0) {
+        imageFile.value.forEach(file => {
+            formData.append('images', file, file.name);
+        });
+    }
+    Object.entries(data).forEach(([key, value]) => {
+        if (key === 'image' || key === 'images') {
+            // Skip the 'image' key from JSON as we're handling it separately
+            return;
+        }
+        if (Array.isArray(value)) {
+            value.forEach((item, index) => {
+                if (typeof item === 'object' && item !== null) {
+                    Object.entries(item).forEach(([subKey, subValue]) => {
+                        formData.append(`${key}[${index}][${subKey}]`, subValue);
+                    });
+                } else {
+                    formData.append(`${key}[]`, item);
+                }
+            });
+        } else if (typeof value === 'object' && value !== null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                formData.append(`${key}[${subKey}]`, subValue);
+            });
+        } else {
+            formData.append(key, value);
+        }
+    });
+    return formData;
+}
+
 const saveProduct = async () => {
     // uploadImg.value.forEach(async (img) => {
     //     const blobImg = await blobUrlToBlob(img).then(blob => {
@@ -347,24 +413,50 @@ const saveProduct = async () => {
     //     formData.append('productName', 'Your Product Name');
     //     console.log(formData)
     // });
-    uploadImg.value?.forEach((img) => {
-        productDetails.value.image?.push(img)
+    imageFile.value?.forEach((img) => {
+        console.log(img, 'img');
+        console.log(JSON.stringify(img), 'JSON.stringify');
+        productDetails.value.image?.push(JSON.stringify(img))
     })
-    const payload = {
-        name: productDetails.value.name,
-        images: productDetails.value.image,
-        description: productDetails.value.description,
-        discountPrice: productDetails.value.discountPrice,
-        price: productDetails.value.price,
-        category: productDetails.value.category,
-        size: productDetails.value?.options[0].size,
-        color: productDetails.value?.options[0].color,
-        status: productDetails.value.status ? 'public' : 'private',
-        isSale: productDetails.value.isSale,
-        isBestSeller: productDetails.value.isBestSeller,
-        quantity: productDetails.value.quantity,
-        tags: productDetails.value.tags,
+    let payload = {}
+    if (productDetails.value.isFastSale) {
+        payload = {
+            name: productDetails.value.name,
+            images: productDetails.value.image,
+            description: productDetails.value.description,
+            discountPrice: productDetails.value.discountPrice,
+            price: productDetails.value.price,
+            category: productDetails.value.category,
+            size: productDetails.value?.options[0].size,
+            color: productDetails.value?.options[0].color,
+            status: productDetails.value.status ? 'public' : 'private',
+            isSale: productDetails.value.isSale,
+            isBestSeller: productDetails.value.isBestSeller,
+            isFastSale: productDetails.value.isFastSale,
+            fastSaleStartDate: productDetails.value.fastSaleStartDate,
+            fastSaleEndDate: productDetails.value.fastSaleEndDate,
+            fastSalePrice: productDetails.value.fastSalePrice,
+            quantity: productDetails.value.quantity,
+            tags: productDetails.value.tags,
+        }
+    } else {
+        payload = {
+            name: productDetails.value.name,
+            images: productDetails.value.image,
+            description: productDetails.value.description,
+            discountPrice: productDetails.value.discountPrice,
+            price: productDetails.value.price,
+            category: productDetails.value.category,
+            size: productDetails.value?.options[0].size,
+            color: productDetails.value?.options[0].color,
+            status: productDetails.value.status ? 'public' : 'private',
+            isSale: productDetails.value.isSale,
+            isBestSeller: productDetails.value.isBestSeller,
+            quantity: productDetails.value.quantity,
+            tags: productDetails.value.tags,
+        }
     }
+    const formData = convertFormData(payload)
     // const formData = new FormData();
     // for ( var key in payload ) {
     //     formData.append(key, JSON.stringify(payload[key]));
@@ -372,14 +464,14 @@ const saveProduct = async () => {
     // console.log(formData)
     if (productId.value) {
         try {
-            await storeProduct.updateProduct(productId.value, payload)
+            await storeProduct.updateProduct(productId.value, formData)
             router.push({ name: 'ProductViewAdmin' }).then(() => toastSuccess('Update Success'))
         } catch (error) {
             return error
         }
     } else {
         try {
-            await storeProduct.createProduct(payload)
+            await storeProduct.createProduct(formData)
             router.push({ name: 'ProductViewAdmin' }).then(() => toastSuccess('Create Success'))
         } catch (error) {
             return error

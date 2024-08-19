@@ -1,6 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
+import AboutUsView from '@/views/AboutUsView.vue'
+import ContactUsView from '@/views/ContactUsView.vue'
+import TermsView from '@/views/TermsView.vue'
+import PrivacyPolicyView from '@/views/FAQView.vue'
+import FAQView from '@/views/PrivacyPolicyView.vue'
 import Checkout from '@/views/CheckoutView.vue'
 import OrderView from '@/views/OrderView.vue'
 import ShopView from '@/views/ShopView.vue'
@@ -113,6 +119,14 @@ const router = createRouter({
           }
         },
         {
+          path: '/register',
+          name: 'RegisterView',
+          component: RegisterView,
+          meta: {
+            breadcrumb: 'Checkout'
+          }
+        },
+        {
           path: '/payment',
           name: 'PaymentView',
           component: PaymentView,
@@ -148,7 +162,47 @@ const router = createRouter({
           meta: {
             breadcrumb: 'Books'
           }
-        }
+        },
+        {
+          path: '/about-us',
+          name: 'AboutUsView',
+          component: AboutUsView,
+          meta: {
+            breadcrumb: 'AboutUs'
+          }
+        },
+        {
+          path: '/contact-us',
+          name: 'ContactUsView',
+          component: ContactUsView,
+          meta: {
+            breadcrumb: 'ContactUs'
+          }
+        },
+        {
+          path: '/terms',
+          name: 'TermsView',
+          component: TermsView,
+          meta: {
+            breadcrumb: 'Terms'
+          }
+        },
+        {
+          path: '/privacy-policy',
+          name: 'PrivacyPolicyView',
+          component: PrivacyPolicyView,
+          meta: {
+            breadcrumb: 'PrivacyPolicy'
+          }
+        },
+        {
+          path: '/faq',
+          name: 'FAQView',
+          component: FAQView,
+          meta: {
+            breadcrumb: 'FAQ'
+          }
+        },
       ],
       meta: {
         title: 'Home',

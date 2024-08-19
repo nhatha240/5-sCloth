@@ -57,7 +57,9 @@
               type="text">
           </div>
           <button
-            class="bg-[#D651FF] text-xl rounded-lg text-white flex items-center gap-[19px] py-[19px] pr-[14px] pl-[29px] font-semibold">
+            class="bg-[#D651FF] text-xl rounded-lg text-white flex items-center gap-[19px] py-[19px] pr-[14px] pl-[29px] font-semibold"
+            @click="searchProduct"
+          >
             Tìm kiếm
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M5 12H19" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -405,7 +407,10 @@ import { onMounted, ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import HeaderMain from '@/components/HeaderMain.vue'
 import HotProductSlide from '@/components/HotProductSlide.vue'
+import { useProductStore } from '../stores/ProductStore'
+import router from '@/router';
 
+const storeProduct = useProductStore()
 const sizes = ref([
   { label: 'L', value: 'L' },
   { label: 'XL', value: 'XL' },
@@ -700,6 +705,15 @@ const onSwiper = (swiper) => {
 const onSlideChange = () => {
   console.log('slide change');
 };
+
+const searchProduct = async () => {
+  try {
+    await storeProduct.getProduct()
+    router.push({ name: '' })
+  } catch (error) {
+    return error;
+  }
+}
 </script>
 <style>
 .search-details-btn {
