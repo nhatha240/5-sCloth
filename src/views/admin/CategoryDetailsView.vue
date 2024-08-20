@@ -69,7 +69,7 @@
                                 @dragenter.prevent="setActive" >
                                 <div class="image-viewer-layout">
                                     <div class="file-image-review">
-                                        <img crossorigin="anonymous"  class="image-view" :src="uploadImg" alt="" v-if="uploadImg">
+                                        <img crossorigin="anonymous"  class="image-view" :src="uploadImg?.url" alt="" v-if="uploadImg">
                                         <img crossorigin="anonymous"  class="image-view" :src="urlApi + categoryData.image" alt="" v-else>
                                         <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                     </div>
@@ -128,14 +128,62 @@ const handleUpload = (event) => {
     console.log(files);
 
     if (files && files.length > 0) {
-        categoryData.value.image = 'public/uploads/' + files[0]
-        uploadImg.value = URL.createObjectURL(files[0])
+        // categoryData.value.image = 'public/uploads/' + files[0]
+        // uploadImg.value = URL.createObjectURL(files[0])
+        processFiles(files[0])
     }
     event.target.value = '';
 }
 
+const processFiles = (file) => {
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            uploadImg.value = {
+                name: file.name,
+                url: e.target.result,
+                file: file,
+            };
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('Please upload only images.');
+    }
+};
+
 const toAddProduct = () => {
     router.push({ name: 'CreateProductView' })
+}
+
+const convertFormData = (data) => {
+    const formData = new FormData();
+
+    if (uploadImg.value) {
+        formData.append('images', uploadImg.value.file);
+    }
+    Object.entries(data).forEach(([key, value]) => {
+        if (key === 'image' || key === 'images') {
+            return;
+        }
+        if (Array.isArray(value)) {
+            value.forEach((item, index) => {
+                if (typeof item === 'object' && item !== null) {
+                    Object.entries(item).forEach(([subKey, subValue]) => {
+                        formData.append(`${key}[${index}][${subKey}]`, subValue);
+                    });
+                } else {
+                    formData.append(`${key}[]`, item);
+                }
+            });
+        } else if (typeof value === 'object' && value !== null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                formData.append(`${key}[${subKey}]`, subValue);
+            });
+        } else {
+            formData.append(key, value);
+        }
+    });
+    return formData;
 }
 
 const saveCategory = async () => {
@@ -145,7 +193,8 @@ const saveCategory = async () => {
         delete categoryData.value.__v
         delete categoryData.value.itemsCount
         delete categoryData.value.products
-        await storeCategory.updateCategory(categoryData.value)
+        const formData = convertFormData(categoryData.value)
+        await storeCategory.updateCategory(formData)
         router.push({ name: 'CategoriesView' }).then(() => toastSuccess('Update Success'))
     } catch (error) {
         initCategory()

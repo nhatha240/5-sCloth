@@ -200,25 +200,25 @@ onMounted(() => {
 const nextPage = ref('')
 const prevPage = ref('')
 
-const toPage = (cursor) => {
-    initProducts(cursor)
+const toPage = () => {
+    initProducts()
 }
 
-const initProducts = async (cursor) => {
+const initProducts = async () => {
     try {
         const params = {
-            cursor: cursor,
-            // page: page.value,
+            // cursor: cursor,
+            page: page.value,
             pageSize: pageSize.value,
         }
         const data = await storeProduct.getProducts(params)
         console.log(data);
-        items.value = data?.results
+        items.value = data?.results?.results
         console.log(items.value);
-        nextPage.value = data?.nextCursor
-        prevPage.value = data?.prevCursor
-        totalPage.value = data?.totalPages
-        totalitem.value = data?.totalResults
+        nextPage.value = data?.results?.nextCursor
+        prevPage.value = data?.results?.prevCursor
+        totalPage.value = data?.results?.totalPages
+        totalitem.value = data?.results?.totalResults
     } catch (error) {
         return error
     }

@@ -131,7 +131,7 @@
           </MenuItems>
         </Menu>
         <button class="btn-pink px-[20px]" v-else @click="() => {router.push({ name: 'LoginView' })}">
-          Login
+          Đăng nhập
         </button>
       </div>
     </nav>

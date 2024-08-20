@@ -50,7 +50,7 @@
                                 <div class="image-viewer-layout">
                                     <div class="file-image-review" v-for="(image, index) in selectedImages"
                                         :key="index">
-                                        <img class="image-view" :src="image.url" alt="Selected Image" />
+                                        <img crossorigin="anonymous" class="image-view" :src="image.url" alt="Selected Image" />
                                         <button @click="removeImage(index)">Remove</button>
                                     </div>
                                 </div>
@@ -286,12 +286,13 @@ const initProductDetails = async () => {
     try {
         const data = await storeProduct.getProduct(productId.value)
         productDetails.value = data;
-        productDetails.value.images = data.images.map((image) => {
+        productDetails.value.images = data.image.map((image) => {
             return {
                 name: image,
                 url: urlApi + image,
             };
         });
+        selectedImages.value = productDetails.value.images
         productDetails.value.fastSaleStartDate = formatDate(productDetails.value.fastSaleStartDate, 'YYYY-MM-DD')
         productDetails.value.fastSaleEndDate = formatDate(productDetails.value.fastSaleEndDate, 'YYYY-MM-DD')
     } catch (error) {

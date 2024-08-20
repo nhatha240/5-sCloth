@@ -43,7 +43,7 @@
                     <a href="/about-us" class="">About us</a>
                     <a href="/contact-us" class="">Contact us</a>
                     <a href="/product" class="">Products</a>
-                    <a href="/login" class="">Login</a>
+                    <a class="cursor-pointer" @click="toPage('login')">Login</a>
                     <a href="/register" class="">Sign Up</a>
                 </div>
             </div>
@@ -80,6 +80,11 @@ import router from '@/router';
 
 const toRegister = () => {
     router.push({ name: 'RegisterView' })
+    scrollTo(0, 0)
+}
+
+const toPage = () => {
+    router.push({ name: 'LoginView' })
     scrollTo(0, 0)
 }
 </script>
