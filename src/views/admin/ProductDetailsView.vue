@@ -397,7 +397,7 @@ const saveProduct = async () => {
     formData.append('quantity', productDetails.value.quantity)
     if (selectedImages.value.length > 0) {
         selectedImages.value.forEach((image) => {
-            formData.append(`images`, image.file)
+            formData.append(`image`, image.file)
         })
     }
     console.log('cate',productDetails.value.category)
