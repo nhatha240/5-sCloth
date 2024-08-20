@@ -401,7 +401,6 @@ const saveProduct = async () => {
             formData.append(`image`, image.file)
         })
     }
-    console.log('cate',productDetails.value.category)
     if (productDetails.value.category.length > 0) {
         console.log('cate length',productDetails.value.category)
         productDetails.value.category.forEach((category, key) => {

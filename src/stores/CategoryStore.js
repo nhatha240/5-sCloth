@@ -11,9 +11,9 @@ export const useCategoryStore = defineStore('category', {
         categoriesList: (state) => state.categories,
     },
     actions: {
-        async createCategory({image, description, name}) {
+        async createCategory(formData) {
             return new Promise((resolve, reject) => {
-                CategoryService.createCategory({image, description, name})
+                CategoryService.createCategory(formData)
                     .then(({ data }) => {
                         resolve(data)
                     })
