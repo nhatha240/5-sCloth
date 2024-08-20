@@ -390,17 +390,33 @@ const saveProduct = async () => {
     formData.append('description', productDetails.value.description)
     formData.append('discountPrice', productDetails.value.discountPrice)
     formData.append('price', productDetails.value.price)
-    formData.append('category', productDetails.value.category)
-    formData.append('size', productDetails.value?.options[0].size)
-    formData.append('color', productDetails.value?.options[0].color)
     formData.append('status', productDetails.value.status ? 'public' : 'private')
     formData.append('isSale', productDetails.value.isSale)
     formData.append('isBestSeller', productDetails.value.isBestSeller)
     formData.append('quantity', productDetails.value.quantity)
-    formData.append('tags', productDetails.value.tags)
     if (selectedImages.value.length > 0) {
         selectedImages.value.forEach((image, key) => {
             formData.append(`images[${key}]`, image.file)
+        })
+    }
+    if (productDetails.value.category > 0) {
+        productDetails.value.category.forEach((category, key) => {
+            formData.append(`category[${key}]`, category)
+        })
+    }
+    if (productDetails.value.tags > 0) {
+        productDetails.value.tags.forEach((tags, key) => {
+            formData.append(`tags[${key}]`, tags)
+        })
+    }
+    if (productDetails.value?.options[0].size > 0) {
+        productDetails.value?.options[0].size.value.forEach((size, key) => {
+            formData.append(`size[${key}]`, size)
+        })
+    }
+    if (productDetails.value?.options[0].color > 0) {
+        productDetails.value?.options[0].color.value.forEach((color, key) => {
+            formData.append(`color[${key}]`, color)
         })
     }
     if (productId.value) {
