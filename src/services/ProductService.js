@@ -12,7 +12,7 @@ export default {
     async getAllProduct(query) {
         const params = {
             page: query?.page,
-            limit: query?.pageSize
+            limit: query?.pageSize,
         }
         return await API.get('/products', {params})
     },
@@ -49,5 +49,11 @@ export default {
             responseType: 'blob'
         }
         return await API.get('/admin/csv/products', '', config)
+    },
+    async getProductTopSale() {
+        return await API.get('/products/top-sell')
+    },
+    async getHotProduct() {
+        return await API.get('/products/noi-bat')
     },
 }

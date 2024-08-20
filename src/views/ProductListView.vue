@@ -37,7 +37,7 @@
                         <div class="relative w-full mb-[30px] group hover:bg-inherit">
                             <img crossorigin="anonymous" class="object-cover rounded-[20px]" 
                                 :src="product.image[0] == 'public/uploads/products/default.jpg' 
-                                    ? imageList[Math.floor(Math.random() * (5 - 0) + 0)] : product.image[0]" 
+                                    ? imageList[Math.floor(Math.random() * (5 - 0) + 0)] : urlApi + product.image[0]" 
                                 alt=""
                                 >
                             <div class="absolute top-[28px] left-0" v-if="product.isBestSeller">
@@ -115,12 +115,13 @@ import { useProductStore } from '@/stores/ProductStore'
 import { useCategoryStore } from '@/stores/CategoryStore'
 import { toastSuccess } from '@/constant/commonUsage'
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
 const storeCategory = useCategoryStore()
 const route = useRoute()
 const router = useRouter()
 const page = ref(route?.query?.page ? route.query.page : 1)
-const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 100)
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 10)
 const productList = ref([])
 const imageList = ref([
     '/images/product_shirt1.svg',
@@ -171,7 +172,9 @@ const initCategories = async () => {
 }
 
 const findCategoryName = (id) => {
-    return storeCategory.categories?.find((category) => category.id == id).name;
+    if (storeCategory.categories) {
+        return storeCategory.categories?.find((category) => category.id == id)?.name;
+    }
 }
 
 const initProducts = async () => {
@@ -182,11 +185,11 @@ const initProducts = async () => {
         }
         const data = await storeProduct.getAllProduct(params)
         console.log(data);
-        if (data?.results && data?.results?.length > 0) {
-            productList.value = data?.results
+        if (data?.results?.results && data?.results?.results?.length > 0) {
+            productList.value = data?.results?.results
         }
-        totalPage.value = data?.totalPages
-        totalItems.value = data?.totalResults
+        totalPage.value = data?.results?.totalPages
+        totalItems.value = data?.results?.totalResults
     } catch (error) {
         console.log(error)
     }

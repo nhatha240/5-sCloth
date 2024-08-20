@@ -65,7 +65,7 @@
           <div class="flex-[0_0_60%] flex gap-[21px] flex-grow">
             <div class="w-1/2" v-for="(img, i) in product.image" :key="i">
               <img crossorigin="anonymous" :src="img == 'public/uploads/products/default.jpg' 
-                                    ? imageList[Math.floor(Math.random() * (1 - 0) + 0)] : img"  alt="Product front" class="w-full object-cover">
+                                    ? imageList[Math.floor(Math.random() * (1 - 0) + 0)] : urlApi + img"  alt="Product front" class="w-full object-cover">
             </div>
           </div>
 
@@ -193,6 +193,7 @@ import HeaderMain from '@/components/HeaderMain.vue'
 import { generateSingleData } from '../constant/commonFunction'
 import { useProductStore } from '@/stores/ProductStore'
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const route = useRoute()
 const router = useRouter()
 const storeProduct = useProductStore()

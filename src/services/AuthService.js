@@ -30,5 +30,11 @@ export default {
   },
   async refreshAdminToken(token) {
     return await API.post(`/admin/refresh-tokens`, token)
-  }
+  },
+  async updateAdminAccount(payload) {
+    return await API.post(`/admin/update`, payload)
+  },
+  async registerAdminAccount(payload) {
+    return await API.post(`/admin/register`, payload)
+  },
 }

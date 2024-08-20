@@ -153,7 +153,7 @@
     <div class="">
       <div class="flex justify-between mx-[150px] pb-[80px]">
         <div class="font-bold text-4xl">Sản phẩm nổi bật</div>
-        <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
+        <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toProductList">
           Xem Thêm
           <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
         </div>
@@ -164,37 +164,43 @@
           <swiper-slide v-for="(product, index) in newProducts" :key="index">
             <div class="grid grid-cols-2 p-[50px] bg-[#FAFAFA] rounded-[10px] gap-[80px]">
               <div class="col-span-1 w-[270px]">
-                <img crossorigin="anonymous" :src="product.product_image" alt="">
+                <img crossorigin="anonymous" 
+                  :src="product?.image && product?.image[0] !== 'public/uploads/products/default.jpg' 
+                    ? urlApi + product.image[0] : `/images/slide_main_image${Math.floor(Math.random() * (2 - 1) + 0)}.svg`"
+                  alt=""
+                >
               </div>
               <div class="col-span-1 flex flex-col justify-between">
                 <div class="flex items-center gap-8">
-                  <div class="pr-[34px] new-product-tag">
-                    {{ product.tag }}
+                  <div class="flex items-center">
+                    <div class="pr-[34px] new-product-tag" v-for="(tag, index) in product.tags" :key="index">
+                      {{ tag }}{{ (index < tags?.length - 1 && index % 2 === 0) ? ', ' : '' }}
+                    </div>
                   </div>
                   <div class="rating pr-[16px] flex items-center">
                     <img crossorigin="anonymous" class="cursor-pointer"
-                      :src="star.rate ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
-                      v-for="(star, i) in product.rating" :key="i">
-                    <div class="review-count pl-4">{{ product.reviews_count }} Reviews</div>
+                      :src="product.userRating >= star ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
+                      v-for="star in 5" :key="star">
+                    <div class="review-count pl-4">{{ product.totalRating }} Reviews</div>
                   </div>
                 </div>
                 <div class="flex flex-col items-center pt-[26px] prod-name-text">
-                  {{ product.product_name }}
-                  <span class="prod-details-text">{{ product.product_details }}</span>
+                  {{ product.name }}
+                  <span class="prod-details-text">{{ product.description }}</span>
                 </div>
                 <div class="flex items-center pt-[19px] gap-6">
-                  <div class="main-price">{{ product.product_sale_price }}</div>
-                  <span class="sub-price">{{ product.product_price }}</span>
+                  <div class="main-price">${{ product.discountPrice }}</div>
+                  <span class="sub-price">${{ product.price }}</span>
                 </div>
                 <div class="flex items-center gap-[30px] pt-[68px]">
-                  <button class="add-cart-purple-button">
+                  <button class="add-cart-purple-button" @click="updateCart(product?._id, 1)">
                     <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                     Thêm vào giỏ
                   </button>
-                  <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
+                  <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="likeByUser(product?._id)">
                     <img crossorigin="anonymous" src="/images/heart_icon.svg" alt="">
                   </button>
-                  <div class="purple-text-500">Xem chi tiết</div>
+                  <div class="cursor-pointer purple-text-500" @click="toProduct(product?._id)">Xem chi tiết</div>
                 </div>
               </div>
             </div>
@@ -219,7 +225,7 @@
           <div class="black-text-500">Đảm bảo hoàn trả</div>
         </div>
       </div>
-      <HotProductSlide :saleWellProducts="saleWellProducts"></HotProductSlide>
+      <HotProductSlide :saleWellProducts="saleWellProducts" v-if="saleWellProducts && saleWellProducts?.length > 0"></HotProductSlide>
       <div class="px-[50px] mb-[150px]">
         <div class="flex justify-between pb-[80px]">
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
@@ -409,7 +415,9 @@ import HeaderMain from '@/components/HeaderMain.vue'
 import HotProductSlide from '@/components/HotProductSlide.vue'
 import { useProductStore } from '../stores/ProductStore'
 import router from '@/router';
+import { toastSuccess } from '@/constant/commonUsage';
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
 const sizes = ref([
   { label: 'L', value: 'L' },
@@ -697,6 +705,8 @@ const countdown = () => {
 };
 
 onMounted(() => {
+  initTopSale()
+  initHotProduct()
   timer.value = setInterval(countdown, 1000);
 });
 const onSwiper = (swiper) => {
@@ -713,6 +723,60 @@ const searchProduct = async () => {
   } catch (error) {
     return error;
   }
+}
+
+const initTopSale = async () => {
+  try {
+    const data = await storeProduct.getProductTopSale()
+    if (data && data?.length > 0) {
+      saleWellProducts.value = data;
+    }
+  } catch (error) {
+    return error
+  }
+}
+
+const initHotProduct = async () => {
+  try {
+    const data = await storeProduct.getHotProduct()
+    console.log(data)
+    if (data && data?.length > 0) {
+      newProducts.value = data;
+    }
+  } catch (error) {
+    return error
+  }
+}
+
+const toProductList = () => {
+    router.push({ name: 'ProductListView' })
+    scrollTo(0 ,0)
+}
+
+const toProduct = (id) => {
+    router.push({ name: 'ProductView', params: { id: id } })
+    scrollTo(0 ,0)
+}
+
+const likeByUser = (id) => {
+  try {
+        // toastSuccess('Add to cart success')
+    } catch (error) {
+        return error
+    }
+}
+
+const updateCart = async (id, quantity) => {
+    try {
+        const payload = {
+            productId: id,
+            quantity: quantity,
+        }
+        await storeProduct.addCart(payload)
+        toastSuccess('Add to cart success')
+    } catch (error) {
+        return error
+    }
 }
 </script>
 <style>

@@ -98,6 +98,24 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getProductTopSale() {
+            return new Promise((resolve, reject) => {
+                ProductService.getProductTopSale()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async getHotProduct() {
+            return new Promise((resolve, reject) => {
+                ProductService.getHotProduct()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
         async exportProductCsv(file_name) {
             return new Promise(() => {
                 ProductService.exportProductCsv()

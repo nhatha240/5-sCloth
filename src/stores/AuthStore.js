@@ -176,6 +176,24 @@ export const useAuthStore = defineStore('auth', {
           })
           .catch(({ response }) => reject(response))
       })
-    }
+    },
+    async updateAdminAccount(payload) {
+      return new Promise((resolve, reject) => {
+        AuthService.updateAdminAccount(payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    async registerAdminAccount(payload) {
+      return new Promise((resolve, reject) => {
+        AuthService.registerAdminAccount(payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
   }
 })
