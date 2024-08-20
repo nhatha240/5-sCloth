@@ -159,7 +159,7 @@ const convertFormData = (data) => {
     const formData = new FormData();
 
     if (uploadImg.value) {
-        formData.append('images', uploadImg.value.file);
+        formData.append('image', uploadImg.value.file);
     }
     Object.entries(data).forEach(([key, value]) => {
         if (key === 'image' || key === 'images') {
