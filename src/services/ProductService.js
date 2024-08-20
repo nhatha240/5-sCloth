@@ -23,9 +23,11 @@ export default {
         return await API.post(`/admin/create-product`, payload)
     },
     async updateProduct(id, payload) {
-        return await API.put(`/admin/update-product/${id}`, payload, 
-            {headers: {'Content-Type': 'multipart/form-data'}
-        })
+        return await API.putForm(`/admin/update-product/${id}`, payload,
+            {headers: {
+                'Content-Type': 'multipart/form-data'
+            }}
+        )
     },
     async deleteProduct(id) {
         return await API.delete(`/admin/delete-product/${id}`)

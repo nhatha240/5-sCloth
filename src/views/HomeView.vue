@@ -708,8 +708,8 @@ const onSlideChange = () => {
 
 const searchProduct = async () => {
   try {
-    await storeProduct.getProduct()
-    router.push({ name: '' })
+    // await storeProduct.getProduct()
+    router.push({ name: 'ProductView' })
   } catch (error) {
     return error;
   }

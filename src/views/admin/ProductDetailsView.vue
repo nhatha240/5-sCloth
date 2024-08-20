@@ -224,6 +224,8 @@ import { useCategoryStore } from '@/stores/CategoryStore';
 import AddCategoryPopup from '@/components/AddCategoryPopup.vue'
 import { toastSuccess } from '@/constant/commonUsage'
 import { formatDate } from '@/constant/commonFunction';
+import axios from 'axios'
+import { useAuthStore } from '@/stores/AuthStore';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
@@ -323,6 +325,7 @@ const handleUpload = async (event) => {
             uploadImg.value?.push(URL.createObjectURL(files[index]))
             imageFile.value?.push(files[index])
             console.log(imageFile.value);
+            processFiles(files[index])
             // productDetails.value.image?.push(files[index])
     //         setting.value.value?.push({
     //             file: files[index],
@@ -367,6 +370,23 @@ const removeSize = (index) => {
 const removeColor = (index) => {
     productDetails.value?.options[0].color?.splice(index, 1)
 }
+
+const processFiles = (files) => {
+  Array.from(files).forEach((file) => {
+    if (file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imageFile.value.push({
+          name: file.name,
+          url: e.target.result,
+        });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert('Please upload only images.');
+    }
+  });
+};
 
 const convertFormData = (data) => {
     const formData = new FormData();
@@ -457,11 +477,6 @@ const saveProduct = async () => {
         }
     }
     const formData = convertFormData(payload)
-    // const formData = new FormData();
-    // for ( var key in payload ) {
-    //     formData.append(key, JSON.stringify(payload[key]));
-    // }
-    // console.log(formData)
     if (productId.value) {
         try {
             await storeProduct.updateProduct(productId.value, formData)

@@ -15,7 +15,7 @@ const toggleLoading = (isLoading) => {
 apiClient.interceptors.request.use(
   (config) => {
     toggleLoading(true)
-    config.headers['Accept'] = 'application/json'
+    config.headers['Accept'] = '*/*'
     config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
     config.headers['Access-Control-Allow-Origin'] = '*'
     return config
