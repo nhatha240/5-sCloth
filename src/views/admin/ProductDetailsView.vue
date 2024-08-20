@@ -334,6 +334,7 @@ const processFiles = (files) => {
                 selectedImages.value.push({
                     name: file.name,
                     url: e.target.result,
+                    file: file,
                 });
             };
             reader.readAsDataURL(file);
@@ -395,30 +396,35 @@ const saveProduct = async () => {
     formData.append('isBestSeller', productDetails.value.isBestSeller)
     formData.append('quantity', productDetails.value.quantity)
     if (selectedImages.value.length > 0) {
-        selectedImages.value.forEach((image, key) => {
-            formData.append(`images[${key}]`, image.file)
+        selectedImages.value.forEach((image) => {
+            formData.append(`images`, image.file)
         })
     }
-    if (productDetails.value.category > 0) {
+    console.log('cate',productDetails.value.category)
+    if (productDetails.value.category.length > 0) {
+        console.log('cate length',productDetails.value.category)
         productDetails.value.category.forEach((category, key) => {
+            console.log('cate value',category)
             formData.append(`category[${key}]`, category)
         })
+    }else{
+        formData.append(`category[0]`, null)
     }
-    if (productDetails.value.tags > 0) {
+    if (productDetails.value.tags.length > 0) {
         productDetails.value.tags.forEach((tags, key) => {
             formData.append(`tags[${key}]`, tags)
         })
     }
-    if (productDetails.value?.options[0].size > 0) {
-        productDetails.value?.options[0].size.value.forEach((size, key) => {
+    if (productDetails.value?.options[0].size.length > 0) {
+        productDetails.value?.options[0].size.forEach((size, key) => {
             formData.append(`size[${key}]`, size)
         })
-    }
-    if (productDetails.value?.options[0].color > 0) {
-        productDetails.value?.options[0].color.value.forEach((color, key) => {
+    } 
+    if (productDetails.value?.options[0].color.length > 0) {
+        productDetails.value?.options[0].color.forEach((color, key) => {
             formData.append(`color[${key}]`, color)
         })
-    }
+    } 
     if (productId.value) {
         try {
             await storeProduct.updateProduct(productId.value, formData)
