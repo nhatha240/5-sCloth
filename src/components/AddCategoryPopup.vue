@@ -46,7 +46,7 @@
                     v-slot="{ field, errors }"
                     v-model="category.image"
                     :name="'categoryImage'"
-                    :rules="'required'"
+                    :rules="''"
                 >
                     <label for="formFile" class="form-label"></label>
                     <input class="form-control" type="file" id="formFile" accept="image/*" @change="handleUpload($event)">
@@ -112,10 +112,58 @@ const cancelModal = () => {
     emits('update:modelValue', false)
 }
 
+const convertFormData = (data) => {
+    const formData = new FormData();
+
+    if (category.value.image) {
+        formData.append('image', category.value.image);
+    }
+    Object.entries(data).forEach(([key, value]) => {
+        if (key === 'image' || key === 'images') {
+            return;
+        }
+        if (Array.isArray(value)) {
+            value.forEach((item, index) => {
+                if (typeof item === 'object' && item !== null) {
+                    Object.entries(item).forEach(([subKey, subValue]) => {
+                        formData.append(`${key}[${index}][${subKey}]`, subValue);
+                    });
+                } else {
+                    formData.append(`${key}[]`, item);
+                }
+            });
+        } else if (typeof value === 'object' && value !== null) {
+            Object.entries(value).forEach(([subKey, subValue]) => {
+                formData.append(`${key}[${subKey}]`, subValue);
+            });
+        } else {
+            formData.append(key, value);
+        }
+    });
+    return formData;
+}
+
+const processFiles = (file) => {
+    if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            category.value.image.value = {
+                name: file.name,
+                url: e.target.result,
+                file: file,
+            };
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('Please upload only images.');
+    }
+};
+
 const handleUpload = (event) => {
     const files = event.dataTransfer ? event.dataTransfer.files : event.target.files;
     if (files.length) {
-        category.value.image = '/public/uploads/' + files[0]?.name
+        // category.value.image = '/public/uploads/' + files[0]?.name
+        processFiles(files[0])
         // category.value.image = files[0]
         // const fileUrl = URL.createObjectURL(files[0])
         // category.value.image = fileUrl?.replace(window.location.protocol + '//' + window.location.host, import.meta.env.VITE_BASE_URL)
@@ -128,8 +176,14 @@ const onInvalidSubmitError = ({ errors }) => {
     return errors;
 };
 const addCategory = handleSubmit(async () => {
+        const formSubmit = new FormData();
+        formSubmit.append('name', 'abc')
+        formSubmit.append('description', 'test')
+        // formSubmit.append(`image`, category.value.image.file)
+        console.log(category.value);
+        console.log(category.value.name);
     try {
-        await storeCategory.createCategory(category.value)
+        await storeCategory.createCategory(formSubmit)
         toastSuccess('Success')
     } catch (error) {
         return error
