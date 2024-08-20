@@ -24,6 +24,14 @@
                 @update:deleteCustomer="deleteCustomer" @update:customerDetail="ratingDetail" 
                 :showSearchField="false" :fieldSearch="'userId.name'">
             </CustomersTable>
+            <div class="flex items-center gap-2">
+                <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
+                    <img crossorigin="anonymous" src="/images/page-prev-icon.svg" />
+                </button>
+                <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
+                    <img crossorigin="anonymous" src="/images/page-next-icon.svg" />
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -34,7 +42,9 @@ import router from '@/router';
 import { ref, onMounted } from 'vue';
 import _ from 'lodash'
 import { useUserStore } from '../../stores/UserStore';
+import { useRouter } from 'vue-router';
 
+const route = useRouter()
 const storeUser = useUserStore()
 const modalDelete = ref(false)
 const idSelected = ref([])
@@ -94,19 +104,28 @@ const headers = [
     { text: "Sao", value: "rating" },
     { text: "Ngày", value: "createdAt" },
 ];
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 10)
 const options = ref(['userId.name', 'comment', 'rating', 'createdAt'])
 
 const ratingDetail = (e) => {
     router.push({ name: 'RatingDetailsView', params: { id: e?._id } })
 }
 
+const toPage = (cursor) => {
+    initRatings(cursor)
+}
+
 onMounted(() => {
     initRatings()
 })
 
-const initRatings = async () => {
+const initRatings = async (cursor) => {
     try {
-        const data = await storeUser.listRating()
+        const params = {
+            pageSize: pageSize.value,
+            cursor: cursor
+        }
+        const data = await storeUser.listRating(params)
         console.log(data);
         if (data?.results) {
             items.value = data.results

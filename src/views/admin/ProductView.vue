@@ -85,14 +85,6 @@
                     </div>
                 </template>
             </EasyDataTable>
-            <div class="flex items-center gap-2">
-                <button :class="{ 'opacity-50': !prevPage }" :disabled="!prevPage" @click="toPage(prevPage)">
-                    <img crossorigin="anonymous" src="/images/page-prev-icon.svg" />
-                </button>
-                <button :class="{ 'opacity-50': !nextPage }" :disabled="!nextPage" @click="toPage(nextPage)">
-                    <img crossorigin="anonymous" src="/images/page-next-icon.svg" />
-                </button>
-            </div>
             <PaginateAdmin
                 v-if="totalitem"
                 v-model:page="page"

@@ -34,9 +34,12 @@
                                     @dragenter.prevent="setActive"
                                 >
                                     <div class="image-viewer-layout">
-                                        <div class="file-image-review">
-                                            <img crossorigin="anonymous"  class="image-view" :src="imageAccount?.url" alt="" v-if="imageAccount">
-                                            <!-- <img crossorigin="anonymous"  class="image-view" :src="urlApi + categoryData.image" alt="" v-else> -->
+                                        <div class="file-image-review" v-if="imageAccount?.url">
+                                            <img crossorigin="anonymous"  class="image-view" :src="imageAccount?.url" alt="" v-if="imageAccount?.url">
+                                            <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
+                                        </div>
+                                        <div class="file-image-review" v-if="storeAuth.admin.image">
+                                            <img crossorigin="anonymous"  class="image-view" :src="urlApi + storeAuth.admin.image" alt="" v-if="storeAuth.admin.image">
                                             <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                         </div>
                                     </div>

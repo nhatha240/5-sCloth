@@ -17,7 +17,8 @@ export default {
     async listRating(query) {
         const params = {
             page: query?.page,
-            limit: query?.pageSize
+            limit: query?.pageSize,
+            cursor: query?.cursor,
         }
         return await API.get(`/admin/list-rating`, {params})
     },
