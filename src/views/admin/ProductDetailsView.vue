@@ -51,7 +51,7 @@
                                     <div class="file-image-review" v-for="(image, index) in selectedImages"
                                         :key="index">
                                         <img crossorigin="anonymous" class="image-view" :src="image.url" alt="Selected Image" />
-                                        <button @click="removeImage(index)">Remove</button>
+                                        <button class="z-10" @click="removeImage(index)">Remove</button>
                                     </div>
                                 </div>
                                 <label for="file" class="upload-btn">Add File</label>
@@ -99,6 +99,14 @@
                             <span class="slider round"></span>
                         </label>
                         Is FlashSale
+                    </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <label class="switch">
+                            <input type="checkbox" :checked="productDetails.trending"
+                                v-model="productDetails.trending">
+                            <span class="slider round"></span>
+                        </label>
+                        Xu hướng
                     </div>
                     <div class="flex flex gap-[28px] pb-4" v-if="productDetails.isFastSale">
                         <div class="w-50">
@@ -262,6 +270,7 @@ const productDetails = ref({
     isSale: false,
     isBestSeller: false,
     isFastSale: false,
+    trending: false,
     quantity: 0,
     tags: [],
     fastSaleStartDate: '',
@@ -282,19 +291,48 @@ const backToProduct = () => {
     router.push({ name: 'ProductViewAdmin' })
 }
 
+async function getFileFromImageSource(imageSource) {
+    try {
+        // Fetch the image data
+        const response = await fetch(imageSource);
+
+        // Get the blob data
+        const blob = await response.blob();
+        // Create a File object from the blob
+        const file = new File([blob], 'image.png', { type: blob.type });
+
+        return file;
+    } catch (error) {
+        console.error('Error converting image source to File:', error);
+        return null;
+    }
+}
+
 const initProductDetails = async () => {
     try {
         const data = await storeProduct.getProduct(productId.value)
-        productDetails.value = data;
-        productDetails.value.images = data.image.map((image) => {
-            return {
-                name: image,
-                url: urlApi + image,
-            };
-        });
-        selectedImages.value = productDetails.value.images
-        productDetails.value.fastSaleStartDate = formatDate(productDetails.value.fastSaleStartDate, 'YYYY-MM-DD')
-        productDetails.value.fastSaleEndDate = formatDate(productDetails.value.fastSaleEndDate, 'YYYY-MM-DD')
+        if (data ){
+            productDetails.value = data;
+            productDetails.value.images = data.image.map((image) => {
+                return {
+                    name: image,
+                    url: urlApi + image,
+                };
+            });
+            productDetails.value.images.forEach(async(image) => {
+                const fileData = await getFileFromImageSource(image.url);
+                image.file = fileData
+            });
+            productDetails.value.category = data.category.map((category) => {
+                return category._id
+            })
+            if (productDetails.value.trending === undefined) {
+                productDetails.value.trending = false
+            }
+            selectedImages.value = productDetails.value.images
+            productDetails.value.fastSaleStartDate = formatDate(productDetails.value.fastSaleStartDate, 'YYYY-MM-DD')
+            productDetails.value.fastSaleEndDate = formatDate(productDetails.value.fastSaleEndDate, 'YYYY-MM-DD')
+        }
     } catch (error) {
         return error
     }
@@ -389,6 +427,7 @@ const saveProduct = async () => {
         formData.append('isFastSale', productDetails.value.isFastSale)
     }
     formData.append('name', productDetails.value.name)
+    formData.append('trending', productDetails.value.trending)
     formData.append('description', productDetails.value.description)
     formData.append('discountPrice', productDetails.value.discountPrice)
     formData.append('price', productDetails.value.price)
@@ -398,11 +437,12 @@ const saveProduct = async () => {
     formData.append('quantity', productDetails.value.quantity)
     if (selectedImages.value.length > 0) {
         selectedImages.value.forEach((image) => {
-            formData.append(`image`, image.file)
+            if (image.file) {
+                formData.append(`image`, image.file)
+            }
         })
     }
     if (productDetails.value.category.length > 0) {
-        console.log('cate length',productDetails.value.category)
         productDetails.value.category.forEach((category, key) => {
             console.log('cate value',category)
             formData.append(`category[${key}]`, category)

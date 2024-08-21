@@ -35,7 +35,7 @@
                 <div class="flex-[0_0_25%]" v-for="(product, index) in productList" :key="index">
                     <div class="h-full flex flex-col justify-between">
                         <div class="relative w-full mb-[30px] group hover:bg-inherit">
-                            <img crossorigin="anonymous" class="object-cover rounded-[20px]" 
+                            <img crossorigin="anonymous" class="object-cover rounded-[20px] min-h-[382px]" 
                                 :src="product.image[0] == 'public/uploads/products/default.jpg' 
                                     ? imageList[Math.floor(Math.random() * (5 - 0) + 0)] : urlApi + product.image[0]" 
                                 alt=""

@@ -46,7 +46,7 @@
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
-                  ${{ item.product.discountPrice ? (item.product.discountPrice * item.quantity) : (item.product.price * item.quantity) }}
+                  ${{ item.product.discountPrice ? (item.product.price * item.quantity) : (item.product.discountPrice * item.quantity) }}
                 </div>
                 <div class="" @click="removeItemCart(item.product.id)">
                   <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">

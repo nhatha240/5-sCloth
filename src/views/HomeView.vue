@@ -163,10 +163,12 @@
           @slideChange="onSlideChange" :navigation="true">
           <swiper-slide v-for="(product, index) in newProducts" :key="index">
             <div class="grid grid-cols-2 p-[50px] bg-[#FAFAFA] rounded-[10px] gap-[80px]">
-              <div class="col-span-1 w-[270px]">
-                <img crossorigin="anonymous" 
+              <div class="col-span-1 w-[270px] object-fit rounded-[20px]" 
+                :class="{ 'bg-gray-600': product?.image && product?.image[0] == 'public/uploads/products/default.jpg'  }"
+              >
+                <img crossorigin="anonymous" class="min-w-[270px] min-h-[386px] rounded-[20px]"
                   :src="product?.image && product?.image[0] !== 'public/uploads/products/default.jpg' 
-                    ? urlApi + product.image[0] : `/images/slide_main_image${Math.floor(Math.random() * (2 - 1) + 0)}.svg`"
+                    ? urlApi + product.image[0] : ``"
                   alt=""
                 >
               </div>
@@ -184,13 +186,13 @@
                     <div class="review-count pl-4">{{ product.totalRating }} Reviews</div>
                   </div>
                 </div>
-                <div class="flex flex-col items-center pt-[26px] prod-name-text">
+                <div class="flex flex-col items-start pt-[26px] prod-name-text">
                   {{ product.name }}
                   <span class="prod-details-text">{{ product.description }}</span>
                 </div>
                 <div class="flex items-center pt-[19px] gap-6">
-                  <div class="main-price">${{ product.discountPrice }}</div>
-                  <span class="sub-price">${{ product.price }}</span>
+                  <div class="main-price">${{ product.price }}</div>
+                  <span class="sub-price">${{ product.discountPrice }}</span>
                 </div>
                 <div class="flex items-center gap-[30px] pt-[68px]">
                   <button class="add-cart-purple-button" @click="updateCart(product?._id, 1)">
@@ -229,7 +231,7 @@
       <div class="px-[50px] mb-[150px]">
         <div class="flex justify-between pb-[80px]">
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
-          <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
+          <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toProductList">
             Xem Thêm
             <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
           </div>
@@ -238,20 +240,23 @@
           <swiper :slides-per-view="'6'" :space-between="100" :navigation="true" :loop="true">
             <swiper-slide v-for="(product, index) in topProducts" :key="index">
               <div class="flex flex-col justify-between min-h-[491px]">
-                <img crossorigin="anonymous" :src="product.product_image" alt="">
+                <div class="min-h-[197px] min-w-[138px] object-fit rounded-[16px]" :class="{ 'bg-gray-500': product?.image && product?.image[0] == 'public/uploads/products/default.jpg' }">
+                  <img class="min-h-[197px] min-w-[138px] rounded-[16px]" crossorigin="anonymous" :src="urlApi + product?.image[0]" alt="" v-if="product?.image && product?.image[0]">
+                </div>
                 <div class="pt-[21px] flex gap-[5px]">
-                  <img crossorigin="anonymous" src="/images/star_active.svg" alt="" v-for="star in product.rating" :key="star">
+                  <img crossorigin="anonymous" :src="product?.userRating ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt="" v-for="star in 5" :key="star">
                 </div>
                 <div class="pt-[14px]">
-                  {{ product.product_name }}
+                  {{ product.name }}
                 </div>
-                <div class="pt-[10px]">
-                  {{ product.color }}
+                <div class="flex gap-1 pt-[10px]" v-if="product?.options?.length > 0">
+                  <div class="" v-for="color in product?.options[0]?.color" :key="color">
+                    {{ color }}{{ (i < product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                  </div>
                 </div>
                 <button class="btn-price-cart min-h-[73px] relative mt-[33px] text-left">
-                  <div class="main-price">{{ product.product_sale_price ? product.product_sale_price :
-                  product.product_price }}</div>
-                  <div class="sub-price">{{ product.product_sale_price ? product.product_price : '' }}</div>
+                  <div class="main-price">{{ product.price }}</div>
+                  <div class="sub-price">{{ product.discountPrice ? product.discountPrice : '' }}</div>
                   <div class="cart-btn-icon w-[57px] h-[57px] bg-[#D651FF] rounded-[50%]">
                     <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                   </div>
@@ -353,7 +358,7 @@
           </div>
         </div>
         <div class="pt-[148px] flex justify-center mb-[50px]">
-          <button class="view-more-btn">
+          <button class="view-more-btn" @click="toProductList">
             Xem thêm
             <img crossorigin="anonymous" src="/images/arrow_right_white.svg" alt="">
           </button>
@@ -371,20 +376,20 @@
             <swiper-slide v-for="(rate, index) in ratingList" :key="index">
               <div class="p-[30px] rating-details">
                 <div class="flex items-center gap-3">
-                  <img crossorigin="anonymous" class="cursor-pointer" :src="star.rate ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
-                    alt="" v-for="(star, i) in rate.rating" :key="i">
+                  <img crossorigin="anonymous" class="cursor-pointer" :src="rate?.rating >= star ? '/images/star_rating_active.svg' : '/images/star_rating_inactive.svg'"
+                    alt="" v-for="star in 5" :key="star">
                 </div>
                 <div class="my-[30px] text-left">
-                  {{ rate.comment }}
+                  {{ rate?.comment }}
                 </div>
                 <div class="row justify-between">
                   <div class="col flex-col text-left">
-                    <div class="font-semibold text-[18px]">{{ rate.name }}</div>
-                    <div class="text-[#3D3D3D] font-normal text-sm">{{ rate.comment_date }}</div>
+                    <div class="font-semibold text-[18px]">{{ rate?.userId?.name }}</div>
+                    <div class="text-[#3D3D3D] font-normal text-sm">{{ formatDate(rate?.commentTime, 'mm-dd-YYYY') }}</div>
                   </div>
                   <div class="">
-                    <img crossorigin="anonymous" :src="rate.avatar" alt="" v-if="rate.avatar">
-                    <div class="avatar-empty" v-else></div>
+                    <!-- <img crossorigin="anonymous" :src="rate.avatar" alt="" v-if="rate.avatar"> -->
+                    <div class="avatar-empty"></div>
                   </div>
                 </div>
               </div>
@@ -414,11 +419,14 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import HeaderMain from '@/components/HeaderMain.vue'
 import HotProductSlide from '@/components/HotProductSlide.vue'
 import { useProductStore } from '../stores/ProductStore'
+import { useUserStore } from '../stores/UserStore'
 import router from '@/router';
 import { toastSuccess } from '@/constant/commonUsage';
+import { formatDate } from '@/constant/commonFunction';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
+const storeUser = useUserStore()
 const sizes = ref([
   { label: 'L', value: 'L' },
   { label: 'XL', value: 'XL' },
@@ -707,6 +715,8 @@ const countdown = () => {
 onMounted(() => {
   initTopSale()
   initHotProduct()
+  initTopProducts()
+  initRatings()
   timer.value = setInterval(countdown, 1000);
 });
 const onSwiper = (swiper) => {
@@ -722,6 +732,35 @@ const searchProduct = async () => {
     router.push({ name: 'ProductListView' })
   } catch (error) {
     return error;
+  }
+}
+
+const initRatings = async () => {
+  try {
+    const params = {
+      limit: 10,
+    }
+    const data = await storeUser.getRatings(params)
+    if (data?.results && data?.results?.length > 0) {
+      ratingList.value = data?.results;
+    }
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+const initTopProducts = async () => {
+  try {
+    const params = {
+      trending: true,
+    }
+    const data = await storeProduct.getAllProduct(params)
+    if (data?.results?.results && data?.results?.results?.length > 0) {
+      topProducts.value = data?.results?.results;
+    }
+  } catch (error) {
+    return error
   }
 }
 
@@ -893,6 +932,11 @@ const updateCart = async (id, quantity) => {
   line-height: 21px;
   text-align: left;
   color: #00000080;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 }
 
 .prod-quantity-text {

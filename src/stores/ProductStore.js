@@ -116,6 +116,15 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getProductComment(id) {
+            return new Promise((resolve, reject) => {
+                ProductService.getProductComment(id)
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
         async exportProductCsv(file_name) {
             return new Promise(() => {
                 ProductService.exportProductCsv()

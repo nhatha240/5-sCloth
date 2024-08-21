@@ -28,10 +28,10 @@
         </div>
         <div class="relative flex gap-19px">
           <div class="text-[#D651FF] font-semibold text-[45px]">
-            ${{ product.discountPrice ? product.discountPrice : product.price }}
+            ${{ product.price }}
           </div>
           <span class="text-[#636363] font-normal text-sm flex gap-[9px] items-end" v-if="product.discountPrice">
-            <div class="line-through">${{ product.price }}</div>
+            <div class="line-through">${{ product.discountPrice }}</div>
             <div class="rounded-[8px] pt-[2px] pb-[3px] px-[14px] bg-[#FF7A00] text-[#FFFFFF] text-base font-medium">
               {{ Math.round((product.price - product.discountPrice) / product.price * 100) }}%
             </div>
@@ -49,7 +49,7 @@
               </div>
             </div>
           </div>
-          <button class="buy-btn flex items-center gap-[34px]" @click="updateCart(product.id, product.stock)">
+          <button class="buy-btn flex items-center gap-[34px]" @click="updateCart(product._id, product.stock)">
             <img crossorigin="anonymous" src="/images/basket_buy_icon.svg" alt="">
             BUY
           </button>
@@ -109,25 +109,25 @@
                     {{ star.star }}
                   </div>
                   <div class="relative w-[270px] bg-[#DDDDDD] h-[9px] rounded-[15px]">
-                    <div class="absolute bg-[#D651FF] h-[9px] rounded-[15px]" :style="{'width': star.userRating_percent }"></div>
+                    <div class="absolute bg-[#D651FF] h-[9px] rounded-[15px]" :style="{'width': star.totalRating }"></div>
                   </div>
                   <div class="">
-                    {{ star.userRating_percent }}
+                    {{ star.totalRating }}
                   </div>
                 </div>
               </div>
             </div>
-            <div class="body flex items-center gap-[72px]" v-for="i in 5" :key="i">
+            <div class="body flex items-center gap-[72px]" v-for="(rate, i) in userRating" :key="i">
               <div class="flex flex-col gap-[21px]">
                 <div class="flex gap-[14px]">
                   <div class="text-[#FF7020] font-bold text-[26px]">
-                    {{ product.userRating }}
+                    {{ rate?.rating }}
                   </div>
                 </div>
                 <div class="flex gap-[10px]">
                   <img
                     class="w-[24px]"
-                    :src="Math.round(product.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+                    :src="Math.round(rate?.rating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
                     alt="" v-for="star in 5" :key="star">
                 </div>
               </div>
@@ -136,12 +136,16 @@
                   <div class="w-[57px] h-[57px] rounded-[50%] bg-[#C4C4C4]">
                   </div>
                   <div class="">
-                    <div class="text-[#000000] font-semibold text-[18px]">Michelle Zudid</div>
-                    <div class="text-[#D651FF] font-normal text-[14px]">Jan 4th, 2020</div>
+                    <div class="text-[#000000] font-semibold text-[18px]">
+                      {{ rate?.userId?.name }}
+                    </div>
+                    <div class="text-[#D651FF] font-normal text-[14px]">
+                      {{ formatDate(rate?.commentTime, 'MMM Do, YYYY') }}
+                    </div>
                   </div>
                 </div>
                 <div class="">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  {{ rate?.comment }}
                 </div>
               </div>
             </div>
@@ -190,7 +194,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderMain from '@/components/HeaderMain.vue'
-import { generateSingleData } from '../constant/commonFunction'
+import { formatDate } from '../constant/commonFunction'
 import { useProductStore } from '@/stores/ProductStore'
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
@@ -241,10 +245,11 @@ const ratingDetails = ref([
     userRating: 0,
   },
 ])
+const userRating = ref([])
 
 onMounted(() => {
-  // product.value = generateSingleData(productId.value, imageList.value, subImage.value)
   initProduct()
+  initProductComment()
   console.log(product.value);
 })
 
@@ -258,6 +263,39 @@ const initProduct = async () => {
     return error
   }
 }
+
+const initProductComment = async () => {
+  try {
+    const data = await storeProduct.getProductComment(productId.value)
+    console.log(data)
+    userRating.value = data?.results
+    ratingDetails.value = calculateRatingDetails(userRating.value)
+    console.log(ratingDetails.value);
+  } catch (error) {
+    return error
+  }
+}
+
+const calculateRatingDetails = (results) => {
+  const totalRatings = results.length;
+  const ratingCounts = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+
+  // Count ratings
+  results.forEach(result => {
+    if (ratingCounts.hasOwnProperty(result.rating)) {
+      ratingCounts[result.rating]++;
+    }
+  });
+
+  // Calculate percentages and create ratingDetails
+  const ratingDetails = [5, 4, 3, 2, 1].map(star => ({
+    star,
+    totalRating: `${Math.round((ratingCounts[star] / totalRatings) * 100)}%`,
+    userRating: ratingCounts[star]
+  }));
+
+  return ratingDetails;
+};
 
 const getProductName = (e) => {
   console.log(e);

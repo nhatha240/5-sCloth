@@ -129,6 +129,7 @@ const initCheckOutItem = async () => {
     try {
         await storeProduct.listCart()
         items.value = storeProduct.cartItem
+        console.log(storeProduct.cartItem);
     } catch (error) {
         return error
     }

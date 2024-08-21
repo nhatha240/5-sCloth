@@ -13,6 +13,7 @@ export default {
         const params = {
             page: query?.page,
             limit: query?.pageSize,
+            trending: query?.trending,
         }
         return await API.get('/products', {params})
     },
@@ -55,5 +56,8 @@ export default {
     },
     async getHotProduct() {
         return await API.get('/products/noi-bat')
+    },
+    async getProductComment(id) {
+        return await API.get(`/comment/${id}`)
     },
 }

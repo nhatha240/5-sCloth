@@ -164,9 +164,14 @@
       </div>
       <div class="flex-[0_0_50%]">
         <div class="cart-payment-layout">
-          <div class="flex items-center justify-around" v-for="(product, index) in storeProduct.cartItem" :key="index">
+          <div class="flex items-center justify-between" v-for="(product, index) in storeProduct.cartItem" :key="index">
             <div class="flex items-center gap-2">
-              <img crossorigin="anonymous"  :src="urlApi + product?.product?.image[0]" alt="">
+              <div class="relative object-cover">
+                <div class="absolute top-[-10px] right-[-10px] rounded-[50%] w-[30px] h-[30px] bg-gray-500 text-white flex justify-center items-center">
+                  {{ product?.quantity }}
+                </div>
+                <img crossorigin="anonymous" class="max-w-[65px] rounded-[8px]" :src="urlApi + product?.product?.image[0]" alt="">
+              </div>
               <div class="flex flex-col">
                 <div class="">
                   {{ product?.product?.name }}
@@ -177,8 +182,36 @@
               </div>
             </div>
             <div class="flex justify-end">
-              {{ (product?.product?.discountPrice ? (product?.product?.discountPrice * product?.quantity) : (product?.product?.price * product?.quantity)) }}đ
+              {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) : (product?.product?.discountPrice * product?.quantity)) }}đ
             </div>
+          </div>
+          <div class="border-t border-[#D7DBEC] mt-4 flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  Tạm tính
+                </div>
+                <div class="flex justify-end">
+                  {{ storeProduct.totalPrice ?? 0 }}đ
+                </div>
+              </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  Phí vận chuyển
+                </div>
+                <div class="flex justify-end">
+                  Miễn phí
+                </div>
+              </div>
+          </div>
+          <div class="border-t border-[#D7DBEC] mt-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  Tổng cộng
+                </div>
+                <div class="flex justify-end text-lg font-bold">
+                  VND {{ storeProduct.totalPrice ?? 0 }}đ
+                </div>
+              </div>
           </div>
         </div>
       </div>
@@ -311,7 +344,7 @@ function onCancel(data, actions) {
   .cart-payment-layout {
     border-radius: 4px;
     background-color: #F3F3F3;
-    padding: 8px 4px;
+    padding: 8px 16px;
   }
 }
 </style>

@@ -22,6 +22,12 @@ export default {
         }
         return await API.get(`/admin/list-rating`, {params})
     },
+    async getRatings(query) {
+        const params = {
+            limit: query.limit
+        }
+        return await API.get(`/users/rating`, {params})
+    },
     async ratingById(id) {
         return await API.get(`/users/rating/${id}`)
     },
