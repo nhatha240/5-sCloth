@@ -18,5 +18,14 @@ export const useDashboardStore = defineStore('dashboard', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getDashBoardTopProduct() {
+            return new Promise((resolve, reject) => {
+                DashboardService.getDashBoardTopProduct()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
     }
 })

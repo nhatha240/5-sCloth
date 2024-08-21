@@ -35,7 +35,7 @@
             <Menu as="div" class="relative">
               <MenuButton class="w-[197px] bg-[#F3F3F3] text-[#636363] font-normal py-[20px] pl-[30px] pr-[21px] rounded-lg">
                 <div class="flex items-center w-full justify-between gap-[60px]">
-                  Giới tính
+                  Màu sắc
                   <svg width="15" height="8" viewBox="0 0 15 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 0.0961914H7.09619H14.1924L7.09619 7.19238L0 0.0961914Z" fill="#D651FF" />
                   </svg>
@@ -43,10 +43,10 @@
               </MenuButton>
               <MenuItems
                 class="z-[1] absolute right-0 w-full origin-top-right divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                <MenuItem v-for="(gender, index) in genders" :key="index" as="a" :class="[
+                <MenuItem v-for="(color, index) in colors" :key="index" as="a" :class="[
                   'group flex w-full items-center text-[#636363] menu-item-text pt-[14px] pb-[9px] px-[35px] cursor-pointer',
                 ]">
-                {{ gender.label }}
+                {{ color.label }}
                 </MenuItem>
               </MenuItems>
             </Menu>
@@ -431,9 +431,10 @@ const sizes = ref([
   { label: 'L', value: 'L' },
   { label: 'XL', value: 'XL' },
 ])
-const genders = ref([
-  { label: 'Nam', value: 'male' },
-  { label: 'Nữ', value: 'female' },
+const colors = ref([
+  { label: 'Xanh', value: 'xanh' },
+  { label: 'Đỏ', value: 'đỏ' },
+  { label: 'Vàng', value: 'vàng' },
 ])
 const newProducts = ref([
   {

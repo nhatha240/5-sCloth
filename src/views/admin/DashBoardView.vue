@@ -181,14 +181,14 @@
                         <tr v-for="(product, index) in topProductsSold" :key="index" class="shared-classes">
                             <td class="px-4 py-2 text-classes">
                                 <div class="flex items-center gap-[12px]">
-                                    <div class="w-9 h-9">
-                                        <img crossorigin="anonymous" class="object-cover" :src="product.img" alt="">
+                                    <div class="w-9">
+                                        <img crossorigin="anonymous" class="object-cover" :src="urlApi + product?.product?.image[0]" alt="" v-if="product?.product?.image && product?.product?.image?.length > 0">
                                     </div>
-                                    {{ product.name }}
+                                    {{ product?.product?.name }}
                                 </div>
                             </td>
-                            <td class="px-4 py-2 text-classes">${{ product.price }}</td>
-                            <td class="px-4 py-2 text-classes">{{ product.units_sold }}</td>
+                            <td class="px-4 py-2 text-classes">${{ product?.product?.price }}</td>
+                            <td class="px-4 py-2 text-classes">{{ product?.total }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -205,6 +205,7 @@ import { useOrderStore } from '@/stores/OrderStore';
 import { onMounted, ref } from 'vue';
 import { formatDate } from '@/constant/commonFunction';
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeDashboard = useDashboardStore();
 const storeOrder = useOrderStore();
 const totalData = ref({})
@@ -231,6 +232,7 @@ const topProductsSold = ref([
 onMounted(() => {
     initDashboardTotal()
     initTopOrders()
+    initTopProduct()
 })
 
 const initDashboardTotal = async () => {
@@ -251,6 +253,15 @@ const initTopOrders = async () => {
         }
         const data = await storeOrder.getListOrder(params)
         items.value = data?.results
+    } catch (error) {
+        return error
+    }
+}
+
+const initTopProduct = async () => {
+    try {
+        const data = await storeDashboard.getDashBoardTopProduct()
+        topProductsSold.value = data
     } catch (error) {
         return error
     }
