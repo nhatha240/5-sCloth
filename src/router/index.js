@@ -159,6 +159,14 @@ const router = createRouter({
           }
         },
         {
+          path: '/like-product',
+          name: 'LikeProductList',
+          component: ProductListView,
+          meta: {
+            breadcrumb: 'Yêu thích'
+          }
+        },
+        {
           path: '/product/:id',
           name: 'ProductView',
           component: ProductView,

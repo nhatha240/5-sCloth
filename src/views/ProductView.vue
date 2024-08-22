@@ -54,7 +54,7 @@
             MUA
           </button>
           <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
-            <img class="max-w[31px]" crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
+            <img class="max-w[31px] max-w-fit" crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
             <!-- <img crossorigin="anonymous" src="/images/heart_icon.svg" alt=""> -->
           </button>
         </div>

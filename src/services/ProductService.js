@@ -15,6 +15,7 @@ export default {
             limit: query?.pageSize,
             trending: query?.trending,
             name: query?.name,
+            flashSale: query?.flashSale,
         }
         return await API.get('/products', {params})
     },

@@ -161,7 +161,7 @@ const route = useRoute();
 const links = ref([
   { href: '/', label: 'Trang chủ', value: 'home' },
   { href: '/sign-out', label: 'Đăng Xuất', value: 'signOut' },
-  { href: '/support', label: 'Thông tin' },
+  { href: '/like-product', label: 'Yêu thích' },
   { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
 ]);
 

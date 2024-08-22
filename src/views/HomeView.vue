@@ -195,7 +195,10 @@
                   <span class="sub-price">${{ product.discountPrice }}</span>
                 </div>
                 <div class="flex items-center gap-[30px] pt-[68px]">
-                  <button class="add-cart-purple-button" @click="updateCart(product?._id, 1)">
+                  <button class="add-cart-purple-button" 
+                    :class="{ 'pointer-events-none bg-gray-500': product?.quantity <= 0 }"  
+                    @click="updateCart(product?._id, 1)"
+                  >
                     <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                     Thêm vào giỏ
                   </button>
@@ -257,7 +260,9 @@
                 <button class="btn-price-cart min-h-[73px] relative mt-[33px] text-left">
                   <div class="main-price">{{ product.price }}</div>
                   <div class="sub-price">{{ product.discountPrice ? product.discountPrice : '' }}</div>
-                  <div class="cart-btn-icon w-[57px] h-[57px] bg-[#D651FF] rounded-[50%]">
+                  <div class="cart-btn-icon w-[57px] h-[57px] bg-[#D651FF] rounded-[50%]"
+                    :class="{ 'pointer-events-none bg-gray-500': product?.quantity <= 0 }"  
+                    @click="updateCart(product?.id, 1)">
                     <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                   </div>
                 </button>
@@ -717,6 +722,7 @@ onMounted(() => {
   initTopSale()
   initHotProduct()
   initTopProducts()
+  initFlashSaleProducts()
   initRatings()
   timer.value = setInterval(countdown, 1000);
 });
@@ -760,6 +766,18 @@ const initTopProducts = async () => {
     if (data?.results?.results && data?.results?.results?.length > 0) {
       topProducts.value = data?.results?.results;
     }
+  } catch (error) {
+    return error
+  }
+}
+
+const initFlashSaleProducts = async () => {
+  try {
+    const params = {
+      flashSale: true,
+    }
+    const data = await storeProduct.getAllProduct(params)
+    console.log(data)
   } catch (error) {
     return error
   }
@@ -814,6 +832,7 @@ const updateCart = async (id, quantity) => {
         }
         await storeProduct.addCart(payload)
         toastSuccess('Add to cart success')
+        await storeProduct.listCart()
     } catch (error) {
         return error
     }

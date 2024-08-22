@@ -90,6 +90,15 @@ export const useUserStore = defineStore('user', {
           .catch(({ response }) => reject(response))
       })
     },
+    async updateRatingProduct(payload) {
+      return new Promise((resolve, reject) => {
+        UserService.updateRatingProduct(payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
     async exportRatingCsv(file_name) {
       return new Promise(() => {
         UserService.exportRatingCsv()

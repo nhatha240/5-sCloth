@@ -162,7 +162,7 @@
                 <div class="pb-[14px] text-[27px] product-text">
                     Giá: {{ ratingDetails?.productId?.price ?? 0 }} đ
                 </div>
-                <div class="text-[27px] product-text flex gap-[17px] items-center">
+                <div class="text-[27px] product-text flex gap-[17px] items-center" v-if="ratingDetails?.productId?.options && ratingDetails?.productId?.options?.length > 0">
                     Màu:
                     <div class="border border-[#D651FF] rounded-[50%] w-[43px] h-[43px] cursor-pointer"
                         :class="{ 'choosen-color': color }"
@@ -317,36 +317,59 @@ const chooseStar = (star) => {
     ratingDetails.value.rating = star
 }
 
+const isEditRating = ref(false)
 const toRating = async (product) => {
+    console.log(product?.product?.rating, 'product')
     if (product?.product?.rating?.length > 0) {
         try {
             const data = await storeUser.ratingById(product?.product?.rating?.at(-1))
             if (data) {
                 ratingDetails.value = data
             }
+            isEditRating.value = true
         } catch (error) {
             return error
         }
     } else {
         ratingDetails.value.productId.id = product?.product?._id ?? ''
+        isEditRating.value = false
     }
+    console.log(ratingDetails.value)
     ratingModal.value = true
 }
 
 const rateOrder = async () => {
-    try {
-        const payload = {
-            productId: ratingDetails.value.productId.id,
-            comment: ratingDetails.value.comment,
-            rating: ratingDetails.value.rating,
+    if (!isEditRating.value) {
+        try {
+            const payload = {
+                productId: ratingDetails.value.productId.id,
+                comment: ratingDetails.value.comment,
+                rating: ratingDetails.value.rating,
+                order: orderId.value,
+            }
+            await storeUser.ratingProduct(payload)
+            toastSuccess('Rating success')
+            const data = await storeOrder.getUserOrderDetails(orderId.value)
+            orderDetails.value = data
+            ratingModal.value = false
+        } catch (error) {
+            return error
         }
-        await storeUser.ratingProduct(payload)
-        toastSuccess('Rating success')
-        const data = await storeOrder.getUserOrderDetails(orderId.value)
-        orderDetails.value = data
-        ratingModal.value = false
-    } catch (error) {
-        return error
+    } else {
+        try {
+            const payload = {
+                commentId: ratingDetails.value.id,
+                comment: ratingDetails.value.comment,
+                rating: ratingDetails.value.rating,
+            }
+            await storeUser.updateRatingProduct(payload)
+            toastSuccess('Rating success')
+            const data = await storeOrder.getUserOrderDetails(orderId.value)
+            orderDetails.value = data
+            ratingModal.value = false
+        } catch (error) {
+            return error
+        }
     }
 }
 </script>
