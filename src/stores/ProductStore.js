@@ -81,7 +81,7 @@ export const useProductStore = defineStore('product', {
                     .then(({ data }) => {
                         this.cartItem = data?.products
                         this.totalPrice = data?.products?.reduce((sum, item) => {
-                            const itemPrice = item.product.discountPrice > 0 ? item.product.discountPrice : item.product.price;
+                            const itemPrice = item.product.price;
                             return sum + (itemPrice * item.quantity);
                         }, 0);
                         resolve(data)

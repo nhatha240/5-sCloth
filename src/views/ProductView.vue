@@ -40,18 +40,18 @@
         <div class="flex items-center gap-[18px]">
           <div class="">
             <div class="quantity-field flex justify-center items-center w-[183px]">
-              <div class="cursor-pointer" @click="updateStock(product, false)">
+              <div class="cursor-pointer" @click="updateStock(false)">
                 <img crossorigin="anonymous" src="/images/minus_icon.svg" alt="">
               </div>
               <input class="text-center pointer-events-none" type="number" readonly v-model="product.stock">
-              <div class="cursor-pointer" @click="updateStock(product, true)">
+              <div class="cursor-pointer" @click="updateStock(true)">
                 <img crossorigin="anonymous" src="/images/plus_icon.svg" alt="">
               </div>
             </div>
           </div>
           <button class="buy-btn flex items-center gap-[34px]" @click="updateCart(product._id, product.stock)">
             <img crossorigin="anonymous" src="/images/basket_buy_icon.svg" alt="">
-            BUY
+            MUA
           </button>
           <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
             <img class="max-w[31px]" crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
@@ -81,9 +81,9 @@
       <div class="row mt-[131px]">
         <div class="flex-[0_0_70%]">
           <div class="text-[#000000] text-2xl font-semibold mb-[73px]">
-            Customer Reviews
+            Đánh giá của khách hàng
           </div>
-          <div class="review-layout rounded-[10px]">
+          <div class="review-layout rounded-[10px]" v-if="userRating?.length > 0">
             <div class="header flex items-center justify-between">
               <div class="flex flex-col gap-[21px]">
                 <div class="flex gap-[14px]">
@@ -166,19 +166,20 @@
             Liên quan
           </div>
           <div class="flex flex-col gap-[40px]">
-            <div class="relative mt-[63px]" v-for="i in 3" :key="i">
-              <div class="relate-product-layout overflow-hidden flex justify-end">
-                <img crossorigin="anonymous" class="absolute left-0 bottom-0 object-cover max-w-[165px] rounded-[20px]" src="/images/product_details_image1.svg" alt="">
+            <div class="relative mt-[63px]" v-for="(item, i) in product?.relate" :key="i">
+              <div class="relate-product-layout overflow-hidden flex justify-end cursor-pointer" @click="toProduct(item.id)">
+                <img crossorigin="anonymous" class="absolute left-0 bottom-0 object-cover max-w-[165px] rounded-[20px]" 
+                :src="item?.image && item?.image?.length > 0 ? urlApi + item?.image[0] : '/images/product_details_image1.svg'" alt="">
                 <div class="relate-details p-4 flex flex-col justify-end gap-[10px] flex-[0_0_53%]">
                   <div class="star-rate">
                     <img crossorigin="anonymous" src="/images/star_rate_details.svg" alt="">
-                    4.5
+                    {{ item?.userRating ?? 0 }}
                   </div>
                   <div class="main-text">
-                    Such a Fun Age
+                    {{ item?.name ?? 0 }}
                   </div>
                   <div class="price">
-                    $21,4
+                    ${{ item?.price ?? 0 }}
                   </div>
                 </div>
               </div>
@@ -248,17 +249,19 @@ const ratingDetails = ref([
 const userRating = ref([])
 
 onMounted(() => {
-  initProduct()
-  initProductComment()
-  console.log(product.value);
+  initProductDetails()
 })
+
+const initProductDetails = async () => {
+  await initProduct()
+  await initProductComment()
+}
 
 const initProduct = async () => {
   try {
     const data = await storeProduct.getProduct(productId.value)
     data.stock = 0
     product.value = data
-    console.log(data)
   } catch (error) {
     return error
   }
@@ -267,10 +270,8 @@ const initProduct = async () => {
 const initProductComment = async () => {
   try {
     const data = await storeProduct.getProductComment(productId.value)
-    console.log(data)
     userRating.value = data?.results
     ratingDetails.value = calculateRatingDetails(userRating.value)
-    console.log(ratingDetails.value);
   } catch (error) {
     return error
   }
@@ -305,12 +306,12 @@ const chooseColor = (indexColor) => {
   //   color.active = i === indexColor;
   // });
 }
-const updateStock = async (product, up) => {
+const updateStock = async (up) => {
   if (up) {
-    product.stock++
+    product.value.stock++
   } else {
-    if (product.stock > 0) {
-      product.stock--
+    if (product.value.stock > 0) {
+      product.value.stock--
     }
   }
 }
@@ -328,6 +329,13 @@ const updateCart = async (id, quantity) => {
         return error
     }
   }
+}
+
+const toProduct = async (id) => {
+  productId.value = id
+  scrollTo(0, 0)
+  router.replace({ params: { id: id } })
+  await initProductDetails()
 }
 </script>
 

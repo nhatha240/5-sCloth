@@ -46,7 +46,7 @@
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
-                  ${{ item.product.discountPrice ? (item.product.price * item.quantity) : (item.product.discountPrice * item.quantity) }}
+                  ${{ (item.product.price * item.quantity) }}
                 </div>
                 <div class="" @click="removeItemCart(item.product.id)">
                   <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">
@@ -107,7 +107,11 @@
         <div class="relative w-10 cursor-pointer" @click="openBasket" v-if="storeAuth.user">
           <img crossorigin="anonymous" src="/images/basket.svg" alt="basket" />
           <span
-            class="absolute right-0 bg-[#D651FF] w-[23px] h-[23px] border-[#FFFFFF] border-2 rounded-[50%] basket-number">1</span>
+            class="absolute right-0 bg-[#D651FF] w-[23px] h-[23px] border-[#FFFFFF] border-2 rounded-[50%] basket-number"
+            v-if="storeProduct.cartItem?.length > 0"
+          >
+            {{ storeProduct.cartItem?.length }}
+          </span>
         </div>
         <Menu as="div" class="relative" v-if="storeAuth.user">
           <MenuButton
