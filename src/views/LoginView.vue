@@ -3,75 +3,38 @@
     <div class="signup-box mx-auto my-[50px] w-[80%]">
         <div class="bg-[#D651FF] rounded-[10px] h-[88px]"></div>
         <div class="row m-0">
-            <Form ref="form" @submit="confirmRegister" class="signup-input-layout flex-[0_0_50%]" v-if="isRegister">
+            <Form ref="form" @submit="login" class="signup-input-layout flex-[0_0_50%]">
                 <div class="">
-                    <div class="label-text">Tên *</div>
-                    <input type="text" v-model="userInfo.name">
-                </div>
-                <div class="">
-                    <div class="label-text">Số điện thoại*</div>
-                    <input type="number" v-model="userInfo.phone">
-                </div>
-                <div class="">
-                    <div class="label-text">Email*</div>
-                    <input type="email" v-model="userInfo.email">
-                </div>
-                <div class="">
-                    <div class="label-text">Địa chỉ*</div>
-                    <input type="text" v-model="userInfo.address">
-                </div>
-                <div class="">
-                    <div class="label-text">Mật khẩu*</div>
-                    <div class="relative">
-                        <Field v-slot="{ field, errors }"
-                            v-model="userInfo.password"
-                            :name="'password'"
-                            :rules="'required'"
-                            ref="password"
-                        >
-                            <input v-bind="field" type="password">
-                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
-                            <div class="text-red-500">{{ errors[0] }}</div>
-                        </Field>
-                    </div>
-                </div>
-                <div class="">
-                    <div class="label-text">Nhập lại mật khẩu*</div>
-                    <div class="relative">
-                        <Field v-slot="{ field, errors }"
-                            v-model="userInfo.passwordConfirm"
-                            :name="'passwordConfirm'"
-                            :rules="{
-                                'required': true,
-                                'confirmed': '@password',
-                            }"
-                        >
-                            <input v-bind="field" type="password">
-                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
-                            <div class="text-red-500">{{ errors[0] }}</div>
-                        </Field>
-                    </div>
-                </div>
-                <button type="submit" class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
-                    Đăng Kí
-                </button>
-            </Form>
-            <form @submit.prevent="login" class="signup-input-layout flex-[0_0_50%]" v-else>
-                <div class="">
-                    <div class="label-text">Email *</div>
-                    <input type="email" v-model="user.email" required>
+                    <Field v-slot="{ field, errors, meta }"
+                        v-model="user.email"
+                        :name="'email'"
+                        :rules="'required|email'"
+                        ref="email"
+                    >
+                        <div class="label-text">Email *</div>
+                        <input type="email" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                    </Field>
                 </div>
                 <div class="">
                     <div class="label-text">Mật Khẩu*</div>
                     <div class="relative">
-                        <input type="password" v-model="user.password" required>
-                        <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
+                        <Field v-slot="{ field, errors, meta }"
+                            v-model="user.password"
+                            :name="'password'"
+                            :rules="'required'"
+                            ref="password"
+                        >
+                            <input :type="showPassword ? 'text' : 'password'" v-bind="field">
+                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="" @click="toggleShowPassword">
+                            <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                        </Field>
                     </div>
                 </div>
-                <button class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
+                <button type="submit" class="py-[19px] text-[20px] font-medium subscribe-purple-button w-[80%] mx-auto">
                     Đăng Nhập
                 </button>
-            </form>
+            </Form>
             <div class="flex-[0_0_50%] bg-[#F0E4F4] rounded-[12px]">
                 <div class="flex flex-col items-center px-[24px] py-[44px]">
                     <img crossorigin="anonymous" class="" src="/images/main_logo_no_bg.svg" alt="">
@@ -119,8 +82,8 @@ const userInfo = ref({
     phone: '',
     address: '',
 })
-const isRegister = ref(false)
 const isLogin = ref(true)
+const showPassword = ref(false)
 const toLogin = () => {
     isRegister.value = false
     isLogin.value = true
@@ -133,27 +96,18 @@ const toRegister = () => {
     router.push({ name: 'RegisterView' })
 }
 
-const login = async () => {
-    try {
-        await storeAuth.loginUser(user.value)
-        router.push(({ name: 'home' }))
-    } catch (error) {
-        return error
-    }
+const toggleShowPassword = () => {
+    showPassword.value = !showPassword.value
 }
 
 const { handleSubmit } = useForm(userInfo.value);
 const onInvalidSubmitError = ({ errors }) => {
     return errors;
 };
-const confirmRegister = handleSubmit(async () => {
+const login = handleSubmit(async () => {
     try {
-        userInfo.value.phone = userInfo.value.phone.toString();
-        const data = await storeAuth.userRegister(userInfo.value)
-        if (data?.tokens) {
-            scrollTo(0, 0)
-            router.push({ name: 'home' })
-        }
+        await storeAuth.loginUser(user.value)
+        router.push(({ name: 'home' }))
     } catch (error) {
         return error
     }

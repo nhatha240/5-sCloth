@@ -113,11 +113,13 @@ import Paginate from '../components/Paginate.vue'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { useProductStore } from '@/stores/ProductStore'
 import { useCategoryStore } from '@/stores/CategoryStore'
+import { useShopStore } from '@/stores/ShopStore'
 import { toastSuccess } from '@/constant/commonUsage'
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
 const storeCategory = useCategoryStore()
+const storeShop = useShopStore()
 const route = useRoute()
 const router = useRouter()
 const page = ref(route?.query?.page ? route.query.page : 1)
@@ -182,12 +184,14 @@ const initProducts = async () => {
         const params = {
             page: page.value,
             pageSize: pageSize.value,
+            name: storeShop.productName
         }
         const data = await storeProduct.getAllProduct(params)
         console.log(data);
         if (data?.results?.results && data?.results?.results?.length > 0) {
             productList.value = data?.results?.results
         }
+        storeShop.product = ''
         totalPage.value = data?.results?.totalPages
         totalItems.value = data?.results?.totalResults
     } catch (error) {
@@ -205,8 +209,8 @@ const productDetails = (id) => {
     router.push({ name: 'ProductView', params: { id: id } })
 }
 
-const getProductName = (e) => {
-  console.log(e);
+const getProductName = async (e) => {
+  await initProducts()
 }
 </script>
 

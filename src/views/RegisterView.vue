@@ -5,40 +5,72 @@
         <div class="row m-0">
             <Form ref="form" @submit="confirmRegister" class="signup-input-layout flex-[0_0_50%]">
                 <div class="">
-                    <div class="label-text">Tên *</div>
-                    <input type="text" v-model="userInfo.name">
+                    <Field v-slot="{ field, errors, meta }"
+                        v-model="userInfo.name"
+                        :name="'name'"
+                        :rules="'required'"
+                        ref="name"
+                    >
+                        <div class="label-text">Tên *</div>
+                        <input type="text" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                    </Field>
                 </div>
                 <div class="">
-                    <div class="label-text">Số điện thoại*</div>
-                    <input type="number" v-model="userInfo.phone">
+                    <Field v-slot="{ field, errors, meta }"
+                        v-model="userInfo.phone"
+                        :name="'phone'"
+                        :rules="'required'"
+                        ref="phone"
+                    >
+                        <div class="label-text">Số điện thoại*</div>
+                        <input type="number" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                    </Field>
                 </div>
                 <div class="">
-                    <div class="label-text">Email*</div>
-                    <input type="email" v-model="userInfo.email">
+                    <Field v-slot="{ field, errors, meta }"
+                        v-model="userInfo.email"
+                        :name="'email'"
+                        :rules="'required|email'"
+                        ref="email"
+                    >
+                        <div class="label-text">Email*</div>
+                        <input type="email" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                    </Field>
                 </div>
                 <div class="">
-                    <div class="label-text">Địa chỉ*</div>
-                    <input type="text" v-model="userInfo.address">
+                    <Field v-slot="{ field, errors, meta }"
+                        v-model="userInfo.address"
+                        :name="'email'"
+                        :rules="'required'"
+                        ref="email"
+                    >
+                        <div class="label-text">Địa chỉ*</div>
+                        <input type="text" v-bind="field">
+                        <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
+                    </Field>
                 </div>
                 <div class="">
                     <div class="label-text">Mật khẩu*</div>
                     <div class="relative">
-                        <Field v-slot="{ field, errors }"
+                        <Field v-slot="{ field, errors, meta }"
                             v-model="userInfo.password"
                             :name="'password'"
                             :rules="'required'"
                             ref="password"
                         >
-                            <input v-bind="field" type="password">
-                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
-                            <div class="text-red-500">{{ errors[0] }}</div>
+                            <input v-bind="field" :type="showPassword ? 'text' : 'password'">
+                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="" @click="toggleShowPassword">
+                            <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
                         </Field>
                     </div>
                 </div>
                 <div class="">
                     <div class="label-text">Nhập lại mật khẩu*</div>
                     <div class="relative">
-                        <Field v-slot="{ field, errors }"
+                        <Field v-slot="{ field, errors, meta }"
                             v-model="userInfo.passwordConfirm"
                             :name="'passwordConfirm'"
                             :rules="{
@@ -46,9 +78,9 @@
                                 'confirmed': '@password',
                             }"
                         >
-                            <input v-bind="field" type="password">
-                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="">
-                            <div class="text-red-500">{{ errors[0] }}</div>
+                            <input v-bind="field" :type="showPassword2 ? 'text' : 'password'">
+                            <img crossorigin="anonymous" class="absolute right-0 top-0 cursor-pointer" src="/images/hidden_eye_icon.svg" alt="" @click="toggleShowPassword2">
+                            <div class="text-red-500" v-if="meta.touched && errors[0]">{{ errors[0] }}</div>
                         </Field>
                     </div>
                 </div>
@@ -95,12 +127,18 @@ const userInfo = ref({
     phone: '',
     address: '',
 })
-const isLogin = ref(true)
+const showPassword = ref(false)
+const showPassword2 = ref(false)
 const toLogin = () => {
     router.push({ name: 'LoginView' })
 }
-const toRegister = () => {
-    
+
+const toggleShowPassword = () => {
+    showPassword.value = !showPassword.value
+}
+
+const toggleShowPassword2 = () => {
+    showPassword2.value = !showPassword2.value
 }
 
 const { handleSubmit } = useForm(userInfo.value);

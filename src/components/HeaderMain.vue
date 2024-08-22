@@ -99,7 +99,7 @@
           </Menu>
         </div>
         <div class="relative search-header-input flex items-center">
-          <input type="text" placeholder="Nhập tên sản phẩm" v-model="storeShop.product">
+          <input type="text" placeholder="Nhập tên sản phẩm" v-model="storeShop.product" @keydown.enter="searchProduct">
           <img crossorigin="anonymous" class="absolute right-[30px] cursor-pointer" src="/images/search_icon.svg" alt="" @click="searchProduct" />
         </div>
       </div>
@@ -155,14 +155,14 @@ const storeProduct = useProductStore()
 const router = useRouter();
 const route = useRoute();
 const links = ref([
-  { href: '/', label: 'Home', value: 'home' },
+  { href: '/', label: 'Trang chủ', value: 'home' },
   { href: '/sign-out', label: 'Đăng Xuất', value: 'signOut' },
   { href: '/support', label: 'Thông tin' },
   { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
 ]);
 
 const menuContent = ref([
-  { href: '/', label: 'Home', value: 'home' },
+  { href: '/', label: 'Trang chủ', value: 'home' },
   { href: '/shop?category=maleShirt', label: 'Đồ Nam', value: 'ShopView', category: 'maleShirt' },
   { href: '/shop?category=femaleShirt', label: 'Đồ Nữ', value: 'ShopView', category: 'femaleShirt' },
   { href: '/shop?category=childShirt', label: 'Đồ Trẻ Em', value: 'ShopView', category: 'childShirt' },
@@ -239,6 +239,7 @@ const openBasket = () => {
 
 const searchProduct = () => {
   emits("update:search", storeShop.productName);
+  router.push({ name: 'ProductListView' })
 }
 const openCheckout = () => {
   router.push({ name: 'Checkout' })

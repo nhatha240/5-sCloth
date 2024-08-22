@@ -2,10 +2,10 @@
     <div class="dashboard-layout">
         <div class="flex items-center justify-between">
             <div class="title-text">Dashboard</div>
-            <button class="bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px] flex items-center gap-1">
+            <!-- <button class="bg-[#FFFFFF] border border-[#D7DBEC] py-2 px-[25px] rounded-[4px] flex items-center gap-1">
                 <img crossorigin="anonymous" src="/images/manage_icon.svg" alt="">
                 Manage
-            </button>
+            </button> -->
         </div>
         <div class="row flex items-center">
             <div class="revenue-layout flex items-center justify-between !max-w-[25%]">

@@ -14,6 +14,7 @@ export default {
             page: query?.page,
             limit: query?.pageSize,
             trending: query?.trending,
+            name: query?.name,
         }
         return await API.get('/products', {params})
     },

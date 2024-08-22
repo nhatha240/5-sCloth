@@ -115,7 +115,7 @@ const router = createRouter({
           name: 'LoginView',
           component: LoginView,
           meta: {
-            breadcrumb: 'Checkout'
+            breadcrumb: 'Đăng nhập'
           }
         },
         {
@@ -123,7 +123,7 @@ const router = createRouter({
           name: 'RegisterView',
           component: RegisterView,
           meta: {
-            breadcrumb: 'Checkout'
+            breadcrumb: 'Đăng ký'
           }
         },
         {
@@ -152,7 +152,7 @@ const router = createRouter({
           name: 'ProductListView',
           component: ProductListView,
           meta: {
-            breadcrumb: 'Books'
+            breadcrumb: 'Products'
           }
         },
         {

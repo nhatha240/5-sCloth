@@ -7,7 +7,7 @@
                 class="text-[#D651FF] text-lg font-normal hover:underline cursor-pointer"
                 @click="toRouter(crumb)"
             >
-                {{ crumb.name === 'UserLayout' ? 'Home' : crumb.name }}
+                {{ crumb.name === 'UserLayout' ? 'Trang chủ' : crumb.name }}
             </a>
             <a v-else class="text-gray-500 font-normal text-lg no-underline" 
                 :class="{ 'text-[#D651FF]': crumb?.params?.id }"
