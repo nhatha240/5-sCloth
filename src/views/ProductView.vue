@@ -6,12 +6,12 @@
         <div class="flex items-center gap-[20px]">
           <div class="star-rating-details">
             <img
-              :src="Math.round(product?.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+              :src="Math.round(product?.totalRating/product?.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
               alt="" v-for="star in 5" :key="star">
-            {{ product?.userRating }}
+              {{ product?.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}
           </div>
           <div class="count-rating-details">
-            {{ product?.totalRating }} Reviews
+            {{ product?.userRating ?? 0 }} Reviews
           </div>
         </div>
         <div class="text-[#000000] text-[30px] font-semibold">
@@ -88,19 +88,19 @@
               <div class="flex flex-col gap-[21px]">
                 <div class="flex gap-[14px]">
                   <div class="text-[#4D4D4D] font-semibold text-[45px]">
-                    {{ product.userRating }}
+                    {{ (product?.totalRating/product?.userRating) }}
                     <span class="text-[#4D4D4D] font-medium text-base">out of 5</span>
                   </div>
                 </div>
                 <div class="flex gap-[10px]">
                   <img
                     class="w-[24px]"
-                    :src="Math.round(product.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
+                    :src="Math.round(product?.totalRating/product?.userRating) >= star ? '/images/star_rating_icon.svg' : '/images/star_details_icon_inactive.svg'"
                     alt="" v-for="star in 5" :key="star">
                 </div>
               </div>
               <div class="w-[30%]">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusamus dolorem odio doloribus itaque doloremque exercitationem eligendi illum similique odit impedit officiis reprehenderit praesentium aspernatur, sequi quae! Quaerat accusamus optio libero?
+                {{ userRating?.length > 0 ? userRating[0].comment : '' }}
               </div>
               <div class="rating-bar flex flex-col gap-[10px]">
                 <div class="flex items-center gap-[15px]" v-for="(star, index) in ratingDetails" :key="index">
@@ -173,7 +173,7 @@
                 <div class="relate-details p-4 flex flex-col justify-end gap-[10px] flex-[0_0_53%]">
                   <div class="star-rate">
                     <img crossorigin="anonymous" src="/images/star_rate_details.svg" alt="">
-                    {{ item?.userRating ?? 0 }}
+                    {{ item?.userRating ? Math.round(item?.totalRating/item?.userRating) : 0 }}
                   </div>
                   <div class="main-text">
                     {{ item?.name ?? 0 }}
@@ -197,6 +197,7 @@ import { useRoute, useRouter } from 'vue-router'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { formatDate } from '../constant/commonFunction'
 import { useProductStore } from '@/stores/ProductStore'
+import { toastError } from '@/constant/commonUsage'
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const route = useRoute()
@@ -307,7 +308,7 @@ const chooseColor = (indexColor) => {
   // });
 }
 const updateStock = async (up) => {
-  if (up) {
+  if (up && product.value?.quantity) {
     product.value.stock++
   } else {
     if (product.value.stock > 0) {
@@ -328,6 +329,8 @@ const updateCart = async (id, quantity) => {
     } catch (error) {
         return error
     }
+  } else {
+    toastError('Out of stock')
   }
 }
 

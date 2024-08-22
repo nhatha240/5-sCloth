@@ -43,4 +43,10 @@ export default {
     async getUser() {
         return await API.get('/users')
     },
+    async getCommenRating(query) {
+        const params = {
+            limit: query?.limit
+        }
+        return await API.get('/comments', {params})
+    },
 }

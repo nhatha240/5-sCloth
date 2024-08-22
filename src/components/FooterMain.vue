@@ -77,7 +77,9 @@
 
 <script lang="js" setup>
 import router from '@/router';
+import { useAuthStore } from '../stores/AuthStore'
 
+const storeAuth = useAuthStore()
 const toRegister = () => {
     router.push({ name: 'RegisterView' })
     scrollTo(0, 0)

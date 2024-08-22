@@ -242,7 +242,7 @@ const toSettingAccount = () => {
     profileMenu.value = !profileMenu.value
 }
 const logout = () => {
-    storeAuth.clearStoreAuth()
+    storeAuth.clearStoreAdminAuth()
     profileMenu.value = !profileMenu.value
     router.push({ name: 'LoginPage' })
 }

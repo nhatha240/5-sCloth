@@ -181,9 +181,9 @@
                   </div>
                   <div class="rating pr-[16px] flex items-center">
                     <img crossorigin="anonymous" class="cursor-pointer"
-                      :src="product.userRating >= star ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
+                      :src="Math.round(product?.totalRating/product?.userRating) >= star ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
                       v-for="star in 5" :key="star">
-                    <div class="review-count pl-4">{{ product.totalRating }} Reviews</div>
+                    <div class="review-count pl-4">{{ product.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }} Reviews</div>
                   </div>
                 </div>
                 <div class="flex flex-col items-start pt-[26px] prod-name-text">
@@ -237,14 +237,14 @@
           </div>
         </div>
         <div class="px-[50px] top-product-layout">
-          <swiper :slides-per-view="'6'" :space-between="100" :navigation="true" :loop="true">
+          <swiper :slides-per-view="'6'" :space-between="100" :navigation="true">
             <swiper-slide v-for="(product, index) in topProducts" :key="index">
               <div class="flex flex-col justify-between min-h-[491px]">
                 <div class="min-h-[197px] min-w-[138px] object-fit rounded-[16px]" :class="{ 'bg-gray-500': product?.image && product?.image[0] == 'public/uploads/products/default.jpg' }">
                   <img class="min-h-[197px] min-w-[138px] rounded-[16px]" crossorigin="anonymous" :src="urlApi + product?.image[0]" alt="" v-if="product?.image && product?.image[0]">
                 </div>
                 <div class="pt-[21px] flex gap-[5px]">
-                  <img crossorigin="anonymous" :src="product?.userRating ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt="" v-for="star in 5" :key="star">
+                  <img crossorigin="anonymous" :src="Math.round(product?.totalRating/product?.userRating) >= star ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt="" v-for="star in 5" :key="star">
                 </div>
                 <div class="pt-[14px]">
                   {{ product.name }}
@@ -372,7 +372,7 @@
           tiếp nhận và khắc phục
         </div>
         <div>
-          <swiper :slides-per-view="3.8" :space-between="20" :navigation="true" class="rating-list">
+          <swiper :slides-per-view="3.8" :space-between="20" :navigation="true" :centeredSlides="true" class="rating-list">
             <swiper-slide v-for="(rate, index) in ratingList" :key="index">
               <div class="p-[30px] rating-details">
                 <div class="flex items-center gap-3">
@@ -385,7 +385,7 @@
                 <div class="row justify-between">
                   <div class="col flex-col text-left">
                     <div class="font-semibold text-[18px]">{{ rate?.userId?.name }}</div>
-                    <div class="text-[#3D3D3D] font-normal text-sm">{{ formatDate(rate?.commentTime, 'mm-dd-YYYY') }}</div>
+                    <div class="text-[#3D3D3D] font-normal text-sm">{{ formatDate(rate?.commentTime, 'DD-MM-YYYY') }}</div>
                   </div>
                   <div class="">
                     <!-- <img crossorigin="anonymous" :src="rate.avatar" alt="" v-if="rate.avatar"> -->
@@ -741,7 +741,7 @@ const initRatings = async () => {
     const params = {
       limit: 10,
     }
-    const data = await storeUser.getRatings(params)
+    const data = await storeUser.getCommenRating(params)
     if (data?.results && data?.results?.length > 0) {
       ratingList.value = data?.results;
     }

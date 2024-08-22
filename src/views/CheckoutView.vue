@@ -12,7 +12,8 @@
             <div class="mt-[30px] flex flex-col gap-[30px]">
                 <div class="flex item-layout items-center" v-for="(item, index) in items" :key="index">
                     <div class="w-[45%] flex gap-[34px]">
-                        <img crossorigin="anonymous" :src="item.image" alt="">
+                        <img crossorigin="anonymous" class="max-h-[200px] max-w-[140px]"
+                            :src="item?.product?.image && item?.product?.image?.length > 0 ? urlApi + item?.product?.image[0] : ''" alt="">
                         <div class="flex flex-col justify-center gap-[10px]">
                             <div class="code-text">{{ item?.product?.id }}</div>
                             <div class="product-text">{{ item?.product?.name }}</div>
@@ -97,6 +98,7 @@ import { useAuthStore } from "@/stores/AuthStore";
 import { useProductStore } from "@/stores/ProductStore";
 import { toastSuccess } from "@/constant/commonUsage";
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeAuth = useAuthStore()
 const storeProduct = useProductStore()
 const router = useRouter()
@@ -138,7 +140,7 @@ const initCheckOutItem = async () => {
 const updateCart = async (id, quantity) => {
     try {
         const payload = {
-            productId: id,
+            productId: id, 
             quantity: quantity,
         }
         await storeProduct.addCart(payload)

@@ -2,7 +2,7 @@
     <HeaderMain @update:search="getProductName" />
     <div class="shop-layout bg-[#FFFFFF] pt-[45px] w-[85%] mx-auto mb-[117px]">
         <div class="text-[#000000] font-semibold text-[45px]">
-            Yêu thích
+            Sản phẩm
         </div>
         <div class="w-full flex justify-end mb-[53px]">
             <div class="">
@@ -48,7 +48,7 @@
                                 <div class="absolute left-[9px] top-[8px] bg-[#inherit] z-10">
                                     <div class="flex flex-col gap-[30px]">
                                         <div
-                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product.id)">
+                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product.id, product.quantity)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
@@ -66,11 +66,11 @@
                         <div class="flex items-center gap-[10px] rating-field mb-[16px]">
                             <img crossorigin="anonymous" src="/images/star_rating_shop.svg" alt="">
                             <div class="font-semibold">
-                                {{ product.userRating }}
+                                {{ product.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}
                             </div>
                             <div class="w-[4px] h-[4px] bg-[#333333] rounded-full"></div>
                             <div class="font-medium">
-                                {{ product.totalRating }} reviews
+                                {{ product.userRating }} reviews
                             </div>
                         </div>
                         <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]">
@@ -114,7 +114,7 @@ import HeaderMain from '@/components/HeaderMain.vue'
 import { useProductStore } from '@/stores/ProductStore'
 import { useCategoryStore } from '@/stores/CategoryStore'
 import { useShopStore } from '@/stores/ShopStore'
-import { toastSuccess } from '@/constant/commonUsage'
+import { toastError, toastSuccess } from '@/constant/commonUsage'
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
@@ -151,17 +151,21 @@ const toPage = () => {
     initProducts()
 }
 
-const addToCart = async (id) => {
-    try {
-        const payload = {
-            productId: id,
-            quantity: 1,
+const addToCart = async (id, stock) => {
+    if (stock > 0) {
+        try {
+            const payload = {
+                productId: id,
+                quantity: 1,
+            }
+            await storeProduct.addCart(payload)
+            toastSuccess('Add to cart success')
+            storeProduct.listCart()
+        } catch (error) {
+            return error
         }
-        await storeProduct.addCart(payload)
-        toastSuccess('Add to cart success')
-        storeProduct.listCart()
-    } catch (error) {
-        return error
+    } else {
+        toastError('Out of stock')
     }
 }
 

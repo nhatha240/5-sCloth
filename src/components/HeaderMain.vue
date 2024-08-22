@@ -18,7 +18,7 @@
               <div class="flex items-center justify-between py-[11px] pr-[24px] pl-[10px] bg-[#D651FF] rounded-[15px]"
                 v-for="(item, i) in storeProduct.cartItem" :key="i">
                 <div class="max-w-[85px] h-[93px]">
-                  <img crossorigin="anonymous"  class="object-cover" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
+                  <img crossorigin="anonymous" class="object-cover max-h-[93px]" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
                 </div>
                 <div class="flex flex-col pr-[86px]">
                   <div class="font-medium main-text">{{ item.product.name }}</div>
@@ -53,7 +53,7 @@
                 </div>
               </div>
             </div>
-            <div class="border-t border-[#D0CFCF] pt-[15px]">
+            <div class="border-t border-[#D0CFCF] pt-[15px]" v-if="storeProduct.cartItem?.length > 0">
               <button class="w-[50%] mx-auto rounded-[12px] flex items-center justify-between subscribe-purple-button" @click="openCheckout">
                 <div class="font-medium text-[16px] tex-[#FEFCFC]">${{ storeProduct.totalPrice ?? 0 }}</div>
                 <div class="font-medium text-[16px] tex-[#FEFCFC]">Checkout</div>

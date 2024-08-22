@@ -71,7 +71,7 @@ const isUserAuthenticated = (to, from, next) => {
 }
 
 const isAdminAuthenticated = (to, from, next) => {
-  if (localStorage.getItem('token')) {
+  if (localStorage.getItem('adminToken')) {
     if (to?.path == '/admin/login') {
       next({ name: 'DashBoardView' })
     } else {
@@ -131,7 +131,7 @@ const router = createRouter({
           name: 'PaymentView',
           component: PaymentView,
           meta: {
-            breadcrumb: 'Payment'
+            breadcrumb: 'Thanh toán'
           }
         },
         {
@@ -139,13 +139,16 @@ const router = createRouter({
           name: 'OrderView',
           component: OrderView,
           meta: {
-            breadcrumb: 'Orders'
+            breadcrumb: 'Đơn hàng'
           }
         },
         {
           path: '/shop',
           name: 'ShopView',
-          component: ShopView
+          component: ShopView,
+          meta: {
+            breadcrumb: 'ShopView'
+          }
         },
         {
           path: '/product',
@@ -160,7 +163,7 @@ const router = createRouter({
           name: 'ProductView',
           component: ProductView,
           meta: {
-            breadcrumb: 'Books'
+            breadcrumb: 'Đặt hàng'
           }
         },
         {
@@ -204,9 +207,6 @@ const router = createRouter({
           }
         },
       ],
-      meta: {
-        title: 'Home',
-      },
     },
     {
       path: '/admin',
@@ -338,5 +338,10 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title ? to.meta.title : to.meta.breadcrumb;
+  return next();
+});
 
 export default router

@@ -24,7 +24,7 @@
                             </div>
                             <div class="star-rating flex items-center justify-center gap-[5px] px-[20px] py-[11px]">
                                 <img crossorigin="anonymous" src="/images/star_rating_icon.svg" alt="">
-                                <div>{{ product.userRating }}</div>
+                                <div>{{ product.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}</div>
                             </div>
                         </div>
                         <div class="flex flex-col prod-name-text">

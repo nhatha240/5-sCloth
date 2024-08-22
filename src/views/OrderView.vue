@@ -152,20 +152,22 @@
             </div>
             <div class="flex-[0_0_30%] flex flex-col">
                 <div class="rounded-[20px] max-w-[357px] max-h-[473px] pb-[31px]">
-                    <img crossorigin="anonymous" src="/images/rating_product_image1.svg" alt="">
+                    <img crossorigin="anonymous" 
+                        :src="ratingDetails?.productId?.image && ratingDetails?.productId?.image?.length >0
+                            ? urlApi + ratingDetails?.productId?.image[0] : '/images/rating_product_image1.svg'" alt="">
                 </div>
                 <div class="pb-[21px] product-text">
-                    Quần đùi thun vải nỉ
+                    {{ ratingDetails?.productId?.name ?? '' }}
                 </div>
                 <div class="pb-[14px] text-[27px] product-text">
-                    Giá: 300.000 đ
+                    Giá: {{ ratingDetails?.productId?.price ?? 0 }} đ
                 </div>
                 <div class="text-[27px] product-text flex gap-[17px] items-center">
                     Màu:
                     <div class="border border-[#D651FF] rounded-[50%] w-[43px] h-[43px] cursor-pointer"
-                        :class="{ 'choosen-color': color.active }"
-                        :style="`background-color: ${color.color};`"
-                        v-for="(color, i) in colors" :key="color" @click="chooseColor(i)">
+                        :class="{ 'choosen-color': color }"
+                        :style="`background-color: ${color};`"
+                        v-for="(color, i) in ratingDetails?.productId?.options[0].color" :key="color" @click="chooseColor(i)">
                     </div>
                 </div>
             </div>
@@ -181,7 +183,7 @@
                 <div class="w-[20%]">Tổng tiền thanh toán</div>
                 <div class="">Xem</div>
             </div>
-            <div class="flex flex-col gap-[39px]">
+            <div class="flex flex-col gap-[39px]" v-if="items?.length > 0">
                 <div class="body-order flex item-layout items-center text-[19px]" v-for="(item, index) in items"
                     :key="index">
                     <div class="w-[20%] text-wrap overflow-hidden break-all">
@@ -196,6 +198,11 @@
                     </div>
                 </div>
             </div>
+            <div class="flex flex-col gap-[39px]" v-else>
+                <div class="body-order flex text-[19px] items-center justify-center">
+                    <h2>Chưa có đơn hàng nào</h2>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -207,6 +214,7 @@ import { useUserStore } from '@/stores/UserStore'
 import { formatDate } from "@/constant/commonFunction";
 import { toastSuccess } from "@/constant/commonUsage";
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeOrder = useOrderStore()
 const storeUser = useUserStore()
 const modalOrder = ref(false)
@@ -261,9 +269,9 @@ const colors = ref([
 ])
 
 const chooseColor = (index) => {
-    colors.value.forEach((color, i) => {
-        color.active = i === index;
-    });
+    // colors.value.forEach((color, i) => {
+    //     color.active = i === index;
+    // });
 }
 
 const initOrderItem = async () => {

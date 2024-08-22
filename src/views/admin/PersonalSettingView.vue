@@ -1,5 +1,5 @@
 <template>
-    <div class="personal-setting-layout">
+    <div class="personal-setting-layout" v-if="storeAuth.admin">
         <div class="flex items-center justify-between mb-[30px]">
             <div class="title-text">Settings</div>
             <div class="flex items-center gap-3">
@@ -38,7 +38,7 @@
                                             <img crossorigin="anonymous"  class="image-view" :src="imageAccount?.url" alt="" v-if="imageAccount?.url">
                                             <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                         </div>
-                                        <div class="file-image-review" v-if="storeAuth.admin.image">
+                                        <div class="file-image-review" v-if="storeAuth.admin?.image">
                                             <img crossorigin="anonymous"  class="image-view" :src="urlApi + storeAuth.admin.image" alt="" v-if="storeAuth.admin.image">
                                             <img crossorigin="anonymous" class="check-mark" src="/images/check_mark_image_icon.svg" alt="">
                                         </div>

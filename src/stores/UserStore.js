@@ -71,6 +71,16 @@ export const useUserStore = defineStore('user', {
           .catch(({ response }) => reject(response))
       })
     },
+    async getCommenRating(params) {
+      return new Promise((resolve, reject) => {
+        UserService.getCommenRating(params)
+          .then(({ data }) => {
+            console.log(data)
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
     async ratingProduct(payload) {
       return new Promise((resolve, reject) => {
         UserService.ratingProduct(payload)
