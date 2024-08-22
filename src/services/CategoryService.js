@@ -17,4 +17,11 @@ export default {
     async updateCategory(payload) {
         return await API.put(`/admin/update-category/`, payload)
     },
+    async getAllCategory(query) {
+        const params = {
+            page: query.page,
+            limit: query.limit,
+        }
+        return await API.get(`/categories`, {params})
+    },
 }

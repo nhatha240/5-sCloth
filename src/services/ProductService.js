@@ -19,6 +19,9 @@ export default {
         }
         return await API.get('/products', {params})
     },
+    async getLikeProducts() {
+        return await API.get('/users/like')
+    },
     async getProduct(id) {
         return await API.get(`/admin/get-product/${id}`)
     },

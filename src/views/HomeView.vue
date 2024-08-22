@@ -234,7 +234,7 @@
       <div class="px-[50px] mb-[150px]">
         <div class="flex justify-between pb-[80px]">
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
-          <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toProductList">
+          <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toLikeProducts">
             Xem Thêm
             <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
           </div>
@@ -719,6 +719,7 @@ const countdown = () => {
 };
 
 onMounted(() => {
+  initCategory()
   initTopSale()
   initHotProduct()
   initTopProducts()
@@ -806,7 +807,25 @@ const initHotProduct = async () => {
   }
 }
 
+const initCategory = async () => {
+  try {
+    const params = {
+      page: 1,
+      limit: 6
+    }
+    const data = await storeProduct.getAllCategory(params)
+    console.log(data)
+  } catch (error) {
+    return error
+  }
+}
+
 const toProductList = () => {
+    router.push({ name: 'ProductListView' })
+    scrollTo(0 ,0)
+}
+
+const toLikeProducts = () => {
     router.push({ name: 'ProductListView' })
     scrollTo(0 ,0)
 }

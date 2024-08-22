@@ -29,6 +29,15 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getLikeProducts() {
+            return new Promise((resolve, reject) => {
+                ProductService.getLikeProducts()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
         async getProduct(id) {
             return new Promise((resolve, reject) => {
                 ProductService.getProduct(id)

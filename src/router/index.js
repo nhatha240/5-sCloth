@@ -12,6 +12,7 @@ import OrderView from '@/views/OrderView.vue'
 import ShopView from '@/views/ShopView.vue'
 import ProductView from '@/views/ProductView.vue'
 import ProductListView from '@/views/ProductListView.vue'
+import LikeProductsView from '@/views/LikeProductsView.vue'
 import PaymentView from '@/views/PaymentView.vue'
 import DashBoardView from '@/views/admin/DashBoardView.vue'
 import OrderListView from '@/views/admin/OrderListView.vue'
@@ -155,13 +156,13 @@ const router = createRouter({
           name: 'ProductListView',
           component: ProductListView,
           meta: {
-            breadcrumb: 'Products'
+            breadcrumb: 'Sản phẩm'
           }
         },
         {
           path: '/like-product',
-          name: 'LikeProductList',
-          component: ProductListView,
+          name: 'LikeProductsView',
+          component: LikeProductsView,
           meta: {
             breadcrumb: 'Yêu thích'
           }
@@ -171,7 +172,7 @@ const router = createRouter({
           name: 'ProductView',
           component: ProductView,
           meta: {
-            breadcrumb: 'Đặt hàng'
+            breadcrumb: 'Sản phẩm'
           }
         },
         {

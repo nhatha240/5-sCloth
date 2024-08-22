@@ -161,7 +161,7 @@ const route = useRoute();
 const links = ref([
   { href: '/', label: 'Trang chủ', value: 'home' },
   { href: '/sign-out', label: 'Đăng Xuất', value: 'signOut' },
-  { href: '/like-product', label: 'Yêu thích' },
+  { href: '/like-product', label: 'Yêu thích', value: 'LikeProductsView' },
   { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
 ]);
 
@@ -201,7 +201,7 @@ const toPage = (link) => {
     storeAuth.clearStoreAuth()
     router.push({ name: 'LoginView' });
   } else {
-    router.push({ name: link.value, query: { category: link.category } });
+    router.push({ name: link.value, query: { category: link?.category } });
   }
 }
 

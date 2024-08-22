@@ -56,7 +56,10 @@ const navigate = (path) => {
     router.push(path);
 };
 const toRouter = (routeData) => {
-    if (NAME_LINK_ROUTER[routeData.name]) {
+    if (routeData?.params?.id) {
+        router.go(-1)
+    }
+    else if (NAME_LINK_ROUTER[routeData.name]) {
         router.push({ name: NAME_LINK_ROUTER[routeData.name] })
     } else {
         router.push(routeData.to)
