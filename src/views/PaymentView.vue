@@ -233,7 +233,7 @@ const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeUser = useUserStore()
 const storeProduct = useProductStore()
 const storeOrder = useOrderStore()
-const CLIENT_ID = 'AfIaLEGS-9xRihTtrrI9moBlf6gOAOOfu7Pq85HYuADQtRE-erhSh1mWKJ25szo9lQSgM_dp5A0vD6H0'
+const CLIENT_ID = import.meta.env.VITE_CLIENT_ID
 
 const { cartTotal } = defineProps({
   cartTotal: {
