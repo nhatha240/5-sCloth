@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia'
 import ShopService from '@/services/ShopService'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 export const useShopStore = defineStore('shop', {
     state: () => ({
-        product: '',
+        product: route?.query?.category ? route?.query?.category : '',
         products: [],
         clothes: [],
     }),

@@ -16,14 +16,24 @@ export default {
             trending: query?.trending,
             name: query?.name,
             flashSale: query?.flashSale,
+            sortBy: query?.sortBy,
         }
         return await API.get('/products', {params})
     },
     async getLikeProducts() {
         return await API.get('/users/like')
     },
+    async updateLikeProduct(payload) {
+        return await API.post('/users/like', payload)
+    },
+    async updateUnLikeProduct(payload) {
+        return await API.post('/users/unlike', payload)
+    },
     async getProduct(id) {
         return await API.get(`/admin/get-product/${id}`)
+    },
+    async getProductDetails(id) {
+        return await API.get(`/products/${id}`)
     },
     async createProduct(payload) {
         return await API.post(`/admin/create-product`, payload)

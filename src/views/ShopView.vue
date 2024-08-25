@@ -14,9 +14,9 @@
                         </h2>
                         <ul class="space-y-2 pl-[29px]" v-if="isOpen">
                             <li v-for="(option, index) in options" :key="index" class="flex items-center">
-                                <input type="radio" :id="option" :value="option" v-model="selectedOption"
+                                <input type="radio" :id="option.id" :value="option" v-model="selectedOption"
                                     class="form-radio text-purple-600 focus:ring-purple-500">
-                                <label :for="option" class="ml-2 text-sm text-gray-700">{{ option }}</label>
+                                <label :for="option.id" class="ml-2 text-sm text-gray-700">{{ option?.name }}</label>
                             </li>
                         </ul>
                         <button @click="loadMore" class="w-full text-left text-sm text-purple-600 mt-2 hover:underline">
@@ -31,12 +31,12 @@
                         </h2>
                         <ul class="space-y-2 pl-[29px]" v-if="isOpenColor">
                             <div class="flex items-center">
-                                <input type="radio" :id="colors.all" :value="colors.all" v-model="selectedOption"
+                                <input type="radio" :id="colors.all" :value="colors.all" v-model="selectedColor"
                                     class="form-radio text-purple-600 focus:ring-purple-500">
                                 <label :for="colors.all" class="ml-2 text-sm text-gray-700">{{ 'Tất cả' }}</label>
                             </div>
                             <li v-for="(color, index) in colors.color" :key="index" class="flex items-center">
-                                <input type="radio" :id="color" :value="color" v-model="selectedOption"
+                                <input type="radio" :id="color" :value="color" v-model="selectedColor"
                                     class="form-radio text-purple-600 focus:ring-purple-500">
                                 <label :for="color" class="ml-2 text-sm text-gray-700">{{ color }}</label>
                             </li>
@@ -56,15 +56,17 @@
                         </div>
                     </div>
                     <div class="pt-[63px] p-4 flex flex-col gap-[25px]">
-                        <button class="btn-pink">Refine Search</button>
-                        <button class="btn-no-color">Reset Filter</button>
+                        <button class="btn-pink" @click="searchByfilter">Refine Search</button>
+                        <button class="btn-no-color" @click="resetFilter">Reset Filter</button>
                     </div>
                 </div>
             </div>
             <div class="flex-[0_0_60%] flex-grow pl-[32px]">
-                <div class="main-text">Áo sơ mi</div>
+                <div class="main-text">
+                    {{ route?.query?.category ? route?.query?.category : 'Áo sơ mi' }}
+                </div>
                 <div class="flex justify-between items-center mb-[51px]">
-                    <div class="note-text">Hơn 50 sản phẩm ở đây!!</div>
+                    <div class="note-text">Hơn {{ productList?.length }} sản phẩm ở đây!!</div>
                     <div class="">
                         <Menu as="div" class="relative">
                             <MenuButton
@@ -97,9 +99,11 @@
                 <div class="grid grid-cols-3 gap-[70px]">
                     <div class="flex-[0_0_30%]" v-for="(product, index) in productList" :key="index">
                         <div class="h-full flex flex-col justify-between">
-                            <div class="relative w-full mb-[30px] group hover:bg-inherit" @click="productDetails(product.id)">
-                                <img crossorigin="anonymous" class="object-cover rounded-[20px]" :src="product.product_image" alt="">
-                                <div class="absolute top-[28px] left-0" v-if="product.bestSeller">
+                            <div class="relative w-full mb-[30px] group hover:bg-inherit">
+                                <img crossorigin="anonymous" class="object-cover rounded-[20px] min-w-[260px] min-h-[364px] max-w-[260px] max-h-[364px]" 
+                                    :src="product.image && product.image[0] ? urlApi + product.image[0] : ''"  alt=""
+                                >
+                                <div class="absolute top-[28px] left-0" v-if="product.isBestSeller">
                                     <div class="best-sell-tag">Best Seller</div>
                                 </div>
                                 <div class="hidden group-hover:block absolute right-[27px] bottom-[25px] z-10">
@@ -107,9 +111,9 @@
                                         <div class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
                                             @click="product.is_like = !product.is_like">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
-                                                alt="" v-if="product.is_like">
+                                                alt="" v-if="product.is_like" @click="unLikeProduct(product?.id)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
-                                                v-else>
+                                                v-else @click="likeProduct(product?.id)">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
@@ -119,7 +123,9 @@
                                                 alt="">
                                         </div>
                                         <div
-                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
+                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
+                                            @click="addToCart(product.id, product.quantity)"
+                                        >
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
@@ -129,25 +135,25 @@
                             <div class="flex items-center gap-[10px] rating-field mb-[16px]">
                                 <img crossorigin="anonymous" src="/images/star_rating_shop.svg" alt="">
                                 <div class="font-semibold">
-                                    {{ product.rating }}
+                                    {{ product.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}
                                 </div>
                                 <div class="w-[4px] h-[4px] bg-[#333333] rounded-full"></div>
                                 <div class="font-medium">
-                                    {{ product.rating_count }} reviews
+                                    {{ product.userRating }} reviews
                                 </div>
                             </div>
                             <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]">
                                 <div class="border border-[#D651FF] rounded-[50%] w-[30px] h-[30px] cursor-pointer"
-                                    :class="{ 'choosen-color': color.active }"
-                                    :style="`background-color: ${color.color};`"
-                                    v-for="(color, i) in product.color_list" :key="i" @click="chooseColor(index, i)">
+                                    :class="{ 'choosen-color': color }"
+                                    :style="`background-color: ${color};`"
+                                    v-for="(color, i) in product?.options[0]?.color" :key="i">
                                 </div>
                             </div>
                             <div class="mb-[67px] product-text text-[28px]">
-                                {{ product.product_name }}
+                                {{ product.name }}
                             </div>
                             <div class="flex items-center gap-5 product-text text-[28px]">
-                                ${{ product.sale_price ? product.sale_price : product.price }}
+                                ${{ product.discountPrice ? product.discountPrice : product.price }}    
                                 <span class="sale-text" v-if="product.sale_price">
                                     ${{ product.price }}
                                 </span>
@@ -156,7 +162,7 @@
                     </div>
                 </div>
                 <div class="w-full flex justify-center mt-[103px]">
-                    <button class="view-more-product-btn">
+                    <button class="view-more-product-btn" :disabled="totalItems <= productList?.length" @click="loadMoreProduct">
                         Xem thêm
                     </button>
                 </div>
@@ -167,24 +173,31 @@
 
 <script setup>
 import { useShopStore } from "../stores/ShopStore"
+import { useProductStore } from "../stores/ProductStore"
+import { useCategoryStore } from "../stores/CategoryStore"
 import { faker } from '@faker-js/faker';
 import { onMounted, ref } from "vue";
 import Slider from '@vueform/slider'
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { generateFakeData } from '../constant/commonFunction'
 import HeaderMain from '@/components/HeaderMain.vue'
+import { toastError, toastSuccess } from "@/constant/commonUsage";
 
+const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const router = useRouter()
-const tagChoosen = ref('')
+const route = useRoute()
+const storeProduct = useProductStore()
+const storeCategory = useCategoryStore()
+const tagChoosen = ref('desc')
 const tagList = ref([
     {
-        label: 'Mới nhất', value: 'new'
+        label: 'Mới nhất', value: 'desc'
     },
     {
-        label: 'Oldest', value: 'old'
+        label: 'Oldest', value: 'asc'
     },
 ])
-const priceRange = ref([145, 430])
+const priceRange = ref([0, 500])
 const shopStore = useShopStore()
 const productList = ref([])
 const imageList = ref([
@@ -209,13 +222,14 @@ const options = ref([
 ]);
 const colors = ref({
     all: true,
-    color: [faker.color.rgb(), faker.color.rgb(), faker.color.rgb(), faker.color.rgb()]
+    color: ['Đỏ', 'Xanh lá', 'Xanh', 'Trắng', 'Đen']
 })
 
 const isOpen = ref(true);
 const isOpenColor = ref(true);
 const isOpenPrice = ref(true);
 const selectedOption = ref('');
+const selectedColor = ref('');
 
 const getProductName = (e) => {
   console.log(e);
@@ -239,13 +253,71 @@ const loadMore = () => {
 };
 
 onMounted(() => {
-    productList.value = generateFakeData(9, imageList.value)
+    // productList.value = generateFakeData(9, imageList.value)
+    initCategories()
+    initProducts()
     shopStore.clothes = productList.value
     console.log(shopStore.getClothes);
 })
 
+const page = ref(route?.query?.page ? route.query.page : 1)
+const pageSize = ref(route?.query?.pageSize ? route.query.pageSize : 9)
+const totalPage = ref()
+const totalItems = ref()
+const initProducts = async () => {
+    try {
+        const params = {
+            page: page.value,
+            pageSize: pageSize.value,
+            name: route?.query?.category,
+            sortBy: tagChoosen.value,
+        }
+        const data = await storeProduct.getAllProduct(params)
+        console.log(data);
+        if (data?.results?.results && data?.results?.results?.length > 0) {
+            // productList.value = data?.results?.results
+            data?.results?.results.forEach(res => {
+                productList.value?.push(res)
+            });
+        }
+        shopStore.product = ''
+        totalPage.value = data?.results?.totalPages
+        totalItems.value = data?.results?.totalResults
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const initCategories = async () => {
+    try {
+        await storeCategory.getAllCategory({})
+        options.value = storeCategory.categories
+    } catch (error) {
+        return error
+    }
+}
+
+const searchByfilter = () => {
+    productList.value = []
+    initProducts()
+}
+
+const resetFilter = () => {
+    selectedOption.value = ''
+    selectedColor.value = ''
+    productList.value = []
+    initProducts()
+}
+
+const loadMoreProduct = () => {
+    page.value++
+    initProducts()
+}
+
 const changeTag = (tag) => {
     tagChoosen.value = tag
+    productList.value = []
+    initProducts()
 }
 
 const chooseColor = (index, indexColor) => {
@@ -255,7 +327,51 @@ const chooseColor = (index, indexColor) => {
 }
 
 const productDetails = (id) => {
-    router.push({ name: '', params: { id: id } })
+    router.push({ name: 'ProductView', params: { id: id } })
+}
+
+const addToCart = async (id, stock) => {
+    if (stock > 0) {
+        try {
+            const payload = {
+                productId: id,
+                quantity: 1,
+            }
+            await storeProduct.addCart(payload)
+            toastSuccess('Add to cart success')
+            storeProduct.listCart()
+        } catch (error) {
+            return error
+        }
+    } else {
+        toastError('Out of stock')
+    }
+}
+
+const likeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateLikeProduct(payload)
+        toastSuccess('Like success')
+    } catch (error) {
+        toastError(error)
+        return error
+    }
+}
+
+const unLikeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateUnLikeProduct(payload)
+        toastSuccess('Unlike success')
+    } catch (error) {
+        toastError(error)
+        return error
+    }
 }
 
 </script>

@@ -52,6 +52,7 @@ export const useCategoryStore = defineStore('category', {
             return new Promise((resolve, reject) => {
                 CategoryService.getAllCategory(request)
                     .then(({ data }) => {
+                        this.categories = data?.results;
                         resolve(data)
                     })
                     .catch(({ response }) => reject(response))

@@ -11,7 +11,7 @@
             <swiper-slide v-for="(product, index) in saleWellProducts" :key="index">
                 <div class="grid grid-cols-2 bg-[#FFFFFF] rounded-[10px]">
                     <div class="col-span-1 w-[200px]">
-                        <img crossorigin="anonymous" 
+                        <img crossorigin="anonymous"  class="h-full rounded-[10px]"
                             :src="product?.image && product?.image[0] !== 'public/uploads/products/default.jpg' ? urlApi + product.image[0] : `/images/hot_sale_product${index+1}.svg`"
                             alt=""
                             @click="toProduct(product?._id)"
@@ -32,8 +32,8 @@
                             <span class="prod-quantity-text pt-[14px]">{{ 'Số lượng còn :' + product.quantity }}</span>
                         </div>
                         <div class="flex items-center pt-[40px] gap-6" v-if="product.discountPrice">
-                            <div class="main-price">${{ product.discountPrice }}</div>
-                            <span class="sub-price">${{ product.price }}</span>
+                            <div class="main-price">${{ product.price }}</div>
+                            <span class="sub-price">${{ product.discountPrice }}</span>
                         </div>
                         <div class="flex items-center pt-[40px] gap-6" v-else>
                             <div class="main-price">${{ product.price }}</div>

@@ -48,6 +48,36 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getProductDetails(id) {
+            return new Promise((resolve, reject) => {
+                ProductService.getProductDetails(id)
+                    .then(({ data }) => {
+                        this.product = data;
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async updateLikeProduct(payload) {
+            return new Promise((resolve, reject) => {
+                ProductService.updateLikeProduct(payload)
+                    .then(({ data }) => {
+                        this.product = data;
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async updateUnLikeProduct(payload) {
+            return new Promise((resolve, reject) => {
+                ProductService.updateUnLikeProduct(payload)
+                    .then(({ data }) => {
+                        this.product = data;
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
         async createProduct(payload) {
             return new Promise((resolve, reject) => {
                 ProductService.createProduct(payload)

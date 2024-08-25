@@ -83,16 +83,16 @@
           <img crossorigin="anonymous" src="/images/hot_trend_img.svg" alt="">
         </div>
         <div class="col-span-3  flex gap-[31px] justify-center">
-          <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-            <img crossorigin="anonymous" src="/images/sub_hot_trend1.svg" alt="">
+          <div class="sub-hot-image relative group hover:bg-[#000000CF]" v-for="(trend1, index) in trendCategories1" :key="index">
+            <img crossorigin="anonymous" :src="trend1?.image ? urlApi + trend1?.image : '/images/sub_hot_trend1.svg'" alt="">
             <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
               <div
-                class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
+                class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="toCategory(trend1?.name)">
+                <img crossorigin="anonymous" :src="'/images/search_details_icon.svg'" alt="">
               </div>
             </div>
           </div>
-          <div class="sub-hot-image relative group hover:bg-[#000000CF]">
+          <!-- <div class="sub-hot-image relative group hover:bg-[#000000CF]">
             <img crossorigin="anonymous" src="/images/sub_hot_trend2.svg" alt="">
             <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
               <div
@@ -111,12 +111,23 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="col-span-3  flex gap-[31px] justify-center">
-          <div>
+          <div v-for="(trend2, index) in trendCategories2" :key="index">
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img crossorigin="anonymous" src="/images/sub_hot_trend4.svg" alt="">
+              <img crossorigin="anonymous" :src="trend2?.image ? urlApi + trend2?.image : '/images/sub_hot_trend4.svg'" alt="">
+              <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
+                <div
+                  class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="toCategory(trend2?.name)">
+                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div>
+            <div class="sub-hot-image relative group hover:bg-[#000000CF]">
+              <img crossorigin="anonymous" src="/images/sub_hot_trend5.svg" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
@@ -135,18 +146,7 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div>
-            <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img crossorigin="anonymous" src="/images/sub_hot_trend5.svg" alt="">
-              <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
-                <div
-                  class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]">
-                  <img crossorigin="anonymous" src="/images/search_details_icon.svg" alt="">
-                </div>
-              </div>
-            </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -300,7 +300,10 @@
               <div class="bg-[#310043] rounded-[20px] p-[30px] text-white row gap-[38px]">
                 <!-- Product image -->
                 <div class="flex-[0_0_200px] object-cover rounded-xl mb-3 w-[200px]">
-                  <img crossorigin="anonymous" :src="product.image" alt="Áo thun cổ trơn dài tay">
+                  <img crossorigin="anonymous" 
+                    :src="product.image && product.image?.length > 0 ? urlApi + product.image[0] : ''" 
+                    alt="Áo thun cổ trơn dài tay"
+                  >
                 </div>
                 <div class="col mt-[28px]">
                   <!-- Rating -->
@@ -308,21 +311,24 @@
                     <div class="top-sale-text">SALE</div>
                     <div class="flex gap-[7px]">
                       <img crossorigin="anonymous" class="cursor-pointer"
-                        :src="star.rate ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
-                        v-for="(star, i) in product.rating" :key="i">
-                      <span class="ml-1 text-sm">({{ product.rating_count }})</span>
+                        :src="Math.round(product?.totalRating/product?.userRating) >= star ? '/images/star_active.svg' : '/images/star_inactive.svg'" alt=""
+                        v-for="(star, i) in 5" :key="i">
+                      <span class="ml-1 text-sm">({{ product?.userRating }})</span>
                     </div>
                   </div>
 
                   <!-- Product name -->
                   <h2 class="text-lg font-semibold mb-1">{{ product.name }}</h2>
-                  <p class="text-sm text-purple-300 mb-2">{{ product.color }}</p>
+                  <div class="flex items-center gap-1" v-if="product?.options?.length > 0">
+                    <p class="text-sm text-purple-300 mb-2" v-for="(color, i) in product?.options[0]?.color" :key="i">
+                      {{ color }}{{ (i < product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                    </p>
+                  </div>
 
                   <!-- Price -->
                   <div class="flex items-center gap-5 mb-2 price-layout pt-[48px]">
-                    <span class="main-price">{{ product.sale_price ? '$' + product.sale_price : '$' + product.price
-                      }}</span>
-                    <span class="sub-main-price" v-if="product.sale_price">{{ '$' + product.price }}</span>
+                    <span class="main-price">{{ product.fastSalePrice ? '$' + product.fastSalePrice : '$' + 0 }}</span>
+                    <span class="sub-main-price" v-if="product.discountPrice">{{ '$' + product.discountPrice }}</span>
                   </div>
 
                   <!-- Stock -->
@@ -330,12 +336,12 @@
                     <div class="flex flex-col w-full">
                       <div class="relative stock-count-field">
                         <div class="absolute bg-[#FF7A00] h-[6px] rounded-[39px]"
-                          :style="{ width: `${(product.stock / product.max_stock) * 100}%` }"></div>
+                          :style="{ width: `${(product.quantity / product.quantity) * 100}%` }"></div>
                       </div>
-                      <div class="text-sm">Còn: {{ product.stock }}</div>
+                      <div class="text-sm">Còn: {{ product.quantity }}</div>
                     </div>
                     <!-- Cart button -->
-                    <button class="bg-purple-500 rounded-full p-[17px]">
+                    <button class="bg-purple-500 rounded-full p-[17px]" @click="updateCart(product?.id, 1)">
                       <img crossorigin="anonymous" class="min-w-[24px]" src="/images/basket_white.svg" alt="" />
                     </button>
                   </div>
@@ -424,14 +430,17 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import HeaderMain from '@/components/HeaderMain.vue'
 import HotProductSlide from '@/components/HotProductSlide.vue'
 import { useProductStore } from '../stores/ProductStore'
+import { useCategoryStore } from '../stores/CategoryStore'
 import { useUserStore } from '../stores/UserStore'
 import router from '@/router';
 import { toastSuccess } from '@/constant/commonUsage';
 import { formatDate } from '@/constant/commonFunction';
+import moment from 'moment';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const storeProduct = useProductStore()
 const storeUser = useUserStore()
+const storeCategory = useCategoryStore()
 const sizes = ref([
   { label: 'L', value: 'L' },
   { label: 'XL', value: 'XL' },
@@ -718,8 +727,29 @@ const countdown = () => {
   }
 };
 
+function calculateRemainingTime(startDate, endDate) {
+  const now = moment();
+  const endTime = moment(endDate);
+
+  const duration = moment.duration(endTime.diff(now));
+
+  if (duration.asSeconds() > 0) {
+    flashSaleTimer.value = {
+      hours: Math.floor(duration.asHours()),
+      minutes: duration.minutes(),
+      seconds: duration.seconds(),
+    };
+  } else {
+    flashSaleTimer.value = {
+      hours: 5,
+      minutes: 42,
+      seconds: 19,
+    };
+  }
+}
+
 onMounted(() => {
-  initCategory()
+  initTrendCategory()
   initTopSale()
   initHotProduct()
   initTopProducts()
@@ -778,7 +808,14 @@ const initFlashSaleProducts = async () => {
       flashSale: true,
     }
     const data = await storeProduct.getAllProduct(params)
-    console.log(data)
+    if (data?.results?.results && data?.results?.results?.length > 0) {
+      flashSaleProducts.value = data?.results?.results
+      data?.results?.results.forEach(res => {
+        if (res?.fastSaleStartDate || res?.fastSaleEndDate) {
+          calculateRemainingTime(res?.fastSaleStartDate, res?.fastSaleEndDate)
+        }
+      });
+    }
   } catch (error) {
     return error
   }
@@ -807,14 +844,26 @@ const initHotProduct = async () => {
   }
 }
 
-const initCategory = async () => {
+const trendCategories1 = ref([]);
+const trendCategories2 = ref([]);
+const initTrendCategory = async () => {
   try {
     const params = {
       page: 1,
       limit: 6
     }
-    const data = await storeProduct.getAllCategory(params)
-    console.log(data)
+    const data = await storeCategory.getAllCategory(params)
+    console.log(data?.results)
+    if (data?.results && data?.results?.length > 0) {
+      if (data?.results?.length >= 3) {
+        trendCategories1.value = data?.results?.slice(0, 3);
+      } else {
+        trendCategories1.value = data?.results
+      }
+      if (data?.results?.length >= 6) {
+        trendCategories2.value = data?.results?.slice(3, 6);
+      }
+    }
   } catch (error) {
     return error
   }
@@ -822,6 +871,11 @@ const initCategory = async () => {
 
 const toProductList = () => {
     router.push({ name: 'ProductListView' })
+    scrollTo(0 ,0)
+}
+
+const toCategory = (category) => {
+    router.push({ name: 'ShopView', query: { category: category } })
     scrollTo(0 ,0)
 }
 
@@ -903,8 +957,15 @@ const updateCart = async (id, quantity) => {
 .sub-hot-image {
   width: 250px;
   height: 360px;
+  min-width: 250px;
+  min-height: 360px;
+  max-width: 250px;
+  max-height: 360px;
   border-radius: 20px;
   background: #C4C4C4;
+}
+.sub-hot-image img {
+  border-radius: 20px;
 }
 
 .rating {

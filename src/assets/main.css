@@ -113,6 +113,10 @@
   }
 }
 
+.view-more-product-btn:disabled {
+  opacity: 0.6;
+}
+
 .row {
   display: flex;
   flex-wrap: wrap;

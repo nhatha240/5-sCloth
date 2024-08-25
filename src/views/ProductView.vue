@@ -260,7 +260,7 @@ const initProductDetails = async () => {
 
 const initProduct = async () => {
   try {
-    const data = await storeProduct.getProduct(productId.value)
+    const data = await storeProduct.getProductDetails(productId.value)
     data.stock = 0
     product.value = data
   } catch (error) {

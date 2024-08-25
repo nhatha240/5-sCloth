@@ -150,9 +150,11 @@ import { useShopStore } from '../stores/ShopStore'
 import { useAuthStore } from '../stores/AuthStore'
 import { useProductStore } from '../stores/ProductStore'
 import { toastSuccess } from '@/constant/commonUsage';
+import { useCategoryStore } from '../stores/CategoryStore'
 
 const emits = defineEmits(['update:search'])
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
+const storeCategory = useCategoryStore()
 const storeAuth = useAuthStore()
 const storeShop = useShopStore()
 const storeProduct = useProductStore()
@@ -167,21 +169,39 @@ const links = ref([
 
 const menuContent = ref([
   { href: '/', label: 'Trang chủ', value: 'home' },
-  { href: '/shop?category=maleShirt', label: 'Đồ Nam', value: 'ShopView', category: 'maleShirt' },
-  { href: '/shop?category=femaleShirt', label: 'Đồ Nữ', value: 'ShopView', category: 'femaleShirt' },
-  { href: '/shop?category=childShirt', label: 'Đồ Trẻ Em', value: 'ShopView', category: 'childShirt' },
-  { href: '/shop?category=accessory', label: 'Phụ Kiện', value: 'ShopView', category: 'accessory' },
+  { href: '/shop?category=Đồ Nam', label: 'Đồ Nam', value: 'ShopView', category: 'Đồ Nam' },
+  { href: '/shop?category=Đồ Nữ', label: 'Đồ Nữ', value: 'ShopView', category: 'Đồ Nữ' },
+  { href: '/shop?category=Đồ Trẻ Em', label: 'Đồ Trẻ Em', value: 'ShopView', category: 'Đồ Trẻ Em' },
+  { href: '/shop?category=Phụ Kiện', label: 'Phụ Kiện', value: 'ShopView', category: 'Phụ Kiện' },
   { href: '/order', label: 'Đơn hàng', value: 'OrderView' },
-  { href: '/', label: 'Sale', value: '' },
+  { href: '/product', label: 'Sale', value: 'ProductListView' },
 ])
 const showBasket = ref(false)
 
 onMounted(() => {
+  initCageoriesMenu()
   refreshToken()
   if (storeAuth.user) {
     getListCart()
   }
 })
+
+const categoriesMenu = ref([]);
+const initCageoriesMenu = async () => {
+  try {
+    const params = {
+      page: 1,
+      limit: 4
+    }
+    const data = await storeCategory.getAllCategory(params)
+    if (data && data?.length > 0) {
+      categoriesMenu.value = data;
+
+    }
+  } catch (error) {
+    return error
+  }
+}
 
 const refreshToken = async () => {
   if (storeAuth.userRefreshToken) {
