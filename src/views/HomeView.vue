@@ -10,7 +10,7 @@
       </div>
       <div class="search-bar absolute bottom-[-52px] w-full">
         <div
-          class="flex gap-5 p-[30px] bg-white mx-[287px] items-center rounded-[10px] shadow-[0_16px_28px_0_rgba(141,40,173,0.15)]">
+          class="flex gap-3 p-[30px] bg-white mx-[287px] items-center rounded-[10px] shadow-[0_16px_28px_0_rgba(141,40,173,0.15)]">
           <div>
             <Menu as="div" class="relative">
               <MenuButton class="w-[161px] bg-[#F3F3F3] text-[#636363] font-normal py-[20px] pl-[30px] pr-[21px] rounded-lg">
@@ -53,6 +53,7 @@
           </div>
           <div class="flex-grow">
             <input placeholder="Nhập tên sản phẩm vào đây"
+              v-model="storeShop.product"
               class="search-input flex items-center justify-between w-full bg-[#F3F3F3] text-[#636363] font-normal py-[20px] pl-[30px] pr-[54px] rounded-lg"
               type="text">
           </div>
@@ -436,8 +437,10 @@ import router from '@/router';
 import { toastSuccess } from '@/constant/commonUsage';
 import { formatDate } from '@/constant/commonFunction';
 import moment from 'moment';
+import { useShopStore } from '@/stores/ShopStore';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
+const storeShop = useShopStore()
 const storeProduct = useProductStore()
 const storeUser = useUserStore()
 const storeCategory = useCategoryStore()

@@ -5,30 +5,7 @@
             Yêu thích
         </div>
         <div class="w-full flex justify-end mb-[53px]">
-            <div class="">
-                <Menu as="div" class="relative">
-                    <MenuButton
-                        class="flex items-center justify-between bg-white text-[#D651FF] text-lg font-medium py-[10px] px-[7px] rounded-lg border-[#D651FF] border-[1px] min-w-[126px]">
-                        <div class="flex items-center gap-[16px]">
-                            <div>Mới nhất</div>
-                            <img crossorigin="anonymous" src="/images/arrow_sort_icon.svg" alt="">
-                        </div>
-                    </MenuButton>
-                    <MenuItems class="z-[1] absolute top-[64px] right-0 w-full origin-top-right divide-y 
-                                    divide-gray-100 bg-white shadow-lg ring-1
-                                    ring-black/5 focus:outline-none rounded-[10px]">
-                        <MenuItem v-for="(tag, index) in product?.tags" :key="index" as="div" :class="[
-                            tagChoosen === tag ? 'bg-[#EEDFF3]' : '',
-                            index === 0 ? 'rounded-[10px_10px_0_0]' : '',
-                            tagList.length === (index - 1) ? 'rounded-[0_0_10px_10px]' : '',
-                            'group flex items-center justify-between w-max text-[#D651FF] menu-item-text pt-[14px] py-[10px] px-[25px] cursor-pointer',
-                        ]" @click="changeTag(tag)">
-                        {{ tag }}
-                        <img crossorigin="anonymous" src="/images/check_chose_category.svg" alt="" v-if="tagChoosen === tag">
-                        </MenuItem>
-                    </MenuItems>
-                </Menu>
-            </div>
+            
         </div>
         <div class="">
             <div class="grid grid-cols-4 gap-[70px]">
