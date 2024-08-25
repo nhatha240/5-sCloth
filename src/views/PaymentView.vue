@@ -172,7 +172,7 @@
                 </div>
                 <img crossorigin="anonymous" class="max-w-[65px] rounded-[8px]" :src="urlApi + product?.product?.image[0]" alt="">
               </div>
-              <div class="flex flex-col">
+              <div class="flex gap-1">
                 <div class="">
                   {{ product?.product?.name }}
                 </div>
@@ -182,7 +182,7 @@
               </div>
             </div>
             <div class="flex justify-end">
-              {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) : (product?.product?.discountPrice * product?.quantity)) }}đ
+              {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) : (product?.product?.price * product?.quantity)) }}đ
             </div>
           </div>
           <div class="border-t border-[#D7DBEC] mt-4 flex flex-col gap-2">
@@ -295,7 +295,7 @@ const confirmOrder = async () => {
     router.push({ name: 'home' })
     const data = await storeOrder.addOrder(productItem)
     if (data?.id) {
-      await storeOrder.captureOrder(data?.id)
+      // await storeOrder.captureOrder(data?.id)
     }
 
   } catch (error) {
