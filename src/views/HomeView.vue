@@ -863,7 +863,7 @@ const initTrendCategory = async () => {
       } else {
         trendCategories1.value = data?.results
       }
-      if (data?.results?.length >= 6) {
+      if (data?.results?.length > 3) {
         trendCategories2.value = data?.results?.slice(3, 6);
       }
     }
