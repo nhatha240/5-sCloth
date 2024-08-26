@@ -16,3 +16,10 @@ export const ORDER_STATUS = {
 export const NAME_LINK_ROUTER = {
     'Books': 'ProductListView',
 }
+export const DEFAULT_COLOR = {
+    'Đỏ': 'red',
+    'Xanh lá': 'green',
+    'Xanh': 'blue',
+    'Trắng': 'white',
+    'Đen': 'black',
+}

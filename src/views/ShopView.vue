@@ -182,6 +182,7 @@ import { useRoute, useRouter } from "vue-router";
 import { generateFakeData } from '../constant/commonFunction'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { toastError, toastSuccess } from "@/constant/commonUsage";
+import { DEFAULT_COLOR } from '@/constant/common';
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const router = useRouter()
@@ -303,7 +304,7 @@ const initByFilter = async () => {
             pageSize: pageSize.value,
             name: selectedOption.value ? selectedOption.value : route?.query?.category,
             sortBy: tagChoosen.value,
-            color: selectedColor.value,
+            color: DEFAULT_COLOR[selectedColor.value],
             priceRage: priceRange.value,
         }
         const data = await storeProduct.getAllProduct(params)
