@@ -17,9 +17,13 @@ apiClient.interceptors.request.use(
     toggleLoading(true)
     config.headers['Accept'] = '*/*'
     if (config?.url?.includes('/admin')) {
-      config.headers['Authorization'] = 'Bearer ' + useAuthStore().adminToken
+      if (useAuthStore().adminToken) {
+        config.headers['Authorization'] = 'Bearer ' + useAuthStore().adminToken
+      }
     } else {
-      config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+      if (useAuthStore().token) {
+        config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+      }
     }
     config.headers['Access-Control-Allow-Origin'] = '*'
     return config
