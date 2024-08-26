@@ -85,7 +85,7 @@
         </div>
         <div class="col-span-3  flex gap-[31px] justify-center">
           <div class="sub-hot-image relative group hover:bg-[#000000CF]" v-for="(trend1, index) in trendCategories1" :key="index">
-            <img crossorigin="anonymous" :src="trend1?.image ? urlApi + trend1?.image : '/images/sub_hot_trend1.svg'" alt="">
+            <img crossorigin="anonymous" class="h-full" :src="trend1?.image ? urlApi + trend1?.image : '/images/sub_hot_trend1.svg'" alt="">
             <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
               <div
                 class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="toCategory(trend1?.name)">
@@ -117,7 +117,7 @@
         <div class="col-span-3  flex gap-[31px] justify-center">
           <div v-for="(trend2, index) in trendCategories2" :key="index">
             <div class="sub-hot-image relative group hover:bg-[#000000CF]">
-              <img crossorigin="anonymous" :src="trend2?.image ? urlApi + trend2?.image : '/images/sub_hot_trend4.svg'" alt="">
+              <img crossorigin="anonymous" class="h-full" :src="trend2?.image ? urlApi + trend2?.image : '/images/sub_hot_trend4.svg'" alt="">
               <div class="hidden group-hover:block absolute top-0 w-full h-full bg-[#000000CF] rounded-[20px]">
                 <div
                   class="search-details-btn w-[79px] h-[79px] bg-[#D651FF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="toCategory(trend2?.name)">
