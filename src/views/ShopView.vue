@@ -15,7 +15,7 @@
                         <ul class="space-y-2 pl-[29px]" v-if="isOpen">
                             <li v-for="(option, index) in options" :key="index" class="flex items-center">
                                 <input type="radio" :id="option.id" :value="option.name" v-model="selectedOption"
-                                    class="form-radio text-purple-600 focus:ring-purple-500">
+                                    class="form-radio text-purple-600 focus:ring-purple-500" :checked="selectedOption == option?.name">
                                 <label :for="option.id" class="ml-2 text-sm text-gray-700">{{ option?.name }}</label>
                             </li>
                         </ul>
@@ -176,7 +176,7 @@ import { useShopStore } from "../stores/ShopStore"
 import { useProductStore } from "../stores/ProductStore"
 import { useCategoryStore } from "../stores/CategoryStore"
 import { faker } from '@faker-js/faker';
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Slider from '@vueform/slider'
 import { useRoute, useRouter } from "vue-router";
 import { generateFakeData } from '../constant/commonFunction'
@@ -253,9 +253,20 @@ const loadMore = () => {
     console.log('Load more clicked');
 };
 
+watch(
+    () => route?.query?.category,
+    () => {
+        if (route?.query?.category) {
+            selectedOption.value = route?.query?.category ? route?.query?.category : ''
+            searchByfilter()
+        }
+    }
+)
+
 onMounted(() => {
     // productList.value = generateFakeData(9, imageList.value)
     initCategories()
+    selectedOption.value = route?.query?.category ? route?.query?.category : ''
     initProducts()
     shopStore.clothes = productList.value
 })
@@ -302,11 +313,12 @@ const initByFilter = async () => {
         const params = {
             page: page.value,
             pageSize: pageSize.value,
-            name: selectedOption.value ? selectedOption.value : route?.query?.category,
+            name: selectedOption.value,
             sortBy: tagChoosen.value,
             color: DEFAULT_COLOR[selectedColor.value],
             priceRage: priceRange.value,
         }
+        router.replace({ query: { category: selectedOption.value } })
         const data = await storeProduct.getAllProduct(params)
         if (data?.results?.results && data?.results?.results?.length > 0) {
             data?.results?.results.forEach(res => {
