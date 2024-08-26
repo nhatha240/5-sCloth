@@ -12,7 +12,7 @@
             <a v-else class="text-gray-500 font-normal text-lg no-underline" 
                 :class="{ 'text-[#D651FF]': crumb?.params?.id }"
             >
-                {{ crumb?.query?.category ? crumb?.query?.category : crumb.name }}
+                {{ crumb.name ? crumb.name : crumb?.query?.category }}
             </a>
             <span class="" v-if="crumb?.params?.id && index == breadcrumbs.length - 1">
                 <span class="mx-2 text-[#D651FF] text-lg font-semibold">/</span>
