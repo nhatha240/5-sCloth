@@ -99,9 +99,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="!text-[#F0142F] details-text cursor-pointer pt-[28px] border-t border-[#E6E9F4] mt-[2px]">
+                    <!-- <div class="!text-[#F0142F] details-text cursor-pointer pt-[28px] border-t border-[#E6E9F4] mt-[2px]">
                         Xóa đánh giá
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

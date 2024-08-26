@@ -197,19 +197,19 @@ const routeList = ref([
         label: 'Dashboard', path: '/admin', icon: '/images/dashboard_icon.svg', notifyCount: '', name: 'DashBoardView'
     },
     {
-        label: 'Orders', path: '/admin/orders', icon: '/images/orders_icon.svg', notifyCount: '', name: ['OrderListView', 'OrderDetailsView']
+        label: 'Đơn hàng', path: '/admin/orders', icon: '/images/orders_icon.svg', notifyCount: '', name: ['OrderListView', 'OrderDetailsView']
     },
     {
-        label: 'Products', path: '/admin/products', icon: '/images/products_icon.svg', notifyCount: '', name: ['ProductViewAdmin', 'ProductDetailsView', 'CreateProductView']
+        label: 'Sản phẩm', path: '/admin/products', icon: '/images/products_icon.svg', notifyCount: '', name: ['ProductViewAdmin', 'ProductDetailsView', 'CreateProductView']
     },
     {
-        label: 'Categories', path: '/admin/categories', icon: '/images/categories_icon.svg', notifyCount: '', name: ['CategoriesView', 'CategoryDetailsView']
+        label: 'Danh mục', path: '/admin/categories', icon: '/images/categories_icon.svg', notifyCount: '', name: ['CategoriesView', 'CategoryDetailsView']
     },
     {
-        label: 'Customers', path: '/admin/customers', icon: '/images/customers_icon.svg', notifyCount: '', name: ['CustomerListView', 'CustomerInfoView', 'CustomerModifyView']
+        label: 'Người dùng', path: '/admin/customers', icon: '/images/customers_icon.svg', notifyCount: '', name: ['CustomerListView', 'CustomerInfoView', 'CustomerModifyView']
     },
     {
-        label: 'Rating', path: '/admin/rating', icon: '/images/rating_icon.svg', notifyCount: '', name: ['RatingPageView', 'RatingDetailsView']
+        label: 'Quản lý bình luận', path: '/admin/rating', icon: '/images/rating_icon.svg', notifyCount: '', name: ['RatingPageView', 'RatingDetailsView']
     },
     // {
     //     label: 'Coupon', path: '/admin/coupon', icon: '/images/coupons_icon.svg', notifyCount: '', name: ''
@@ -228,7 +228,7 @@ const otherInfoRouteList = ref([
 ])
 const settingRouteList = ref([
     {
-        label: 'Personal Settings', path: '/admin/personal-settings', icon: '/images/personal_setting_icon.svg', notifyCount: '', name: 'PersonalSettingView'
+        label: 'Trang của tôi', path: '/admin/personal-settings', icon: '/images/personal_setting_icon.svg', notifyCount: '', name: 'PersonalSettingView'
     },
     // {
     //     label: 'Global Settings', path: '/admin/', icon: '/images/global_setting_icon.svg', notifyCount: '', name: ''

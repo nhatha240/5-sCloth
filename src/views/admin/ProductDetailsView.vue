@@ -82,7 +82,7 @@
                             <input type="checkbox" :checked="productDetails.status" v-model="productDetails.status">
                             <span class="slider round"></span>
                         </label>
-                        Is public
+                        Công khai
                     </div>
                     <div class="flex items-center gap-3 mb-6">
                         <label class="switch">
@@ -90,7 +90,15 @@
                                 v-model="productDetails.isBestSeller">
                             <span class="slider round"></span>
                         </label>
-                        Is best seller
+                        Sản phẩn bán chạy
+                    </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <label class="switch">
+                            <input type="checkbox" :checked="productDetails.isSale"
+                                v-model="productDetails.isSale">
+                            <span class="slider round"></span>
+                        </label>
+                        Setting giảm giá
                     </div>
                     <div class="flex items-center gap-3 mb-6">
                         <label class="switch">
@@ -98,7 +106,7 @@
                                 v-model="productDetails.isFastSale">
                             <span class="slider round"></span>
                         </label>
-                        Is FlashSale
+                        Giảm giá FlashSale
                     </div>
                     <div class="flex items-center gap-3 mb-6">
                         <label class="switch">
