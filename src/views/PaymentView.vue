@@ -227,7 +227,7 @@ import { useUserStore } from '../stores/UserStore'
 import { useProductStore } from '../stores/ProductStore'
 import { useOrderStore } from '../stores/OrderStore'
 import router from '@/router'
-import { toastSuccess } from '@/constant/commonUsage'
+import { toastError, toastSuccess } from '@/constant/commonUsage'
 
 // Change to your CLIENT ID gotten from the developer dashboard
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
@@ -260,7 +260,7 @@ onBeforeMount(function () {
   loadScript({ 'client-id': CLIENT_ID }).then((paypal) => {
     paypal
       .Buttons({
-        createOrder: createOrder,
+        createOrder,
         onApprove: onApprove,
         onCancel: onCancel,
         onError: (err) => {
@@ -271,20 +271,21 @@ onBeforeMount(function () {
   })
 })
 
-function createOrder(data, actions) {
-  console.log('Creating order...', data, actions)
-  return actions.order.create({
-    purchase_units: [
-      {
-        amount: {
-          value: cartTotal
-        }
-      }
-    ]
-  })
+function createOrder() {
+  return confirmOrder()
+  // console.log('Creating order...', data, actions)
+  // return actions.order.create({
+  //   purchase_units: [
+  //     {
+  //       amount: {
+  //         value: cartTotal
+  //       }
+  //     }
+  //   ]
+  // })
 }
 
-const confirmOrder = async () => {
+const confirmOrder = () => {
   try {
     const productItem = {
       products: storeProduct.cartItem.map(item => ({
@@ -295,21 +296,54 @@ const confirmOrder = async () => {
       }))
     }
     console.log(productItem);
-    router.push({ name: 'home' })
-    const data = await storeOrder.addOrder(productItem)
+    // router.push({ name: 'home' })
+    const data = storeOrder.addOrder(productItem)
+    console.log(data)
     if (data?.id) {
-      await storeProduct.listCart()
-      await storeOrder.captureOrder(data?.id)
+      // storeProduct.listCart()
     }
-    toastSuccess('Thanh toán thành công')
+    // toastSuccess('Thanh toán thành công')
+    return data
 
   } catch (error) {
     return error
   }
 }
 
-function onApprove(data, actions) {
+async function onApprove(data, actions) {
   console.log('Order approved...')
+  try {
+    const orderData = await storeOrder.captureOrder(data?.id)
+    console.log(orderData)
+    const errorDetail = orderData?.details?.[0];
+
+    if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+      // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+      // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+      return actions.restart();
+    } else if (errorDetail) {
+      // (2) Other non-recoverable errors -> Show a failure message
+      throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+    } else if (!orderData.purchase_units) {
+      throw new Error(JSON.stringify(orderData));
+    } else {
+      // (3) Successful transaction -> Show confirmation or thank you message
+      // Or go to another URL:  actions.redirect('thank_you.html');
+      const transaction =
+        orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
+        orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
+      toastError(
+        `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
+      );
+      console.log(
+        "Capture result",
+        orderData,
+        JSON.stringify(orderData, null, 2),
+      );
+    }
+  } catch (e) {
+    return e
+  }
   return actions.order.capture().then(() => {
     paid.value = true
     console.log('Order complete!')

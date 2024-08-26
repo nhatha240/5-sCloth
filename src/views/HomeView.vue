@@ -254,7 +254,7 @@
                   {{ product.name }}
                 </div>
                 <div class="flex gap-1 pt-[10px]" v-if="product?.options?.length > 0">
-                  <div class="" v-for="color in product?.options[0]?.color" :key="color">
+                  <div class="" v-for="(color, i) in product?.options[0]?.color" :key="i">
                     {{ color }}{{ (i < product?.options[0]?.color?.length - 1) ? ', ' : '' }}
                   </div>
                 </div>
