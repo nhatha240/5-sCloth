@@ -35,9 +35,9 @@
                             {{ product.name }}
                         </div>
                     </div>
-                    <button class="add-prod-btn">
+                    <button class="add-prod-btn" @click="toAddProduct">
                         <img crossorigin="anonymous"  :src="'/images/add_product_icon.svg'" alt="">
-                        <div class="btn-text" @click="toAddProduct">Thêm sản phẩm</div>
+                        <div class="btn-text">Thêm sản phẩm</div>
                     </button>
                 </div>
             </div>
