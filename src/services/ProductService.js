@@ -17,6 +17,8 @@ export default {
             name: query?.name,
             flashSale: query?.flashSale,
             sortBy: query?.sortBy,
+            color: query?.color,
+            priceRage: query?.priceRage,
         }
         return await API.get('/products', {params})
     },

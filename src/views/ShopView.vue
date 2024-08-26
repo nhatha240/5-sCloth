@@ -14,7 +14,7 @@
                         </h2>
                         <ul class="space-y-2 pl-[29px]" v-if="isOpen">
                             <li v-for="(option, index) in options" :key="index" class="flex items-center">
-                                <input type="radio" :id="option.id" :value="option" v-model="selectedOption"
+                                <input type="radio" :id="option.id" :value="option.name" v-model="selectedOption"
                                     class="form-radio text-purple-600 focus:ring-purple-500">
                                 <label :for="option.id" class="ml-2 text-sm text-gray-700">{{ option?.name }}</label>
                             </li>
@@ -162,7 +162,7 @@
                     </div>
                 </div>
                 <div class="w-full flex justify-center mt-[103px]">
-                    <button class="view-more-product-btn" :disabled="totalItems <= productList?.length" @click="loadMoreProduct">
+                    <button class="view-more-product-btn" :disabled="(productList?.length <= 0 || totalItems <= productList?.length)" @click="loadMoreProduct">
                         Xem thêm
                     </button>
                 </div>
@@ -221,7 +221,7 @@ const options = ref([
     'Quần dài kaki'
 ]);
 const colors = ref({
-    all: true,
+    all: '',
     color: ['Đỏ', 'Xanh lá', 'Xanh', 'Trắng', 'Đen']
 })
 
@@ -257,7 +257,6 @@ onMounted(() => {
     initCategories()
     initProducts()
     shopStore.clothes = productList.value
-    console.log(shopStore.getClothes);
 })
 
 const page = ref(route?.query?.page ? route.query.page : 1)
@@ -297,9 +296,33 @@ const initCategories = async () => {
     }
 }
 
+const initByFilter = async () => {
+    try {
+        const params = {
+            page: page.value,
+            pageSize: pageSize.value,
+            name: selectedOption.value ? selectedOption.value : route?.query?.category,
+            sortBy: tagChoosen.value,
+            color: selectedColor.value,
+            priceRage: priceRange.value,
+        }
+        const data = await storeProduct.getAllProduct(params)
+        if (data?.results?.results && data?.results?.results?.length > 0) {
+            data?.results?.results.forEach(res => {
+                productList.value?.push(res)
+            });
+        }
+        shopStore.product = ''
+        totalPage.value = data?.results?.totalPages
+        totalItems.value = data?.results?.totalResults
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 const searchByfilter = () => {
     productList.value = []
-    initProducts()
+    initByFilter()
 }
 
 const resetFilter = () => {
