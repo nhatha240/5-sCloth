@@ -79,7 +79,7 @@
                     <div class="label-text mt-[28px] mb-6">Option</div>
                     <div class="flex items-center gap-3 mb-6">
                         <label class="switch">
-                            <input type="checkbox" :checked="productDetails.status" v-model="productDetails.status">
+                            <input type="checkbox" :checked="productDetails.status == 'public'" v-model="productDetails.status">
                             <span class="slider round"></span>
                         </label>
                         Công khai
