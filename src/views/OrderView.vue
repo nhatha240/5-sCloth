@@ -331,6 +331,7 @@ const toRating = async (product) => {
             return error
         }
     } else {
+        ratingDetails.value.productId = product?.product ?? ''
         ratingDetails.value.productId.id = product?.product?._id ?? ''
         isEditRating.value = false
     }
