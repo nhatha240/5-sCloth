@@ -5,7 +5,8 @@ export default {
         const params = {
             page: query?.page,
             limit: query?.pageSize,
-            cursor: query?.cursor
+            cursor: query?.cursor,
+            sortBy: query?.sortBy,
         }
         return await API.get('/admin/list-order', {params})
     },

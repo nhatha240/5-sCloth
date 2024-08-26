@@ -14,7 +14,7 @@
             </div> -->
         </div>
         <div class="row justify-between">
-            <div class="flex-[0_0_32%] order-details-box">
+            <div class="flex-[0_0_31%] order-details-box">
                 <div class="flex gap-3 items-center pb-[20px]">
                     <div class="title-text">Order #{{ orderId }}</div>
                     <div :class="{
@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-[0_0_32%] order-details-box">
+            <div class="flex-[0_0_31%] order-details-box">
                 <div class="flex gap-3 items-center pb-[20px]">
                     <div class="title-text">Customer</div>
                 </div>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex-[0_0_32%] order-details-box">
+            <div class="flex-[0_0_31%] order-details-box">
                 <div class="flex gap-3 items-center pb-[20px]">
                     <div class="title-text">Document</div>
                 </div>

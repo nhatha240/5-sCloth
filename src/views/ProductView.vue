@@ -79,10 +79,10 @@
           </div>
 
           <!-- Thumbnail images -->
-          <div class="flex-[0_0_125px] flex flex-col gap-[24px] justify-between">
+          <!-- <div class="flex-[0_0_125px] flex flex-col gap-[24px] justify-between">
             <img crossorigin="anonymous" :src="img" alt="Fabric closeup" class="w-[125px] object-cover" v-for="(img, i) in subImage"
               :key="i">
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -317,8 +317,11 @@ const chooseColor = (color) => {
   choosenColor.value = color
 }
 const updateStock = async (up) => {
-  if (up && product.value?.quantity) {
+  if (up && product.value?.quantity && product.value?.stock <= product.value.quantity) {
     product.value.stock++
+    if (product.value.stock > product.value.quantity) {
+      product.value.stock--
+    }
   } else {
     if (product.value.stock > 0) {
       product.value.stock--

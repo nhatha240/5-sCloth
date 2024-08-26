@@ -27,5 +27,23 @@ export const useDashboardStore = defineStore('dashboard', {
                     .catch(({ response }) => reject(response))
             })
         },
+        async getDashBoardChart() {
+            return new Promise((resolve, reject) => {
+                DashboardService.getDashBoardChart()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
+        async getDashBoardSevenDay() {
+            return new Promise((resolve, reject) => {
+                DashboardService.getDashBoardSevenDay()
+                    .then(({ data }) => {
+                        resolve(data)
+                    })
+                    .catch(({ response }) => reject(response))
+            })
+        },
     }
 })

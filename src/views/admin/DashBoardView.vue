@@ -103,7 +103,7 @@
                     </span>
 
                 </div>
-                <BarBlueChart></BarBlueChart>
+                <BarBlueChart :data="barChartData" v-if="barChartData?.length > 0"></BarBlueChart>
             </div>
             <div class="flex-[0_0_33%] bg-[#FFFFFF] !p-[28px] rounded-[6px]">
                 <div class="border-b border-[#E6E9F4] pb-[30px]">
@@ -231,6 +231,8 @@ const topProductsSold = ref([
 
 onMounted(() => {
     initDashboardTotal()
+    initDashBoardChart()
+    initSevenDayChart()
     initTopOrders()
     initTopProduct()
 })
@@ -249,7 +251,8 @@ const initTopOrders = async () => {
     try {
         const params = {
             page: 1,
-            limit: 5,
+            pageSize: 5,
+            sortBy: 'desc',
         }
         const data = await storeOrder.getListOrder(params)
         items.value = data?.results
@@ -262,6 +265,27 @@ const initTopProduct = async () => {
     try {
         const data = await storeDashboard.getDashBoardTopProduct()
         topProductsSold.value = data
+    } catch (error) {
+        return error
+    }
+}
+const barChartData = ref([])
+const initDashBoardChart = async () => {
+    try {
+        const data = await storeDashboard.getDashBoardChart()
+        console.log(data)
+        if (data) {
+            barChartData.value = [data.lastLoginLastTimeCount, data.cart, data.createdLastTimeCount, 0]
+        }
+        console.log(barChartData.value, 'barChartData')
+    } catch (error) {
+        return error
+    }
+}
+const initSevenDayChart = async () => {
+    try {
+        const data = await storeDashboard.getDashBoardChart()
+        console.log(data)
     } catch (error) {
         return error
     }

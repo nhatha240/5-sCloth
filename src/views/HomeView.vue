@@ -203,8 +203,10 @@
                     <img crossorigin="anonymous" src="/images/basket_white.svg" alt="">
                     Thêm vào giỏ
                   </button>
-                  <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="likeByUser(product?._id)">
-                    <img crossorigin="anonymous" src="/images/heart_icon.svg" alt="">
+                  <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="toggleLike(product?._id, index)">
+                    <img crossorigin="anonymous" 
+                    :src="product.is_like ? '/images/heart_icon.svg' : '/images/heart_icon_disable.svg'" 
+                    alt="">
                   </button>
                   <div class="cursor-pointer purple-text-500" @click="toProduct(product?._id)">Xem chi tiết</div>
                 </div>
@@ -328,7 +330,7 @@
 
                   <!-- Price -->
                   <div class="flex items-center gap-5 mb-2 price-layout pt-[48px]">
-                    <span class="main-price">{{ product.fastSalePrice ? '$' + product.fastSalePrice : '$' + 0 }}</span>
+                    <span class="main-price">{{ product.price ? '$' + product.price : '$' + 0 }}</span>
                     <span class="sub-main-price" v-if="product.discountPrice">{{ '$' + product.discountPrice }}</span>
                   </div>
 
@@ -434,7 +436,7 @@ import { useProductStore } from '../stores/ProductStore'
 import { useCategoryStore } from '../stores/CategoryStore'
 import { useUserStore } from '../stores/UserStore'
 import router from '@/router';
-import { toastSuccess } from '@/constant/commonUsage';
+import { toastError, toastSuccess } from '@/constant/commonUsage';
 import { formatDate } from '@/constant/commonFunction';
 import moment from 'moment';
 import { useShopStore } from '@/stores/ShopStore';
@@ -892,11 +894,37 @@ const toProduct = (id) => {
     scrollTo(0 ,0)
 }
 
-const likeByUser = (id) => {
-  try {
-        // toastSuccess('Thêm vỏ hàng thành công')
+const likeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateLikeProduct(payload)
+        toastSuccess('Like success')
     } catch (error) {
+        toastError(error)
         return error
+    }
+}
+
+const unLikeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateUnLikeProduct(payload)
+        toastSuccess('Unlike success')
+    } catch (error) {
+        toastError(error)
+        return error
+    }
+}
+const toggleLike = (id, index) => {
+  newProducts.value[index].is_like = !newProducts.value[index].is_like
+    if (newProducts.value[index].is_like) {
+        likeProduct(id)
+    } else {
+        unLikeProduct(id)
     }
 }
 

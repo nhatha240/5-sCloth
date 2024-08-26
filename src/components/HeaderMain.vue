@@ -21,7 +21,7 @@
                   <img crossorigin="anonymous" class="object-cover max-h-[93px]" :src="item?.product?.image[0] ? urlApi + item.product.image[0] : '/images/basket_images1.svg'" alt="">
                 </div>
                 <div class="flex flex-col pr-[86px]">
-                  <div class="font-medium main-text">{{ item.product.name }}</div>
+                  <div class="font-medium main-text">{{ item?.product?.name }}</div>
                   <div class="flex justify-between gap-2">
                     <div>
                       Size: 
@@ -52,9 +52,9 @@
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
-                  ${{ (item.product.price * item.quantity) }}
+                  ${{ (item?.product?.price * item?.quantity) }}
                 </div>
-                <div class="" @click="removeItemCart(item.product.id)">
+                <div class="" @click="removeItemCart(item?.product?.id)">
                   <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_can_icon.svg" alt="">
                 </div>
               </div>

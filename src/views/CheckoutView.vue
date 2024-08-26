@@ -40,7 +40,7 @@
                     <div class="w-[15%] price-text">
                         {{ '$' + (item?.product?.price > 0 ? (item?.product?.price * item?.quantity) : 0) }}
                     </div>
-                    <div class="" @click="removeItemCart(item.product?.id)">
+                    <div class="" @click="removeItemCart(item?.product?.id)">
                         <img crossorigin="anonymous" class="cursor-pointer" src="/images/trash_icon.svg" alt="">
                     </div>
                 </div>

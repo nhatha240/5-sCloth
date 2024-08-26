@@ -2,7 +2,7 @@
     <div class="px-[50px] mb-[150px]">
         <div class="flex justify-between pb-[80px]">
             <div class="font-bold text-4xl">Sản phẩm bán chạy </div>
-            <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]">
+            <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toProductList">
                 Xem Thêm
                 <img crossorigin="anonymous" src="/images/arrow_find_icon.svg" alt="">
             </div>
@@ -59,6 +59,11 @@ const emits = defineEmits(['update:modelValue'])
 
 const toProduct = (id) => {
     router.push({ name: 'ProductView', params: { id: id } })
+}
+
+const toProductList = () => {
+    router.push({ name: 'ProductListView' })
+    scrollTo(0 ,0)
 }
 
 </script>

@@ -60,7 +60,7 @@
                             'inline-block order-status': true, 
                             'ready': status === 'ready' || status === 'pending',
                             'shipped': status === 'shipped' || status === 'shipping',
-                            'received': status === 'received' || status === 'delivered' || status === 'delivery',
+                            'received': status === 'received' || status === 'delivered' || status === 'delivery' || status == 'success',
                         }">
                         {{ ORDER_STATUS[status] }}
                     </span>

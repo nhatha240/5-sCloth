@@ -43,9 +43,9 @@
                 <div class="">
                     <Field v-slot="{ field, errors, meta }"
                         v-model="userInfo.address"
-                        :name="'email'"
+                        :name="'address'"
                         :rules="'required'"
-                        ref="email"
+                        ref="address"
                     >
                         <div class="label-text">Địa chỉ*</div>
                         <input type="text" v-bind="field">

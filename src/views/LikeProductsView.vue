@@ -13,11 +13,11 @@
                     <div class="h-full flex flex-col justify-between">
                         <div class="relative w-full mb-[30px] group hover:bg-inherit">
                             <img crossorigin="anonymous" class="object-cover rounded-[20px] min-h-[382px]" 
-                                :src="product.image[0] == 'public/uploads/products/default.jpg' 
-                                    ? imageList[Math.floor(Math.random() * (5 - 0) + 0)] : urlApi + product.image[0]" 
+                                :src="product?.image && product?.image?.length > 0 
+                                    ? urlApi + product?.image[0] : ''" 
                                 alt=""
                                 >
-                            <div class="absolute top-[28px] left-0" v-if="product.isBestSeller">
+                            <div class="absolute top-[28px] left-0" v-if="product?.isBestSeller">
                                 <div class="best-sell-tag">Best Seller</div>
                             </div>
                             <div
@@ -25,13 +25,13 @@
                                 <div class="absolute left-[9px] top-[8px] bg-[#inherit] z-10">
                                     <div class="flex flex-col gap-[30px]">
                                         <div
-                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product._id, product.quantity)">
+                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product?._id, product?.quantity)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="productDetails(product._id)"
+                                            @click="productDetails(product?._id)"
                                         >
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/search_product_btn.svg"
                                                 alt="">
@@ -43,11 +43,11 @@
                         <div class="flex items-center gap-[10px] rating-field mb-[16px]">
                             <img crossorigin="anonymous" src="/images/star_rating_shop.svg" alt="">
                             <div class="font-semibold">
-                                {{ product.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}
+                                {{ product?.userRating ? Math.round(product?.totalRating/product?.userRating) : 0 }}
                             </div>
                             <div class="w-[4px] h-[4px] bg-[#333333] rounded-full"></div>
                             <div class="font-medium">
-                                {{ product.userRating }} reviews
+                                {{ product?.userRating }} reviews
                             </div>
                         </div>
                         <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]">
@@ -62,15 +62,15 @@
                             </div>
                         </div>
                         <div class="mb-[5px] product-text text-[28px]">
-                            {{ product.name }}
+                            {{ product?.name }}
                         </div>
                     <div class="mb-[36px] font-normal text-[#00000099] text-[18px] max-text-inline">
-                            {{ product.description }}
+                            {{ product?.description }}
                         </div>
                         <div class="flex items-center gap-5 product-text text-[28px]">
-                            ${{ product.discountPrice ? product.discountPrice : product.price }}
-                            <span class="sale-text" v-if="product.discountPrice">
-                                ${{ product.price }}
+                            ${{ product?.discountPrice ? product?.discountPrice : product?.price }}
+                            <span class="sale-text" v-if="product?.discountPrice">
+                                ${{ product?.price }}
                             </span>
                         </div>
                     </div>

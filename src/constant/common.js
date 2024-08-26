@@ -8,6 +8,7 @@ export const ORDER_STATUS = {
     'ready': 'Ready',
     'shipped': 'Shipped',
     'received': 'Received',
+    'success': 'Success',
     'delivered': 'delivered',
     'delivery': 'Develivered',
     'pending': 'Pending',
