@@ -148,7 +148,7 @@ const addToCart = async (id, stock) => {
 
 const initCategories = async () => {
     try {
-        await storeCategory.getCategories({})
+        await storeCategory.getAllCategory({})
     } catch (error) {
         return error
     }
