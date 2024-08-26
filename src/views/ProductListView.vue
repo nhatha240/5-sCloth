@@ -57,7 +57,7 @@
                         </div>
                         <div class="flex">
                             <div class="text-[rgb(214,81,255)] font-semibold text-[20px]" v-for="(category, i) in product?.category" :key="i">
-                                {{ category ? findCategoryName(category) : '' }}{{ (i < product?.category.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                                {{ category ? findCategoryName(category) : '' }}{{ (i < product?.category.length - 1) ? ', ' : '' }}
                             </div>
                         </div>
                         <div class="mb-[5px] product-text text-[28px]">
@@ -135,7 +135,7 @@ const addToCart = async (id, stock) => {
                 quantity: 1,
             }
             await storeProduct.addCart(payload)
-            toastSuccess('Add to cart success')
+            toastSuccess('Thêm vỏ hàng thành công')
             storeProduct.listCart()
         } catch (error) {
             return error

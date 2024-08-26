@@ -22,9 +22,16 @@
         </div>
         <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]">
           <div class="border-1 border-[#D651FF] rounded-[50%] w-[30px] h-[30px] cursor-pointer"
-            :class="{ 'choosen-color': color.active }" :style="`background-color: ${color};`"
-            v-for="(color, i) in product?.options[0]?.color" :key="i" @click="chooseColor(i)">
+            :class="{ 'choosen-color': color == choosenColor }" :style="`background-color: ${color};`"
+            v-for="(color, i) in product?.options[0]?.color" :key="i" @click="chooseColor(color)">
           </div>
+        </div>
+        <div class="flex gap-[12px] items-center pl-[19px] mb-[17px]" v-if="product?.options[0]?.size">
+          <select class="form-control form-select w-fit" v-model="choosenSize">
+            <option v-for="(size, i) in product?.options[0]?.size" :key="i" :value="size">
+              {{ size }}
+            </option>
+          </select>
         </div>
         <div class="relative flex gap-19px">
           <div class="text-[#D651FF] font-semibold text-[45px]">
@@ -53,9 +60,11 @@
             <img crossorigin="anonymous" src="/images/basket_buy_icon.svg" alt="">
             MUA
           </button>
-          <button class="p-[20px] border border-[#C4C4C4] rounded-lg">
-            <img class="max-w[31px] max-w-fit" crossorigin="anonymous" src="/images/heart_icon_inactive.svg" alt="">
-            <!-- <img crossorigin="anonymous" src="/images/heart_icon.svg" alt=""> -->
+          <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="toggleLike(product?._id)">
+            <img class="max-w[31px] max-w-fit" crossorigin="anonymous" 
+              :src="product.is_like ? '/images/heart_icon_active.svg' : '/images/heart_icon_inactive.svg'" 
+              alt=""
+            >
           </button>
         </div>
       </div>
@@ -197,7 +206,7 @@ import { useRoute, useRouter } from 'vue-router'
 import HeaderMain from '@/components/HeaderMain.vue'
 import { formatDate } from '../constant/commonFunction'
 import { useProductStore } from '@/stores/ProductStore'
-import { toastError } from '@/constant/commonUsage'
+import { toastError, toastSuccess } from '@/constant/commonUsage'
 
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
 const route = useRoute()
@@ -302,10 +311,10 @@ const calculateRatingDetails = (results) => {
 const getProductName = (e) => {
   console.log(e);
 }
-const chooseColor = (indexColor) => {
-  // product.value.color_list.forEach((color, i) => {
-  //   color.active = i === indexColor;
-  // });
+const choosenColor = ref('')
+const choosenSize = ref('')
+const chooseColor = (color) => {
+  choosenColor.value = color
 }
 const updateStock = async (up) => {
   if (up && product.value?.quantity) {
@@ -318,19 +327,30 @@ const updateStock = async (up) => {
 }
 
 const updateCart = async (id, quantity) => {
-  if (quantity) {
-    try {
-        const payload = {
-            productId: id,
-            quantity: quantity,
-        }
-        await storeProduct.addCart(payload)
-        router.push({ name: 'Checkout' })
-    } catch (error) {
-        return error
+  if (!quantity) {
+    toastError('Vui lòng thêm số lượng')
+    return
+  }
+  if (!choosenColor.value) {
+    toastError('Vui lòng chọn màu')
+    return
+  }
+  if (!choosenSize.value) {
+    toastError('Vui lòng chọn kích thước')
+    return
+  }
+  try {
+    const payload = {
+      productId: id,
+      quantity: quantity,
+      color: choosenColor.value,
+      size: choosenSize.value,
     }
-  } else {
-    toastError('Out of stock')
+    await storeProduct.addCart(payload)
+    router.push({ name: 'Checkout' })
+  } catch (error) {
+    toastError('Đã hết hàng')
+    return error
   }
 }
 
@@ -339,6 +359,41 @@ const toProduct = async (id) => {
   scrollTo(0, 0)
   router.replace({ params: { id: id } })
   await initProductDetails()
+}
+
+const likeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateLikeProduct(payload)
+        toastSuccess('Like success')
+    } catch (error) {
+        toastError(error)
+        return error
+    }
+}
+
+const unLikeProduct = async (id) => {
+    try {
+        const payload = {
+            productId: id,
+        }
+        await storeProduct.updateUnLikeProduct(payload)
+        toastSuccess('Unlike success')
+    } catch (error) {
+        toastError(error)
+        return error
+    }
+}
+
+const toggleLike = (id) => {
+    product.value.is_like = !product.value.is_like
+    if (product.value.is_like) {
+        likeProduct(id)
+    } else {
+        unLikeProduct(id)
+    }
 }
 </script>
 

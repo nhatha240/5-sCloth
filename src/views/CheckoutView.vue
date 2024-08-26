@@ -10,7 +10,7 @@
                 <div class=""></div>
             </div>
             <div class="mt-[30px] flex flex-col gap-[30px]">
-                <div class="flex item-layout items-center" v-for="(item, index) in items" :key="index">
+                <div class="flex item-layout items-center" v-for="(item, index) in storeProduct.cartItem" :key="index">
                     <div class="w-[45%] flex gap-[34px]">
                         <img crossorigin="anonymous" class="max-h-[200px] max-w-[140px]"
                             :src="item?.product?.image && item?.product?.image?.length > 0 ? urlApi + item?.product?.image[0] : ''" alt="">
@@ -130,8 +130,6 @@ onMounted(() => {
 const initCheckOutItem = async () => {
     try {
         await storeProduct.listCart()
-        items.value = storeProduct.cartItem
-        console.log(storeProduct.cartItem);
     } catch (error) {
         return error
     }
@@ -144,7 +142,7 @@ const updateCart = async (id, quantity) => {
             quantity: quantity,
         }
         await storeProduct.addCart(payload)
-        toastSuccess('Add to cart success')
+        toastSuccess('Thêm vỏ hàng thành công')
         initCheckOutItem()
     } catch (error) {
         return error

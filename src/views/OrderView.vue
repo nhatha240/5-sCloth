@@ -59,7 +59,8 @@
                                 <div class="break-all">Mã sản phẩm: {{ product?._id }}</div>
                             </div>
                             <div class="w-[20%]">
-                                <img crossorigin="anonymous" src="/images/order_image_product1.svg" alt="">
+                                <img crossorigin="anonymous" class="max-h-[78px]"
+                                :src="product?.product?.image && product?.product?.image?.length > 0 ? urlApi + product?.product?.image[0] : '/images/order_image_product1.svg'" alt="">
                             </div>
                             <div class="w-[14%] text-center">
                                 {{ product?.quantity }}
@@ -165,7 +166,7 @@
                 <div class="text-[27px] product-text flex gap-[17px] items-center" v-if="ratingDetails?.productId?.options && ratingDetails?.productId?.options?.length > 0">
                     Màu:
                     <div class="border border-[#D651FF] rounded-[50%] w-[43px] h-[43px] cursor-pointer"
-                        :class="{ 'choosen-color': color }"
+                        :class="{ 'choosen-color': color == productColor }"
                         :style="`background-color: ${color};`"
                         v-for="(color, i) in ratingDetails?.productId?.options[0].color" :key="color" @click="chooseColor(i)">
                     </div>
@@ -318,6 +319,7 @@ const chooseStar = (star) => {
 }
 
 const isEditRating = ref(false)
+const productColor = ref('')
 const toRating = async (product) => {
     console.log(product?.product?.rating, 'product')
     if (product?.product?.rating?.length > 0) {
@@ -331,6 +333,7 @@ const toRating = async (product) => {
             return error
         }
     } else {
+        productColor.value = product?.color ?? ''
         ratingDetails.value.productId = product?.product ?? ''
         ratingDetails.value.productId.id = product?.product?._id ?? ''
         isEditRating.value = false

@@ -177,7 +177,7 @@
                   {{ product?.product?.name }}
                 </div>
                 <div class="" v-for="(size, i) in product?.product?.options[0]?.size" :key="i">
-                  {{ size }}{{ (i < product?.product?.options[0]?.size?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                  {{ size }}{{ (i < product?.product?.options[0]?.size?.length - 1) ? ', ' : '' }}
                 </div>
               </div>
             </div>
@@ -227,6 +227,7 @@ import { useUserStore } from '../stores/UserStore'
 import { useProductStore } from '../stores/ProductStore'
 import { useOrderStore } from '../stores/OrderStore'
 import router from '@/router'
+import { toastSuccess } from '@/constant/commonUsage'
 
 // Change to your CLIENT ID gotten from the developer dashboard
 const urlApi = import.meta.env.VITE_BASE_URL + '/'
@@ -288,15 +289,19 @@ const confirmOrder = async () => {
     const productItem = {
       products: storeProduct.cartItem.map(item => ({
         product: item.product.id,
-        quantity: item.quantity
+        quantity: item.quantity,
+        color: item.color,
+        size: item.size,
       }))
     }
     console.log(productItem);
     router.push({ name: 'home' })
     const data = await storeOrder.addOrder(productItem)
     if (data?.id) {
-      // await storeOrder.captureOrder(data?.id)
+      await storeProduct.listCart()
+      await storeOrder.captureOrder(data?.id)
     }
+    toastSuccess('Thanh toán thành công')
 
   } catch (error) {
     return error

@@ -25,13 +25,19 @@
                   <div class="flex justify-between gap-2">
                     <div>
                       Size: 
-                      <span v-for="(size, i) in item?.product?.options[0]?.size" :key="i">
-                        {{ size }}{{ (i < item?.product?.options[0]?.size?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                      <span v-if="item?.size">
+                        {{ item.size }}
+                      </span>
+                      <span v-for="(size, i) in item?.product?.options[0]?.size" :key="i" v-else>
+                        {{ size }}{{ (i < item?.product?.options[0]?.size?.length - 1) ? ', ' : '' }}
                       </span>
                     </div>
                     <div>Màu: 
-                      <span v-for="(color, i) in item?.product?.options[0]?.color" :key="i">
-                        {{ color }}{{ (i < item?.product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                      <span v-if="item?.color">
+                        {{ item.color }}
+                      </span>
+                      <span v-for="(color, i) in item?.product?.options[0]?.color" :key="i" v-else>
+                        {{ color }}{{ (i < item?.product?.options[0]?.color?.length - 1) ? ', ' : '' }}
                       </span>
                     </div>
                   </div>
@@ -41,8 +47,8 @@
                     {{ item.quantity }}
                   </div>
                   <div class="flex flex-col gap-[3px]">
-                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/up_icon.svg" alt="" @click="updateCart(item.product.id, 1)">
-                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/down_icon.svg" alt="" @click="updateCart(item.product.id, -1)">
+                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/up_icon.svg" alt="" @click="updateCart(item, item.product.id, 1)">
+                    <img crossorigin="anonymous" class="cursor-pointer" src="/images/down_icon.svg" alt="" @click="updateCart(item, item.product.id, -1)">
                   </div>
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
@@ -243,14 +249,16 @@ const removeItemCart = async (id) => {
   }
 }
 
-const updateCart = async (id, quantity) => {
+const updateCart = async (item, id, quantity) => {
     try {
         const payload = {
             productId: id,
             quantity: quantity,
+            color: item?.color,
+            size: item?.size,
         }
         await storeProduct.addCart(payload)
-        toastSuccess('Add to cart success')
+        toastSuccess('Thêm vỏ hàng thành công')
         getListCart()
     } catch (error) {
         return error

@@ -361,3 +361,6 @@ input:checked + .slider:before {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+.w-fit {
+  width: fit-content;
+}

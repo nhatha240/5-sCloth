@@ -105,9 +105,9 @@ export const useProductStore = defineStore('product', {
                     .catch(({ response }) => reject(response))
             })
         },
-        async addCart({ productId, quantity }) {
+        async addCart({ productId, quantity, color, size }) {
             return new Promise((resolve, reject) => {
-                ProductService.addCart({ productId, quantity })
+                ProductService.addCart({ productId, quantity, color, size })
                     .then(({ data }) => {
                         resolve(data)
                     })

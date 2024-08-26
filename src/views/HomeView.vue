@@ -255,7 +255,7 @@
                 </div>
                 <div class="flex gap-1 pt-[10px]" v-if="product?.options?.length > 0">
                   <div class="" v-for="color in product?.options[0]?.color" :key="color">
-                    {{ color }}{{ (i < product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                    {{ color }}{{ (i < product?.options[0]?.color?.length - 1) ? ', ' : '' }}
                   </div>
                 </div>
                 <button class="btn-price-cart min-h-[73px] relative mt-[33px] text-left">
@@ -322,7 +322,7 @@
                   <h2 class="text-lg font-semibold mb-1">{{ product.name }}</h2>
                   <div class="flex items-center gap-1" v-if="product?.options?.length > 0">
                     <p class="text-sm text-purple-300 mb-2" v-for="(color, i) in product?.options[0]?.color" :key="i">
-                      {{ color }}{{ (i < product?.options[0]?.color?.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                      {{ color }}{{ (i < product?.options[0]?.color?.length - 1) ? ', ' : '' }}
                     </p>
                   </div>
 
@@ -894,7 +894,7 @@ const toProduct = (id) => {
 
 const likeByUser = (id) => {
   try {
-        // toastSuccess('Add to cart success')
+        // toastSuccess('Thêm vỏ hàng thành công')
     } catch (error) {
         return error
     }
@@ -907,7 +907,7 @@ const updateCart = async (id, quantity) => {
             quantity: quantity,
         }
         await storeProduct.addCart(payload)
-        toastSuccess('Add to cart success')
+        toastSuccess('Thêm vỏ hàng thành công')
         await storeProduct.listCart()
     } catch (error) {
         return error

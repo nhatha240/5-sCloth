@@ -75,7 +75,7 @@
                 <template #item-color="{ options }">
                     <span class="" v-for="(option, index) in options" :key="index">
                         <span class="" v-for="(color, i) in option.color" :key="i">
-                            {{ color }}{{ (i < option.color.length - 1 && i % 2 === 0) ? ', ' : '' }}
+                            {{ color }}{{ (i < option.color.length - 1) ? ', ' : '' }}
                         </span>
                     </span>
                 </template>

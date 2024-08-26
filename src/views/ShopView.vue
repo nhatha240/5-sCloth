@@ -19,9 +19,9 @@
                                 <label :for="option.id" class="ml-2 text-sm text-gray-700">{{ option?.name }}</label>
                             </li>
                         </ul>
-                        <button @click="loadMore" class="w-full text-left text-sm text-purple-600 mt-2 hover:underline">
+                        <!-- <button @click="loadMore" class="w-full text-left text-sm text-purple-600 mt-2 hover:underline">
                             + Load More
-                        </button>
+                        </button> -->
                     </div>
                     <div class="p-4">
                         <h2 class="text-lg font-semibold mb-3 flex justify-between items-center">
@@ -72,7 +72,9 @@
                             <MenuButton
                                 class="flex items-center justify-between bg-white text-[#D651FF] text-lg font-medium py-[10px] px-[7px] rounded-lg border-[#D651FF] border-[1px] min-w-[126px]">
                                 <div class="flex items-center gap-[16px]">
-                                    <div>Mới nhất</div>
+                                    <div>
+                                        {{ tagChoosen == 'desc' ? 'Mới nhất' : 'Cũ nhất' }}
+                                    </div>
                                     <img crossorigin="anonymous" src="/images/arrow_sort_icon.svg" alt="">
                                 </div>
                             </MenuButton>
@@ -99,8 +101,8 @@
                 <div class="grid grid-cols-3 gap-[70px]">
                     <div class="flex-[0_0_30%]" v-for="(product, index) in productList" :key="index">
                         <div class="h-full flex flex-col justify-between">
-                            <div class="relative w-full mb-[30px] group hover:bg-inherit">
-                                <img crossorigin="anonymous" class="object-cover rounded-[20px] min-w-[260px] min-h-[364px] max-w-[260px] max-h-[364px]" 
+                            <div class="relative w-full mb-[30px] max-w-[503px] group hover:bg-inherit">
+                                <img crossorigin="anonymous" class="object-cover rounded-[20px] min-w-[260px] min-h-[364px] max-w-full max-h-[364px]" 
                                     :src="product.image && product.image[0] ? urlApi + product.image[0] : ''"  alt=""
                                 >
                                 <div class="absolute top-[28px] left-0" v-if="product.isBestSeller">
@@ -109,11 +111,11 @@
                                 <div class="hidden group-hover:block absolute right-[27px] bottom-[25px] z-10">
                                     <div class="flex flex-col gap-[30px]">
                                         <div class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="product.is_like = !product.is_like">
+                                            @click="toggleLike(product?.id, index)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
-                                                alt="" v-if="product.is_like" @click="unLikeProduct(product?.id)">
+                                                alt="" v-if="product.is_like">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
-                                                v-else @click="likeProduct(product?.id)">
+                                                v-else>
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
@@ -195,7 +197,7 @@ const tagList = ref([
         label: 'Mới nhất', value: 'desc'
     },
     {
-        label: 'Oldest', value: 'asc'
+        label: 'Cũ nhất', value: 'asc'
     },
 ])
 const priceRange = ref([0, 500])
@@ -339,6 +341,10 @@ const searchByfilter = () => {
 }
 
 const resetFilter = () => {
+    if (route?.query?.category) {
+        delete route?.query?.category;
+    }
+    router.replace({ query: { category: '' } })
     selectedOption.value = ''
     selectedColor.value = ''
     productList.value = []
@@ -374,7 +380,7 @@ const addToCart = async (id, stock) => {
                 quantity: 1,
             }
             await storeProduct.addCart(payload)
-            toastSuccess('Add to cart success')
+            toastSuccess('Thêm vỏ hàng thành công')
             storeProduct.listCart()
         } catch (error) {
             return error
@@ -410,6 +416,14 @@ const unLikeProduct = async (id) => {
     }
 }
 
+const toggleLike = (id, index) => {
+    productList.value[index].is_like = !productList.value[index].is_like
+    if (productList.value[index].is_like) {
+        likeProduct(id)
+    } else {
+        unLikeProduct(id)
+    }
+}
 </script>
 
 <style lang="scss">
