@@ -37,7 +37,7 @@
                     </div>
                     <button class="add-prod-btn">
                         <img crossorigin="anonymous"  :src="'/images/add_product_icon.svg'" alt="">
-                        <div class="btn-text" @click="toAddProduct">Add Pr</div>
+                        <div class="btn-text" @click="toAddProduct">Thêm sản phẩm</div>
                     </button>
                 </div>
             </div>
@@ -152,7 +152,7 @@ const processFiles = (file) => {
 };
 
 const toAddProduct = () => {
-    router.push({ name: 'CreateProductView' })
+    router.push({ name: 'CreateProductView', query: { category: categoryId.value } })
 }
 
 const convertFormData = (data) => {

@@ -293,6 +293,7 @@ onMounted(async () => {
     if (productId.value) {
         initProductDetails();
     }
+    checkCategoryInit()
 })
 
 const backToProduct = () => {
@@ -313,6 +314,13 @@ async function getFileFromImageSource(imageSource) {
     } catch (error) {
         console.error('Error converting image source to File:', error);
         return null;
+    }
+}
+
+const checkCategoryInit = () => {
+    console.log(route)
+    if (route?.query?.category) {
+        productDetails.value.category?.push(route?.query?.category)
     }
 }
 
