@@ -176,8 +176,8 @@
                 </div>
               </div>
               <div class="flex justify-end">
-                {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) :
-                  (product?.product?.price * product?.quantity)) }}đ
+                ${{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) :
+                  (product?.product?.price * product?.quantity)) }}
               </div>
             </div>
             <div class="border-t border-[#D7DBEC] mt-4 flex flex-col gap-2">
@@ -186,7 +186,7 @@
                   Tạm tính
                 </div>
                 <div class="flex justify-end">
-                  {{ storeProduct.totalPrice ?? 0 }}đ
+                  ${{ storeProduct.totalPrice ?? 0 }}đ
                 </div>
               </div>
               <div class="flex items-center justify-between">
@@ -204,7 +204,7 @@
                   Tổng cộng
                 </div>
                 <div class="flex justify-end text-lg font-bold">
-                  VND {{ storeProduct.totalPrice ?? 0 }}đ
+                  USD {{ storeProduct.totalPrice ?? 0 }}
                 </div>
               </div>
             </div>
