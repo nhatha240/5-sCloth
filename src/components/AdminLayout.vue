@@ -1,15 +1,5 @@
 <template>
-    <div class="MuiStack-root css-10ioqvk-MuiStack-root">
-        <div class="MuiBox-root css-6su6fj">
-            <div class="MuiDrawer-root MuiDrawer-docked css-1h1dy0v-MuiDrawer-docked">
-                <div
-                    class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiDrawer-paper MuiDrawer-paperAnchorLeft MuiDrawer-paperAnchorDockedLeft css-k1bkb-MuiPaper-root-MuiDrawer-paper">
-                    <div class="MuiBox-root css-10klw3m">
-                        <div class="MuiBox-root css-10596f4">
-                            <a herff="/admin"
-                                class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-uehu5v-MuiTypography-root-MuiLink-root">
-                                <img class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-70z4a9-MuiSvgIcon-root"
-                                    src="/images/main_logo.svg" />
+    
                             </a>
                         </div>
                         <div class="simplebar-scrollable-y" style="height: calc(100% - 68px)">
