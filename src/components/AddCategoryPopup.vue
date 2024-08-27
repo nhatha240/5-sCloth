@@ -65,38 +65,5 @@ const addCategory = () => {
 }
 </script>
 
-<style lang="scss">
-.category-modal {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999 !important;
-    .category-modal-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 540px;
-        padding: 28px;
-        border-radius: 4px;
-        background-color: #ffffff;
-        box-shadow: 0px 2px 10px 0px #262C4729;
-        .title-modal {
-            font-family: Inter, Open Sans, sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            line-height: 28px;
-            text-align: left;
-            color: #131523;
-        }
-        .content-text {
-            font-family: Inter, Open Sans, sans-serif;
-            font-size: 16px;
-            font-weight: 400;
-            line-height: 24px;
-            text-align: left;
-            color: #131523;
-        }
-    }
-}
+
 </style>
