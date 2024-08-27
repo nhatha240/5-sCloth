@@ -325,7 +325,7 @@ async function onApprove(data, actions) {
       const transaction =
         orderData?.purchase_units?.[0]?.payments?.captures?.[0] ||
         orderData?.purchase_units?.[0]?.payments?.authorizations?.[0];
-      toastError(
+      toastSuccess(
         `Transaction ${transaction.status}: ${transaction.id}<br><br>See console for all available details`,
       );
       console.log(
@@ -340,13 +340,15 @@ async function onApprove(data, actions) {
   return actions.order.capture().then(() => {
     paid.value = true
     console.log('Order complete!')
+    toastSuccess('Order complete!')
+    router.push({ name: 'home' })
   })
 }
 function onCancel(data, actions) {
   console.log('Order cancer...', actions, data)
   return actions.order.capture().then(() => {
     paid.value = false
-    console.log('Order cancel!')
+    toastError('Order cancel!')
   })
 }
 </script>

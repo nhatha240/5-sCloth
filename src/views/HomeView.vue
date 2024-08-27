@@ -760,6 +760,7 @@ onMounted(() => {
   initTopProducts()
   initFlashSaleProducts()
   initRatings()
+  initCheckOutItem()
   timer.value = setInterval(countdown, 1000);
 });
 const onSwiper = (swiper) => {
@@ -776,6 +777,14 @@ const searchProduct = async () => {
   } catch (error) {
     return error;
   }
+}
+
+const initCheckOutItem = async () => {
+    try {
+        await storeProduct.listCart()
+    } catch (error) {
+        return error
+    }
 }
 
 const initRatings = async () => {
