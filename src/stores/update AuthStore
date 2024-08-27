@@ -1,0 +1,44 @@
+    async updatePassword(payload) {
+      return new Promise((resolve, reject) => {
+        AuthService.updatePassword(payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    async logout() {
+      return new Promise((resolve, reject) => {
+        AuthService.logout()
+          .then(({ data }) => {
+            resolve(data)
+            this.clearStoreAuth()
+          })
+          .catch(({ response }) => reject(response))
+      })
+    },
+    clearStoreAuth() {
+      this.user = null
+      this.token = null
+      this.previousRoute = null
+      localStorage.removeItem('user-token')
+      localStorage.removeItem('userInfo')
+    },
+    setPreviousRoute(route) {
+      this.previousRoute = route
+    },
+    async userInfo(request) {
+      return new Promise((resolve, reject) => {
+        AuthService.userInfo(request)
+          .then(({ data }) => {
+            if (!this.user) {
+              this.user = data?.data
+              localStorage.setItem('userInfo', JSON.stringify(this.user))
+            }
+            resolve(data)
+          })
+          .catch(({ response }) => reject(response))
+      })
+    }
+  }
+})

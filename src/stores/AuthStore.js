@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import AuthService from '../services/AuthService'
-import { useFacilityStore } from './FacilityStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -86,11 +85,9 @@ export const useAuthStore = defineStore('auth', {
       })
     },
     clearStoreAuth() {
-      const storeFacility = useFacilityStore()
       this.user = null
       this.token = null
       this.previousRoute = null
-      storeFacility.facilityCalendar = null
       localStorage.removeItem('user-token')
       localStorage.removeItem('userInfo')
     },
