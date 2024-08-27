@@ -1,0 +1,18 @@
+ if (!store.isUserAuthenticated) {
+    store.clearStoreAuth()
+    next({ path: '/login' })
+  } else {
+    if (!store || !store.loggedUser) {
+      store.userInfo().then(() => {
+        try {
+          next()
+        } catch (e) {
+          store.clearStoreAuth()
+          next(loginQuery)
+        }
+      })
+    }
+    next()
+  }
+  return
+}
