@@ -18,44 +18,7 @@
     </div>
 </template>
 
-<script lang="js" setup>
-import router from '@/router';
 
-const props = defineProps({
-    image: {
-        type: String,
-        default: () => '',
-    },
-    titleEmpty: {
-        type: String,
-        default: () => '',
-    },
-    contentEmpty: {
-        type: String,
-        default: () => '',
-    },
-    buttonText: {
-        type: String,
-        default: () => '',
-    },
-    pageDataAddName: {
-        type: String,
-        default: () => '',
-    },
-})
-const emits = defineEmits(['update:addDataPage'])
-
-const toAddDataPage = () => {
-    if (props.pageDataAddName) {
-        router.push({ name: props.pageDataAddName })
-    } else {
-        emits('addDataPage')
-    }
-}
-const toReadMore = () => {
-    
-}
-</script>
 
 <style lang="scss">
 .empty-admin-layout {
