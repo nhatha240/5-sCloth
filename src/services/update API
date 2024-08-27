@@ -1,0 +1,27 @@
+import axios from 'axios'
+import { useAuthStore } from '@/stores/AuthStore'
+import router from '@/router'
+import { useErrorStore } from '@/stores/ErrorStore'
+
+const apiClient = axios.create({
+  baseURL: `${import.meta.env.VITE_BASE_URL}/v1`,
+  withCredentials: true
+})
+
+const toggleLoading = (isLoading) => {
+  useAuthStore().toggleLoading(isLoading)
+}
+
+apiClient.interceptors.request.use(
+  (config) => {
+    toggleLoading(true)
+    config.headers['Accept'] = 'application/json'
+    config.headers['Authorization'] = 'Bearer ' + useAuthStore().token
+    config.headers['Access-Control-Allow-Origin'] = '*'
+    return config
+  },
+  (error) => {
+    toggleLoading(true)
+    return Promise.reject(error)
+  }
+)

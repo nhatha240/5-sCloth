@@ -1,0 +1,154 @@
+{
+          path: '/payment',
+          name: 'PaymentView',
+          component: PaymentView,
+          meta: {
+            breadcrumb: 'Payment'
+          }
+        },
+        {
+          path: '/order',
+          name: 'OrderView',
+          component: OrderView,
+          meta: {
+            breadcrumb: 'Checkout'
+          }
+        },
+        {
+          path: '/shop',
+          name: 'ShopView',
+          component: ShopView
+        },
+        {
+          path: '/product',
+          name: 'ProductListView',
+          component: ProductListView,
+          meta: {
+            breadcrumb: 'Books'
+          }
+        },
+        {
+          path: '/product/:id',
+          name: 'ProductView',
+          component: ProductView,
+          meta: {
+            breadcrumb: 'Books'
+          }
+        }
+      ]
+    },
+    {
+      path: '/admin',
+      name: 'AdminLayout',
+      component: AdminLayout,
+      children: [
+        {
+          path: '',
+          name: 'DashBoardView',
+          component: DashBoardView,
+          meta: {
+            title: 'Dashboard'
+          }
+        },
+        {
+          path: 'orders',
+          name: 'OrderListView',
+          component: OrderListView,
+          meta: {
+            title: 'Orders'
+          }
+        },
+        {
+          path: 'orders/:id',
+          name: 'OrderDetailsView',
+          component: OrderDetailsView,
+          meta: {
+            title: 'Order Details'
+          }
+        },
+        {
+          path: 'products',
+          name: 'ProductViewAdmin',
+          component: ProductViewAdmin,
+          meta: {
+            title: 'Products'
+          }
+        },
+        {
+          path: 'products-details/:id?',
+          name: 'ProductDetailsView',
+          component: ProductDetailsView,
+          meta: {
+            title: 'ProductDetails'
+          }
+        },
+        {
+          path: 'categories',
+          name: 'CategoriesView',
+          component: CategoriesView,
+          meta: {
+            title: 'CategoriesView'
+          }
+        },
+        {
+          path: 'categories/:id',
+          name: 'CategoryDetailsView',
+          component: CategoryDetailsView,
+          meta: {
+            title: 'CategoryDetailsView'
+          }
+        },
+        {
+          path: 'customers',
+          name: 'CustomerListView',
+          component: CustomerListView,
+          meta: {
+            title: 'CustomerListView'
+          }
+        },
+        {
+          path: 'customers/:id',
+          name: 'CustomerInfoView',
+          component: CustomerInfoView,
+          meta: {
+            title: 'CustomerInfoView'
+          }
+        },
+        {
+          path: 'customer-modify/:id?',
+          name: 'CustomerModifyView',
+          component: CustomerModifyView,
+          meta: {
+            title: 'CustomerModifyView'
+          }
+        },
+        {
+          path: 'rating',
+          name: 'RatingPageView',
+          component: RatingPageView,
+          meta: {
+            title: 'RatingPageView'
+          }
+        },
+        {
+          path: 'rating/:id',
+          name: 'RatingDetailsView',
+          component: RatingDetailsView,
+          meta: {
+            title: 'RatingDetailsView'
+          }
+        },
+        {
+          path: 'personal-settings',
+          name: 'PersonalSettingView',
+          component: PersonalSettingView,
+          meta: {
+            title: 'PersonalSettingView'
+          }
+        },
+      ]
+    }
+  ]
+})
+
+export default router
