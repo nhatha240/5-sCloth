@@ -234,7 +234,7 @@
         </div>
       </div>
       <HotProductSlide :saleWellProducts="saleWellProducts" v-if="saleWellProducts && saleWellProducts?.length > 0"></HotProductSlide>
-      <div class="px-[50px] mb-[150px]">
+      <div class="px-[50px] mb-[150px]" v-if="topProducts?.length > 0">
         <div class="flex justify-between pb-[80px]">
           <div class="font-bold text-4xl">Top 10 sản phẩm xếp hạng hàng đầu </div>
           <div class="flex items-center gap-[18px] cursor-pointer text-[#D651FF]" @click="toLikeProducts">
@@ -344,7 +344,7 @@
                       <div class="text-sm">Còn: {{ product.quantity }}</div>
                     </div>
                     <!-- Cart button -->
-                    <button class="bg-purple-500 rounded-full p-[17px]" @click="updateCart(product?.id, 1)">
+                    <button class="bg-purple-500 rounded-full p-[17px]" @click="updateCart(product?._id, 1)">
                       <img crossorigin="anonymous" class="min-w-[24px]" src="/images/basket_white.svg" alt="" />
                     </button>
                   </div>
@@ -535,64 +535,7 @@ const saleWellProducts = ref([
     product_image: '/images/hot_sale_product3.svg',
   },
 ])
-const topProducts = ref([
-  {
-    product_image: '/images/top_product1.svg',
-    product_name: 'Áo thun cổ tròn Jolerance',
-    rating: 4,
-    color: 'Đen',
-    product_price: '$16,99',
-    product_sale_price: '$15,63',
-  },
-  {
-    product_image: '/images/top_product2.svg',
-    product_name: 'Áo thun cổ tròn Jolerance',
-    rating: 4,
-    color: 'Trắng',
-    product_price: '$18,13',
-    product_sale_price: '',
-  },
-  {
-    product_image: '/images/top_product3.svg',
-    product_name: 'Áo thun cổ tròn @Reatest Beroes',
-    rating: 3,
-    color: 'John Doe',
-    product_price: '$19,23',
-    product_sale_price: '$20,99',
-  },
-  {
-    product_image: '/images/top_product4.svg',
-    product_name: 'Áo thun cổ tròn Jolerance',
-    rating: 4,
-    color: 'Đen',
-    product_price: '$16,99',
-    product_sale_price: '$15,63',
-  },
-  {
-    product_image: '/images/top_product5.svg',
-    product_name: 'Áo thun cổ tròn AURA',
-    rating: 4,
-    color: 'Nâu',
-    product_price: '$19,51',
-    product_sale_price: '$13,77',
-  },
-  {
-    product_image: '/images/top_product6.svg',
-    product_name: 'Áo thun cổ tròn AURA',
-    rating: 4,
-    color: 'Xám',
-    product_price: '$16,00',
-    product_sale_price: '$15,63',
-  },
-  {
-    product_image: '/images/top_product6.svg',
-    product_name: 'Áo thun cổ tròn AURA',
-    rating: 4,
-    color: 'Xám',
-    product_price: '$16,00',
-    product_sale_price: '$15,63',
-  },
-])
+const topProducts = ref([])
 const flashSaleProducts = ref([
   {
     name: 'Áo thun có trơn dài tay',
@@ -808,9 +751,10 @@ const initTopProducts = async () => {
       trending: true,
     }
     const data = await storeProduct.getAllProduct(params)
-    if (data?.results?.results && data?.results?.results?.length > 0) {
-      topProducts.value = data?.results?.results;
+    if (data?.results && data?.results?.length > 0) {
+      topProducts.value = data?.results;
     }
+    console.log(topProducts.value, 'topProducts.value')
   } catch (error) {
     return error
   }
@@ -822,9 +766,9 @@ const initFlashSaleProducts = async () => {
       flashSale: true,
     }
     const data = await storeProduct.getAllProduct(params)
-    if (data?.results?.results && data?.results?.results?.length > 0) {
-      flashSaleProducts.value = data?.results?.results
-      data?.results?.results.forEach(res => {
+    if (data?.results && data?.results?.length > 0) {
+      flashSaleProducts.value = data?.results
+      data?.results.forEach(res => {
         if (res?.fastSaleStartDate || res?.fastSaleEndDate) {
           calculateRemainingTime(res?.fastSaleStartDate, res?.fastSaleEndDate)
         }

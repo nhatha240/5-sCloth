@@ -24,13 +24,13 @@
                                 <div class="absolute left-[9px] top-[8px] bg-[#inherit] z-10">
                                     <div class="flex flex-col gap-[30px]">
                                         <div
-                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product.id, product.quantity)">
+                                            class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]" @click="addToCart(product._id, product.quantity)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="productDetails(product.id)"
+                                            @click="productDetails(product._id)"
                                         >
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/search_product_btn.svg"
                                                 alt="">
@@ -168,12 +168,12 @@ const initProducts = async () => {
         }
         const data = await storeProduct.getAllProduct(params)
         console.log(data);
-        if (data?.results?.results && data?.results?.results?.length > 0) {
-            productList.value = data?.results?.results
+        if (data?.results && data?.results?.length > 0) {
+            productList.value = data?.results
         }
         storeShop.product = ''
-        totalPage.value = data?.results?.totalPages
-        totalItems.value = data?.results?.totalResults
+        totalPage.value = data?.totalPages
+        totalItems.value = data?.totalResults
     } catch (error) {
         console.log(error)
     }

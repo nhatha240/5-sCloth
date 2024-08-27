@@ -111,7 +111,7 @@
                                 <div class="hidden group-hover:block absolute right-[27px] bottom-[25px] z-10">
                                     <div class="flex flex-col gap-[30px]">
                                         <div class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="toggleLike(product?.id, index)">
+                                            @click="toggleLike(product?._id, index)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
                                                 alt="" v-if="product.liked">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
@@ -119,14 +119,14 @@
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="productDetails(product.id)"
+                                            @click="productDetails(product._id)"
                                         >
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/search_product_btn.svg"
                                                 alt="">
                                         </div>
                                         <div
                                             class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
-                                            @click="addToCart(product.id, product.quantity)"
+                                            @click="addToCart(product._id, product.quantity)"
                                         >
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/add_cart_product_btn.svg"
                                                 alt="">
@@ -287,15 +287,15 @@ const initProducts = async () => {
         }
         const data = await storeProduct.getAllProduct(params)
         console.log(data);
-        if (data?.results?.results && data?.results?.results?.length > 0) {
-            // productList.value = data?.results?.results
-            data?.results?.results.forEach(res => {
+        if (data?.results && data?.results?.length > 0) {
+            // productList.value = data?.results
+            data?.results.forEach(res => {
                 productList.value?.push(res)
             });
         }
         shopStore.product = ''
-        totalPage.value = data?.results?.totalPages
-        totalItems.value = data?.results?.totalResults
+        totalPage.value = data?.totalPages
+        totalItems.value = data?.totalResults
     } catch (error) {
         console.log(error)
     }
