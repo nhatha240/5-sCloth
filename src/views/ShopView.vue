@@ -337,6 +337,7 @@ const initByFilter = async () => {
 
 const searchByfilter = () => {
     productList.value = []
+    page.value = 1
     initByFilter()
 }
 
@@ -348,6 +349,7 @@ const resetFilter = () => {
     selectedOption.value = ''
     selectedColor.value = ''
     productList.value = []
+    page.value = 1
     initProducts()
 }
 
