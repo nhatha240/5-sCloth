@@ -18,7 +18,14 @@
     </div>
 </template>
 
-
+     const price = parseFloat(faker.commerce.price());
+        const sale_price = faker.datatype.boolean() ? parseFloat((price * 0.9).toFixed(2)) : 0;
+        const rating = parseFloat((Math.random() * 5).toFixed(1));
+        const rating_count = faker.number.int({ min: 0, max: 1000 });
+        const bestSeller = faker.datatype.boolean();
+        const is_like = faker.datatype.boolean();
+        const color = faker.color.rgb();
+        const brand_name = faker.commerce.productName()
 
 <style lang="scss">
 .empty-admin-layout {
