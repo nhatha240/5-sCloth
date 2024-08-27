@@ -69,7 +69,16 @@ const props = defineProps({
         default: () => [],
     },
 });
-
+        <EasyDataTable v-model:items-selected="itemsSelected" class="common-table" :headers="headers" :items="items"
+            :search-field="searchField" :search-value="searchValue" @click-row="showCustomer">
+            <template #item-name="{ name }">
+                <div class="flex items-center gap-4">
+                    <img class="avatar-customer" :src="name.avatar" alt="" v-if="name.avatar">
+                    <div class="avatar-customer temp" v-else>
+                        {{ name.name?.charAt(0) }}
+                    </div>
+                    <div class="">{{ name.name }}</div>
+    
 const router = useRouter();
 const route = useRoute();
 
