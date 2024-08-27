@@ -322,14 +322,14 @@ const initByFilter = async () => {
         }
         router.replace({ query: { category: selectedOption.value } })
         const data = await storeProduct.getAllProduct(params)
-        if (data?.results?.results && data?.results?.results?.length > 0) {
-            data?.results?.results.forEach(res => {
+        if (data?.results && data?.results?.length > 0) {
+            data?.results.forEach(res => {
                 productList.value?.push(res)
             });
         }
         shopStore.product = ''
-        totalPage.value = data?.results?.totalPages
-        totalItems.value = data?.results?.totalResults
+        totalPage.value = data?.totalPages
+        totalItems.value = data?.totalResults
     } catch (error) {
         console.log(error)
     }
