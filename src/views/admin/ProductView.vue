@@ -205,12 +205,12 @@ const initProducts = async () => {
         }
         const data = await storeProduct.getProducts(params)
         console.log(data);
-        items.value = data?.results?.results
+        items.value = data?.results
         console.log(items.value);
-        nextPage.value = data?.results?.nextCursor
-        prevPage.value = data?.results?.prevCursor
-        totalPage.value = data?.results?.totalPages
-        totalitem.value = data?.results?.totalResults
+        nextPage.value = data?.nextCursor
+        prevPage.value = data?.prevCursor
+        totalPage.value = data?.totalPages
+        totalitem.value = data?.totalResults
     } catch (error) {
         return error
     }
