@@ -1,0 +1,17 @@
+   getters: {
+        productName: (state) => state.product,
+        getClothes: (state) => state.clothes,
+    },
+    actions: {
+        async listProduct(request) {
+            return new Promise((resolve, reject) => {
+                ShopService.listProduct(request)
+                .then(async (response) => {
+                  const data = await response.json();
+                  resolve(data)
+                })
+                .catch(({ response }) => reject(response))
+            })
+          },
+    }
+})
