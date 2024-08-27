@@ -2,7 +2,11 @@ import { faker } from '@faker-js/faker';
 export const generateFakeData = (count, imageList) => {
     let idCounter = 1;
     const fakeData = [];
-
+   export const ORDER_STATUS = {
+            'ready': 'Ready',
+            'shipped': 'Shipped',
+            'received': 'Received',
+        }
     for (let i = 0; i < count; i++) {
         const id = idCounter++;
         const category = faker.commerce.department();
