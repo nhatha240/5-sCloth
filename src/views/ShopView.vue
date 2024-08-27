@@ -113,7 +113,7 @@
                                         <div class="relative cursor-pointer w-[59px] h-[59px] bg-[#FFFFFF] shadow-[0_14px_26px_0_rgba(39,13,48,0.25)] rounded-[50%]"
                                             @click="toggleLike(product?.id, index)">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn_active.svg"
-                                                alt="" v-if="product.is_like">
+                                                alt="" v-if="product.liked">
                                             <img crossorigin="anonymous" class="w-[38%] center-image" src="/images/like_product_btn.svg" alt=""
                                                 v-else>
                                         </div>
@@ -417,8 +417,8 @@ const unLikeProduct = async (id) => {
 }
 
 const toggleLike = (id, index) => {
-    productList.value[index].is_like = !productList.value[index].is_like
-    if (productList.value[index].is_like) {
+    productList.value[index].liked = !productList.value[index].liked
+    if (productList.value[index].liked) {
         likeProduct(id)
     } else {
         unLikeProduct(id)

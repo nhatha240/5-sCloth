@@ -205,7 +205,7 @@
                   </button>
                   <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="toggleLike(product?._id, index)">
                     <img crossorigin="anonymous" 
-                    :src="product.is_like ? '/images/heart_icon.svg' : '/images/heart_icon_disable.svg'" 
+                    :src="product.liked ? '/images/heart_icon.svg' : '/images/heart_icon_disable.svg'" 
                     alt="">
                   </button>
                   <div class="cursor-pointer purple-text-500" @click="toProduct(product?._id)">Xem chi tiết</div>
@@ -929,8 +929,8 @@ const unLikeProduct = async (id) => {
     }
 }
 const toggleLike = (id, index) => {
-  newProducts.value[index].is_like = !newProducts.value[index].is_like
-    if (newProducts.value[index].is_like) {
+  newProducts.value[index].liked = !newProducts.value[index].liked
+    if (newProducts.value[index].liked) {
         likeProduct(id)
     } else {
         unLikeProduct(id)

@@ -62,7 +62,7 @@
           </button>
           <button class="p-[20px] border border-[#C4C4C4] rounded-lg" @click="toggleLike(product?._id)">
             <img class="max-w[31px] max-w-fit" crossorigin="anonymous" 
-              :src="product.is_like ? '/images/heart_icon_active.svg' : '/images/heart_icon_inactive.svg'" 
+              :src="product.liked ? '/images/heart_icon_active.svg' : '/images/heart_icon_inactive.svg'" 
               alt=""
             >
           </button>
@@ -391,8 +391,8 @@ const unLikeProduct = async (id) => {
 }
 
 const toggleLike = (id) => {
-    product.value.is_like = !product.value.is_like
-    if (product.value.is_like) {
+    product.value.liked = !product.value.liked
+    if (product.value.liked) {
         likeProduct(id)
     } else {
         unLikeProduct(id)

@@ -11,40 +11,44 @@ import {
 import * as echarts from 'echarts/core';
 import 'echarts/lib/component/tooltip';
 import { CanvasRenderer } from 'echarts/renderers';
+import moment from 'moment';
 import { ref } from 'vue';
 import VChart from "vue-echarts";
+
+const props = defineProps({
+    data: [],
+})
+
+const getLast7Days = () => {
+    return Array.from({length: 7}, (_, i) => 
+        moment().subtract(i, 'days').format('D')
+    ).reverse();
+}
+const last7Days = ref(getLast7Days());
+
+const listDayData = (arr1) => {
+    const combinedArray = arr1.map((date) => ({
+        name: date,
+        value: date
+    }));
+    return combinedArray
+}
+
+const listOrderData = (arr1, arr2) => {
+    const combinedArray = arr1.map((date, index) => ({
+        date: date,
+        value: arr2[index]?.revenue
+    }));
+    return combinedArray
+}
 
 echarts.use([BarChart, LegendComponent, CanvasRenderer, GridComponent]);
 
 const seriesData = ref({
     title: 'string',
     color: 'string',
-    orders: [
-        { name: '12am', value: 20 },
-        { name: '1am', value: 32 },
-        { name: '2am', value: 46 },
-        { name: '3am', value: 54 },
-        { name: '4am', value: 66 },
-        { name: '5am', value: 76 },
-        { name: '6am', value: 17 },
-        { name: '7am', value: 18 },
-        { name: '8am', value: 11 },
-        { name: '9am', value: 13 },
-        { name: '10am', value: 8 },
-        { name: '11am', value: 66 },
-        { name: '12pm', value: 56 },
-        { name: '1pm', value: 15 },
-        { name: '2pm', value: 9 },
-    ],
-    date: [
-        { name: '12', value: 12 },
-        { name: '13', value: 13 },
-        { name: '14', value: 14 },
-        { name: '15', value: 15 },
-        { name: '16', value: 16 },
-        { name: '17', value: 17 },
-        { name: '18', value: 18 },
-    ],
+    orders: listOrderData(last7Days.value, props.data),
+    date: listDayData(last7Days.value),
 })
 const xAxisData = ref(seriesData.value?.date);
 const options = ref({

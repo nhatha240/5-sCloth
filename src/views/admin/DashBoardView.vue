@@ -112,7 +112,7 @@
                     </div>
                     <div class="pb-[20px]">
                         <div class="text-title !text-xl">
-                            1,259
+                            {{ sevenDayChartData?.itemSold ? sevenDayChartData?.itemSold?.toLocaleString() : 0 }}
                         </div>
                         <div class="details-text">
                             Items Sold
@@ -120,14 +120,16 @@
                     </div>
                     <div class="pb-[20px]">
                         <div class="text-title !text-xl">
-                            $12,546
+                            ${{ sevenDayChartData?.Revenue ? sevenDayChartData?.Revenue?.toLocaleString() : 0 }}
                         </div>
                         <div class="details-text">
                             Revenue
                         </div>
                     </div>
                 </div>
-                <BarChart></BarChart>
+                <BarChart :data="sevenDayChartData?.RevenueInSevenDay" 
+                    v-if="sevenDayChartData?.RevenueInSevenDay && sevenDayChartData?.RevenueInSevenDay?.length > 0">
+                </BarChart>
             </div>
         </div>
         <div class="row justify-between">
@@ -230,9 +232,9 @@ const topProductsSold = ref([
 ]);
 
 onMounted(() => {
-    initDashboardTotal()
     initDashBoardChart()
     initSevenDayChart()
+    initDashboardTotal()
     initTopOrders()
     initTopProduct()
 })
@@ -282,10 +284,12 @@ const initDashBoardChart = async () => {
         return error
     }
 }
+const sevenDayChartData = ref({})
 const initSevenDayChart = async () => {
     try {
-        const data = await storeDashboard.getDashBoardChart()
+        const data = await storeDashboard.getDashBoardSevenDay()
         console.log(data)
+        sevenDayChartData.value = data
     } catch (error) {
         return error
     }
