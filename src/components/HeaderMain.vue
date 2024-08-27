@@ -26,13 +26,7 @@
                     <div>Size: s</div>
                     <div>Màu: đen</div>
                   </div>
-                </div>
-                <div class="pr-[46px] flex items-center gap-[6px]">
-                  <div class="text-[#393939] font-semibold text-[22px]">1</div>
-                  <div class="flex flex-col gap-[3px]">
-                    <img class="cursor-pointer" src="/images/up_icon.svg" alt="">
-                    <img class="cursor-pointer" src="/images/down_icon.svg" alt="">
-                  </div>
+               
                 </div>
                 <div class="pr-[40px] text-[#393939] font-medium text-sm">
                   $681
