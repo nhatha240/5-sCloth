@@ -15,6 +15,26 @@
                 <button class="sign-up-btn">
                     Đăng Ký
                 </button>
+
+                  <div class="">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <select class="common-input-field" v-model="searchField">
+                    <option v-for="(option, index) in options" :key="index">
+                        {{ option }}
+                    </option>
+                </select>
+                <input class="common-input-field" type="text" v-model="searchValue">
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="btn-modify" @click="addCustomer">
+                    <img src="/images/edit_btn_icon.svg" />
+                </button>
+                <button class="btn-modify">
+                    <img src="/images/icon_delete_btn.svg" @click="deleteCustomer" />
+                </button>
+            </div>
+        </div>
             </div>
         </div>
     </div>
