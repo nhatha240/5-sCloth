@@ -143,16 +143,9 @@
           <div class="">
             <div class=""></div>
             <div class="flex items-center">
-              <input
-                type="radio"
-                id="freeship"
-                name="shipping"
-                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300"
-              />
-              <label
-                for="freeship"
-                class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >
+              <input type="radio" id="freeship" name="shipping"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300" />
+              <label for="freeship" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                 Freeship cho đơn hàng từ 299k
               </label>
               <span class="ml-auto text-sm text-gray-500">0đ</span>
@@ -167,25 +160,27 @@
           <div class="flex items-center justify-between" v-for="(product, index) in storeProduct.cartItem" :key="index">
             <div class="flex items-center gap-2">
               <div class="relative object-cover">
-                <div class="absolute top-[-10px] right-[-10px] rounded-[50%] w-[30px] h-[30px] bg-gray-500 text-white flex justify-center items-center">
+                <div
+                  class="absolute top-[-10px] right-[-10px] rounded-[50%] w-[30px] h-[30px] bg-gray-500 text-white flex justify-center items-center">
                   {{ product?.quantity }}
                 </div>
-                <img crossorigin="anonymous" class="max-w-[65px] rounded-[8px]" :src="urlApi + product?.product?.image[0]" alt="">
+                <img crossorigin="anonymous" class="max-w-[65px] rounded-[8px]"
+                  :src="urlApi + product?.product?.image[0]" alt="">
               </div>
               <div class="flex gap-1">
                 <div class="">
                   {{ product?.product?.name }}
                 </div>
                 <div class="" v-for="(size, i) in product?.product?.options[0]?.size" :key="i">
-                  {{ size }}{{ (i < product?.product?.options[0]?.size?.length - 1) ? ', ' : '' }}
+                  {{ size }}{{ (i < product?.product?.options[0]?.size?.length - 1) ? ', ' : '' }} </div>
                 </div>
               </div>
+              <div class="flex justify-end">
+                {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) :
+                  (product?.product?.price * product?.quantity)) }}đ
+              </div>
             </div>
-            <div class="flex justify-end">
-              {{ (product?.product?.discountPrice ? (product?.product?.price * product?.quantity) : (product?.product?.price * product?.quantity)) }}đ
-            </div>
-          </div>
-          <div class="border-t border-[#D7DBEC] mt-4 flex flex-col gap-2">
+            <div class="border-t border-[#D7DBEC] mt-4 flex flex-col gap-2">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   Tạm tính
@@ -202,8 +197,8 @@
                   Miễn phí
                 </div>
               </div>
-          </div>
-          <div class="border-t border-[#D7DBEC] mt-4">
+            </div>
+            <div class="border-t border-[#D7DBEC] mt-4">
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
                   Tổng cộng
@@ -212,11 +207,11 @@
                   VND {{ storeProduct.totalPrice ?? 0 }}đ
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script lang="js" setup>
@@ -271,8 +266,8 @@ onBeforeMount(function () {
   })
 })
 
-function createOrder() {
-  return confirmOrder()
+async function createOrder() {
+  return await confirmOrder()
   // console.log('Creating order...', data, actions)
   // return actions.order.create({
   //   purchase_units: [
@@ -285,7 +280,7 @@ function createOrder() {
   // })
 }
 
-const confirmOrder = () => {
+const confirmOrder = async () => {
   try {
     const productItem = {
       products: storeProduct.cartItem.map(item => ({
@@ -296,14 +291,12 @@ const confirmOrder = () => {
       }))
     }
     console.log(productItem);
-    // router.push({ name: 'home' })
-    const data = storeOrder.addOrder(productItem)
+    const data = await storeOrder.addOrder(productItem)
     console.log(data)
     if (data?.id) {
       // storeProduct.listCart()
     }
-    // toastSuccess('Thanh toán thành công')
-    return data
+    return await data.id
 
   } catch (error) {
     return error
@@ -311,10 +304,10 @@ const confirmOrder = () => {
 }
 
 async function onApprove(data, actions) {
-  console.log('Order approved...')
+  console.log('Order approved...', data)
+  // toastSuccess('Thanh toán thành công')
   try {
-    const orderData = await storeOrder.captureOrder(data?.id)
-    console.log(orderData)
+    const orderData = await storeOrder.captureOrder(data.orderID)
     const errorDetail = orderData?.details?.[0];
 
     if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -347,11 +340,10 @@ async function onApprove(data, actions) {
   return actions.order.capture().then(() => {
     paid.value = true
     console.log('Order complete!')
-    confirmOrder()
   })
 }
 function onCancel(data, actions) {
-    console.log('Order cancer...', actions, data)
+  console.log('Order cancer...', actions, data)
   return actions.order.capture().then(() => {
     paid.value = false
     console.log('Order cancel!')
@@ -380,6 +372,7 @@ function onCancel(data, actions) {
   .custom-selectbox {
     @apply block appearance-none w-full bg-white border border-[#000000] text-gray-900 pt-[24px] pb-[12px] pl-4 pr-[53px] rounded-[9px] leading-tight focus:outline-none focus:bg-white focus:border-gray-500;
   }
+
   .cart-payment-layout {
     border-radius: 4px;
     background-color: #F3F3F3;
